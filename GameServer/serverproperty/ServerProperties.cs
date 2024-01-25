@@ -570,7 +570,8 @@ namespace DOL.GS.ServerProperties
 		/// <summary>
 		/// Death Messages All Realms
 		/// </summary>
-		[ServerProperty("server", "death_messages_all_realms", "Set to true if you want all realms to see other realms death and kill messages", false)]
+		/// BRENT CHANGED FROM FALSE TO TRUE
+		[ServerProperty("server", "death_messages_all_realms", "Set to true if you want all realms to see other realms death and kill messages", true)]
 		public static bool DEATH_MESSAGES_ALL_REALMS;
 
 		/// <summary>

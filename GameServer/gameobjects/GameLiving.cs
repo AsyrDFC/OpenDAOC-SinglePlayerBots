@@ -249,10 +249,10 @@ namespace DOL.GS
 		///// </summary>
 		//protected readonly List<GameObject> m_attackers;
 
-        /// <summary>
-        /// Returns the current active weapon slot of this living
-        /// </summary>
-        public virtual eActiveWeaponSlot ActiveWeaponSlot
+		/// <summary>
+		/// Returns the current active weapon slot of this living
+		/// </summary>
+		public virtual eActiveWeaponSlot ActiveWeaponSlot
 		{
 			get { return m_activeWeaponSlot; }
 		}
@@ -410,19 +410,19 @@ namespace DOL.GS
 			}
 		}
 
-        /// <summary>
-        /// Gets the current attackspeed of this living in milliseconds
-        /// </summary>
-        /// <returns>effective speed of the attack. average if more than one weapon.</returns>
-        public virtual int AttackSpeed(DbInventoryItem mainWeapon, DbInventoryItem leftWeapon = null)
-        {
+		/// <summary>
+		/// Gets the current attackspeed of this living in milliseconds
+		/// </summary>
+		/// <returns>effective speed of the attack. average if more than one weapon.</returns>
+		public virtual int AttackSpeed(DbInventoryItem mainWeapon, DbInventoryItem leftWeapon = null)
+		{
 			return attackComponent.AttackSpeed(mainWeapon, leftWeapon);
-        }
+		}
 
-        /// <summary>
-        /// Minimum reduction possible to spell casting speed (CastTime * CastingSpeedCap)
-        /// </summary>
-        public virtual double CastingSpeedReductionCap
+		/// <summary>
+		/// Minimum reduction possible to spell casting speed (CastTime * CastingSpeedCap)
+		/// </summary>
+		public virtual double CastingSpeedReductionCap
 		{
 			get { return 0.4; }
 		}
@@ -451,8 +451,8 @@ namespace DOL.GS
 			int ticks = spell.CastTime;
 
 			if (spell.InstrumentRequirement != 0 ||
-			    line.KeyName == GlobalSpellsLines.Item_Spells ||
-			    line.KeyName.StartsWith(GlobalSpellsLines.Champion_Lines_StartWith))
+				line.KeyName == GlobalSpellsLines.Item_Spells ||
+				line.KeyName.StartsWith(GlobalSpellsLines.Champion_Lines_StartWith))
 			{
 				return ticks;
 			}
@@ -489,33 +489,33 @@ namespace DOL.GS
 		}
 
 
-        /// <summary>
-        /// Returns the AttackRange of this living
-        /// </summary>
-        public virtual int AttackRange
-        {
-            get
-            {
-                //Mobs have a good distance range with distance weapons
-                //automatically
-                if (ActiveWeaponSlot == eActiveWeaponSlot.Distance)
-                {
-                    return Math.Max(32, (int)(2000.0 * GetModified(eProperty.ArcheryRange) * 0.01));
-                }
-                //Normal mob attacks have 200 ...
-                //TODO dragon, big mobs etc...
-                return 200;
-            }
+		/// <summary>
+		/// Returns the AttackRange of this living
+		/// </summary>
+		public virtual int AttackRange
+		{
+			get
+			{
+				//Mobs have a good distance range with distance weapons
+				//automatically
+				if (ActiveWeaponSlot == eActiveWeaponSlot.Distance)
+				{
+					return Math.Max(32, (int)(2000.0 * GetModified(eProperty.ArcheryRange) * 0.01));
+				}
+				//Normal mob attacks have 200 ...
+				//TODO dragon, big mobs etc...
+				return 200;
+			}
 
-            set { }
-        }
+			set { }
+		}
 
-        /// <summary>
-        /// calculates weapon stat
-        /// </summary>
-        /// <param name="weapon"></param>
-        /// <returns></returns>
-        public virtual int GetWeaponStat(DbInventoryItem weapon)
+		/// <summary>
+		/// calculates weapon stat
+		/// </summary>
+		/// <param name="weapon"></param>
+		/// <returns></returns>
+		public virtual int GetWeaponStat(DbInventoryItem weapon)
 		{
 			return GetModified(eProperty.Strength);
 		}
@@ -578,13 +578,13 @@ namespace DOL.GS
 
 		private (DbInventoryItem item, long time) m_cachedActiveWeapon;
 
-        /// <summary>
-        /// Returns the currently active weapon, null=natural
-        /// </summary>
-        public virtual DbInventoryItem ActiveWeapon
-        {
-            get
-            {
+		/// <summary>
+		/// Returns the currently active weapon, null=natural
+		/// </summary>
+		public virtual DbInventoryItem ActiveWeapon
+		{
+			get
+			{
 				// We cache the weapon since 'ActiveWeapon' can be called multiple times per tick and 'GameInventory.GetItem' is potentially expensive.
 				if (m_cachedActiveWeapon.time >= GameLoop.GameLoopTime)
 					return m_cachedActiveWeapon.item;
@@ -592,30 +592,30 @@ namespace DOL.GS
 				m_cachedActiveWeapon.item = null;
 				m_cachedActiveWeapon.time = GameLoop.GameLoopTime;
 
-                if (Inventory != null)
-                {
-                    switch (ActiveWeaponSlot)
-                    {
-                        case eActiveWeaponSlot.Standard:
+				if (Inventory != null)
+				{
+					switch (ActiveWeaponSlot)
+					{
+						case eActiveWeaponSlot.Standard:
 							m_cachedActiveWeapon.item = Inventory.GetItem(eInventorySlot.RightHandWeapon);
 							break;
-                        case eActiveWeaponSlot.TwoHanded:
+						case eActiveWeaponSlot.TwoHanded:
 							m_cachedActiveWeapon.item = Inventory.GetItem(eInventorySlot.TwoHandWeapon);
 							break;
-                        case eActiveWeaponSlot.Distance:
+						case eActiveWeaponSlot.Distance:
 							m_cachedActiveWeapon.item = Inventory.GetItem(eInventorySlot.DistanceWeapon);
 							break;
-                    }
-                }
+					}
+				}
 
-                return m_cachedActiveWeapon.item;
-            }
-        }
+				return m_cachedActiveWeapon.item;
+			}
+		}
 
-        /// <summary>
-        /// Returns the chance for a critical hit with a spell
-        /// </summary>
-        public virtual int SpellCriticalChance
+		/// <summary>
+		/// Returns the chance for a critical hit with a spell
+		/// </summary>
+		public virtual int SpellCriticalChance
 		{
 			get { return GetModified(eProperty.CriticalSpellHitChance); }
 			set { }
@@ -635,33 +635,33 @@ namespace DOL.GS
 		/// </summary>
 		public virtual bool AttackState { get; set; }
 
-        /// <summary>
-        /// Whether or not the living can be attacked.
-        /// </summary>
-        public override bool IsAttackable
+		/// <summary>
+		/// Whether or not the living can be attacked.
+		/// </summary>
+		public override bool IsAttackable
 		{
 			get
 			{
 				return (IsAlive &&
-				        !IsStealthed &&
-				        EffectList.GetOfType<NecromancerShadeEffect>() == null &&
-				        ObjectState == GameObject.eObjectState.Active);
+						!IsStealthed &&
+						EffectList.GetOfType<NecromancerShadeEffect>() == null &&
+						ObjectState == GameObject.eObjectState.Active);
 			}
 		}
 
-        /// <summary>
-        /// Whether the living is actually attacking something.
-        /// </summary>
-        public virtual bool IsAttacking
-        {
-            //get { return (AttackState && (m_attackAction != null) && m_attackAction.IsAlive); }
-            get { return (attackComponent.AttackState && (attackComponent.attackAction != null)); }
-        }
+		/// <summary>
+		/// Whether the living is actually attacking something.
+		/// </summary>
+		public virtual bool IsAttacking
+		{
+			//get { return (AttackState && (m_attackAction != null) && m_attackAction.IsAlive); }
+			get { return (attackComponent.AttackState && (attackComponent.attackAction != null)); }
+		}
 
-        /// <summary>
-        /// Gets the effective AF of this living
-        /// </summary>
-        public virtual int EffectiveOverallAF
+		/// <summary>
+		/// Gets the effective AF of this living
+		/// </summary>
+		public virtual int EffectiveOverallAF
 		{
 			get { return 0; }
 		}
@@ -673,7 +673,7 @@ namespace DOL.GS
 		{
 			if (weapon == null) return 0;
 
-			return 0;	// TODO
+			return 0;   // TODO
 		}
 
 		/// <summary>
@@ -1181,7 +1181,7 @@ namespace DOL.GS
 			{
 				long elapsedTime = GameLoop.GameLoopTime - rangeAttackHoldStart;
 				long halfwayPoint = attackComponent.AttackSpeed(ActiveWeapon) / 2;
-				
+
 				if (rangeAttackComponent.RangedAttackState is not eRangedAttackState.ReadyToFire and not eRangedAttackState.None && elapsedTime > halfwayPoint)
 					return false;
 			}
@@ -1226,37 +1226,37 @@ namespace DOL.GS
 
 			int procChance = (int)Math.Ceiling(((weapon.ProcChance > 0 ? weapon.ProcChance : 10) * (weapon.SPD_ABS / 35.0)));
 
-            //Error protection and log for Item Proc's
-            Spell procSpell = null;
-            Spell procSpell1 = null;
-            if (this is GamePlayer)
-            {
-                SpellLine line = SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects);
-                if (line != null)
-                {
-                    procSpell = SkillBase.FindSpell(weapon.ProcSpellID, line);
-                    procSpell1 = SkillBase.FindSpell(weapon.ProcSpellID1, line);
+			//Error protection and log for Item Proc's
+			Spell procSpell = null;
+			Spell procSpell1 = null;
+			if (this is GamePlayer)
+			{
+				SpellLine line = SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects);
+				if (line != null)
+				{
+					procSpell = SkillBase.FindSpell(weapon.ProcSpellID, line);
+					procSpell1 = SkillBase.FindSpell(weapon.ProcSpellID1, line);
 
-                    if (procSpell == null && weapon.ProcSpellID != 0)
-                    {
-                        log.ErrorFormat("- Proc ID {0} Not Found on item: {1} ", weapon.ProcSpellID, weapon.Template.Id_nb);
-                    }
-                    if (procSpell1 == null && weapon.ProcSpellID1 != 0)
-                    {
-                        log.ErrorFormat("- Proc1 ID {0} Not Found on item: {1} ", weapon.ProcSpellID1, weapon.Template.Id_nb);
-                    }
-                }
-            }
+					if (procSpell == null && weapon.ProcSpellID != 0)
+					{
+						log.ErrorFormat("- Proc ID {0} Not Found on item: {1} ", weapon.ProcSpellID, weapon.Template.Id_nb);
+					}
+					if (procSpell1 == null && weapon.ProcSpellID1 != 0)
+					{
+						log.ErrorFormat("- Proc1 ID {0} Not Found on item: {1} ", weapon.ProcSpellID1, weapon.Template.Id_nb);
+					}
+				}
+			}
 
-            // Proc #1
-            if (procSpell != null && Util.Chance(procChance))
+			// Proc #1
+			if (procSpell != null && Util.Chance(procChance))
 
-                StartWeaponMagicalEffect(weapon, ad, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects), weapon.ProcSpellID, false);
+				StartWeaponMagicalEffect(weapon, ad, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects), weapon.ProcSpellID, false);
 
-            // Proc #2
-            if (procSpell1 != null && Util.Chance(procChance))
+			// Proc #2
+			if (procSpell1 != null && Util.Chance(procChance))
 
-                StartWeaponMagicalEffect(weapon, ad, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects), weapon.ProcSpellID1, false);
+				StartWeaponMagicalEffect(weapon, ad, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects), weapon.ProcSpellID1, false);
 
 			// Poison
 
@@ -1367,8 +1367,8 @@ namespace DOL.GS
 			}
 
 			if (this is GameNPC && ActiveWeaponSlot != eActiveWeaponSlot.Distance &&
-			    ((GameNPC)this).Inventory != null &&
-			    ((GameNPC)this).Inventory.GetItem(eInventorySlot.DistanceWeapon) != null)
+				((GameNPC)this).Inventory != null &&
+				((GameNPC)this).Inventory.GetItem(eInventorySlot.DistanceWeapon) != null)
 			{
 				SwitchWeapon(eActiveWeaponSlot.Distance);
 			}
@@ -1402,14 +1402,14 @@ namespace DOL.GS
 			}
 			else if (mimic != null)
 			{
-                if (mimic.HasAbility(Abilities.Advanced_Evade) ||
-                    mimic.HasAbility(Abilities.Enhanced_Evade) ||
-                    mimic.EffectList.GetOfType<CombatAwarenessEffect>() != null ||
-                    mimic.EffectList.GetOfType<RuneOfUtterAgilityEffect>() != null)
-                    evadeChance = GetModified(eProperty.EvadeChance);
-                else if (IsObjectInFront(ad.Attacker, 180) && (evadeBuff != null || mimic.HasAbility(Abilities.Evade)))
-                    evadeChance = Math.Max(GetModified(eProperty.EvadeChance), 0);
-            }
+				if (mimic.HasAbility(Abilities.Advanced_Evade) ||
+					mimic.HasAbility(Abilities.Enhanced_Evade) ||
+					mimic.EffectList.GetOfType<CombatAwarenessEffect>() != null ||
+					mimic.EffectList.GetOfType<RuneOfUtterAgilityEffect>() != null)
+					evadeChance = GetModified(eProperty.EvadeChance);
+				else if (IsObjectInFront(ad.Attacker, 180) && (evadeBuff != null || mimic.HasAbility(Abilities.Evade)))
+					evadeChance = Math.Max(GetModified(eProperty.EvadeChance), 0);
+			}
 			else if (this is GameNPC && IsObjectInFront(ad.Attacker, 180))
 				evadeChance = GetModified(eProperty.EvadeChance);
 
@@ -1438,10 +1438,10 @@ namespace DOL.GS
 
 				if (evadeChance > 0.995)
 					evadeChance = 0.995;
-				
+
 				if (ad.AttackType == eAttackType.MeleeDualWield)
 					evadeChance = Math.Max(evadeChance * 0.5, 0.01);
-			
+
 				if (IsObjectInFront(ad.Attacker, 180) &&
 					(evadeBuff != null || player != null && player.HasAbility(Abilities.Evade) || mimic != null && mimic.HasAbility(Abilities.Evade)) &&
 					evadeChance < 0.05 &&
@@ -1460,15 +1460,15 @@ namespace DOL.GS
 				if (Overwhelm != null)
 					evadeChance = Math.Max(evadeChance - OverwhelmAbility.BONUS, 0);
 			}
-            else if (ad.Attacker is MimicNPC mimicAttacker)
-            {
-                OverwhelmEffect Overwhelm = mimicAttacker.EffectList.GetOfType<OverwhelmEffect>();
+			else if (ad.Attacker is MimicNPC mimicAttacker)
+			{
+				OverwhelmEffect Overwhelm = mimicAttacker.EffectList.GetOfType<OverwhelmEffect>();
 
-                if (Overwhelm != null)
-                    evadeChance = Math.Max(evadeChance - OverwhelmAbility.BONUS, 0);
-            }
+				if (Overwhelm != null)
+					evadeChance = Math.Max(evadeChance - OverwhelmAbility.BONUS, 0);
+			}
 
-            return evadeChance;
+			return evadeChance;
 		}
 
 		public virtual double TryParry(AttackData ad, AttackData lastAD, double attackerConLevel, int attackerCount)
@@ -1501,7 +1501,7 @@ namespace DOL.GS
 					// BladeBarrier overwrites all parrying, 90% chance to parry any attack, does not consider other bonuses to parry.
 					// They still need an active weapon to parry with BladeBarrier
 					BladeBarrier = player.EffectList.GetOfType<BladeBarrierEffect>();
-					
+
 					if (BladeBarrier != null && ActiveWeapon != null)
 						parryChance = 0.90;
 					else if (IsObjectInFront(ad.Attacker, 120))
@@ -1513,32 +1513,32 @@ namespace DOL.GS
 							ActiveWeapon.Object_Type != (int)eObjectType.Crossbow &&
 							ActiveWeapon.Object_Type != (int)eObjectType.Fired)
 						{
-							parryChance = GetModified( eProperty.ParryChance );
+							parryChance = GetModified(eProperty.ParryChance);
 						}
 					}
 				}
-                else if (this is MimicNPC mimic)
-                {
-                    // BladeBarrier overwrites all parrying, 90% chance to parry any attack, does not consider other bonuses to parry.
-                    // They still need an active weapon to parry with BladeBarrier
-                    BladeBarrier = mimic.EffectList.GetOfType<BladeBarrierEffect>();
+				else if (this is MimicNPC mimic)
+				{
+					// BladeBarrier overwrites all parrying, 90% chance to parry any attack, does not consider other bonuses to parry.
+					// They still need an active weapon to parry with BladeBarrier
+					BladeBarrier = mimic.EffectList.GetOfType<BladeBarrierEffect>();
 
-                    if (BladeBarrier != null && ActiveWeapon != null)
-                        parryChance = 0.90;
-                    else if (IsObjectInFront(ad.Attacker, 120))
-                    {
-                        if ((mimic.HasSpecialization(Specs.Parry) || parryBuff != null) && ActiveWeapon != null &&
-                            ActiveWeapon.Object_Type != (int)eObjectType.RecurvedBow &&
-                            ActiveWeapon.Object_Type != (int)eObjectType.Longbow &&
-                            ActiveWeapon.Object_Type != (int)eObjectType.CompositeBow &&
-                            ActiveWeapon.Object_Type != (int)eObjectType.Crossbow &&
-                            ActiveWeapon.Object_Type != (int)eObjectType.Fired)
-                        {
-                            parryChance = GetModified(eProperty.ParryChance);
-                        }
-                    }
-                }
-                else if (this is GameNPC && IsObjectInFront(ad.Attacker, 120))
+					if (BladeBarrier != null && ActiveWeapon != null)
+						parryChance = 0.90;
+					else if (IsObjectInFront(ad.Attacker, 120))
+					{
+						if ((mimic.HasSpecialization(Specs.Parry) || parryBuff != null) && ActiveWeapon != null &&
+							ActiveWeapon.Object_Type != (int)eObjectType.RecurvedBow &&
+							ActiveWeapon.Object_Type != (int)eObjectType.Longbow &&
+							ActiveWeapon.Object_Type != (int)eObjectType.CompositeBow &&
+							ActiveWeapon.Object_Type != (int)eObjectType.Crossbow &&
+							ActiveWeapon.Object_Type != (int)eObjectType.Fired)
+						{
+							parryChance = GetModified(eProperty.ParryChance);
+						}
+					}
+				}
+				else if (this is GameNPC && IsObjectInFront(ad.Attacker, 120))
 					parryChance = GetModified(eProperty.ParryChance);
 
 				if (BladeBarrier != null && !ad.Target.IsStunned && !ad.Target.IsSitting)
@@ -1580,15 +1580,15 @@ namespace DOL.GS
 				if (Overwhelm != null)
 					parryChance = Math.Max(parryChance - OverwhelmAbility.BONUS, 0);
 			}
-            else if (ad.Attacker is MimicNPC attackerMimic)
-            {
-                OverwhelmEffect Overwhelm = attackerMimic.EffectList.GetOfType<OverwhelmEffect>();
+			else if (ad.Attacker is MimicNPC attackerMimic)
+			{
+				OverwhelmEffect Overwhelm = attackerMimic.EffectList.GetOfType<OverwhelmEffect>();
 
-                if (Overwhelm != null)
-                    parryChance = Math.Max(parryChance - OverwhelmAbility.BONUS, 0);
-            }
+				if (Overwhelm != null)
+					parryChance = Math.Max(parryChance - OverwhelmAbility.BONUS, 0);
+			}
 
-            return parryChance;
+			return parryChance;
 		}
 
 		public virtual double TryBlock(AttackData ad, double attackerConLevel, int attackerCount)
@@ -1616,7 +1616,7 @@ namespace DOL.GS
 			double blockChance = 0;
 			DbInventoryItem leftHand = Inventory?.GetItem(eInventorySlot.LeftHandWeapon);
 
-			if (leftHand != null && leftHand.Object_Type != (int) eObjectType.Shield)
+			if (leftHand != null && leftHand.Object_Type != (int)eObjectType.Shield)
 				leftHand = null;
 
 			GamePlayer player = this as GamePlayer;
@@ -1627,13 +1627,13 @@ namespace DOL.GS
 				if (player != null)
 				{
 					if (player.HasAbility(Abilities.Shield) && leftHand != null && (player.ActiveWeapon == null || player.ActiveWeapon.Item_Type == Slot.RIGHTHAND || player.ActiveWeapon.Item_Type == Slot.LEFTHAND))
-						blockChance = GetModified(eProperty.BlockChance) * (leftHand.Quality * 0.01) * (leftHand.Condition / (double) leftHand.MaxCondition);
+						blockChance = GetModified(eProperty.BlockChance) * (leftHand.Quality * 0.01) * (leftHand.Condition / (double)leftHand.MaxCondition);
 				}
 				else if (mimic != null)
 				{
-                    if (mimic.HasAbility(Abilities.Shield) && leftHand != null && (mimic.ActiveWeapon == null || mimic.ActiveWeapon.Item_Type == Slot.RIGHTHAND || mimic.ActiveWeapon.Item_Type == Slot.LEFTHAND))
-                        blockChance = GetModified(eProperty.BlockChance) * (leftHand.Quality * 0.01) * (leftHand.Condition / (double)leftHand.MaxCondition);
-                }
+					if (mimic.HasAbility(Abilities.Shield) && leftHand != null && (mimic.ActiveWeapon == null || mimic.ActiveWeapon.Item_Type == Slot.RIGHTHAND || mimic.ActiveWeapon.Item_Type == Slot.LEFTHAND))
+						blockChance = GetModified(eProperty.BlockChance) * (leftHand.Quality * 0.01) * (leftHand.Condition / (double)leftHand.MaxCondition);
+				}
 				else
 					blockChance = GetModified(eProperty.BlockChance);
 			}
@@ -1648,7 +1648,7 @@ namespace DOL.GS
 					shieldSize = Math.Max(leftHand.Type_Damage, 1);
 
 					if (attackerCount > shieldSize)
-						blockChance *= shieldSize / (double) attackerCount;
+						blockChance *= shieldSize / (double)attackerCount;
 				}
 
 				blockChance *= 0.001;
@@ -1672,7 +1672,7 @@ namespace DOL.GS
 
 				if (IsEngaging)
 				{
-					EngageECSGameEffect engage = (EngageECSGameEffect) EffectListService.GetEffectOnTarget(this, eEffect.Engage);
+					EngageECSGameEffect engage = (EngageECSGameEffect)EffectListService.GetEffectOnTarget(this, eEffect.Engage);
 
 					if (engage != null && attackComponent.AttackState && engage.EngageTarget == ad.Attacker)
 					{
@@ -1703,15 +1703,15 @@ namespace DOL.GS
 				if (Overwhelm != null)
 					blockChance = Math.Max(blockChance - OverwhelmAbility.BONUS, 0);
 			}
-            else if (mimic != null)
-            {
-                OverwhelmEffect Overwhelm = mimic.EffectList.GetOfType<OverwhelmEffect>();
+			else if (mimic != null)
+			{
+				OverwhelmEffect Overwhelm = mimic.EffectList.GetOfType<OverwhelmEffect>();
 
-                if (Overwhelm != null)
-                    blockChance = Math.Max(blockChance - OverwhelmAbility.BONUS, 0);
-            }
+				if (Overwhelm != null)
+					blockChance = Math.Max(blockChance - OverwhelmAbility.BONUS, 0);
+			}
 
-            return blockChance;
+			return blockChance;
 		}
 
 		public double GetAttackerDefensePenetration(GameLiving living, DbInventoryItem weapon)
@@ -1719,32 +1719,32 @@ namespace DOL.GS
 			double totalReduction = 0.0;
 
 			if (living is GamePlayer p)
-            {
-	            double skillBasedReduction = living.WeaponSpecLevel(weapon) * 0.15;
-	            double statBasedReduction = living.GetWeaponStat(weapon) * .05;
+			{
+				double skillBasedReduction = living.WeaponSpecLevel(weapon) * 0.15;
+				double statBasedReduction = living.GetWeaponStat(weapon) * .05;
 				//p.CharacterClass.WeaponSkillBase returns unscaled damage table value
 				//divide by 200 to change to scaling factor. example: warrior's 460 WeaponSkillBase / 200 = 2.3 Damage Table
 				//divide by final 2.1 to use the 2.1 damage table as our anchor. classes below 2.1 damage table will have slightly reduced penetration, above 2.1 will have increased penetration
 				double tableMod = p.CharacterClass.WeaponSkillBase / 200.0 / 2.1;
 				totalReduction = (skillBasedReduction + statBasedReduction) * tableMod;
-            }
+			}
 			else if (living is MimicNPC m)
 			{
-                double skillBasedReduction = living.WeaponSpecLevel(weapon) * 0.15;
-                double statBasedReduction = living.GetWeaponStat(weapon) * .05;
-                //p.CharacterClass.WeaponSkillBase returns unscaled damage table value
-                //divide by 200 to change to scaling factor. example: warrior's 460 WeaponSkillBase / 200 = 2.3 Damage Table
-                //divide by final 2.1 to use the 2.1 damage table as our anchor. classes below 2.1 damage table will have slightly reduced penetration, above 2.1 will have increased penetration
-                double tableMod = m.CharacterClass.WeaponSkillBase / 200.0 / 2.1;
-                totalReduction = (skillBasedReduction + statBasedReduction) * tableMod;
-            }
+				double skillBasedReduction = living.WeaponSpecLevel(weapon) * 0.15;
+				double statBasedReduction = living.GetWeaponStat(weapon) * .05;
+				//p.CharacterClass.WeaponSkillBase returns unscaled damage table value
+				//divide by 200 to change to scaling factor. example: warrior's 460 WeaponSkillBase / 200 = 2.3 Damage Table
+				//divide by final 2.1 to use the 2.1 damage table as our anchor. classes below 2.1 damage table will have slightly reduced penetration, above 2.1 will have increased penetration
+				double tableMod = m.CharacterClass.WeaponSkillBase / 200.0 / 2.1;
+				totalReduction = (skillBasedReduction + statBasedReduction) * tableMod;
+			}
 			else
 			{
 				double NPCReduction = 15 * (living.Level / 50.0); //10% penetration at level 50
 				totalReduction = NPCReduction;
-				if(totalReduction < 0) totalReduction = 0;
+				if (totalReduction < 0) totalReduction = 0;
 			}
-				
+
 			return totalReduction;
 		}
 
@@ -1869,23 +1869,23 @@ namespace DOL.GS
 			Health -= damageAmount + criticalAmount;
 
 			if (!IsAlive && wasAlive && isDeadOrDying == false)
-            {
-					if (Monitor.TryEnter(deadLock))
+			{
+				if (Monitor.TryEnter(deadLock))
+				{
+					try
 					{
-						try
-						{
 						isDeadOrDying = true;
 						Die(source);
-						}
-						finally
-						{
-							Monitor.Exit(deadLock);
-						}
 					}
-					else
+					finally
 					{
-					return;
+						Monitor.Exit(deadLock);
 					}
+				}
+				else
+				{
+					return;
+				}
 			}
 			else
 			{
@@ -1898,14 +1898,14 @@ namespace DOL.GS
 		/// Called on the attacker when attacking an enemy.
 		/// </summary>
 		public virtual void OnAttackEnemy(AttackData ad)
-        {
+		{
 			//Console.WriteLine(string.Format("OnAttack called on {0}", this.Name));
 
 			// Note that this function is called whenever an attack is made, regardless of whether that attack was successful.
 			// i.e. missed melee swings and resisted spells still trigger this.
-			
+
 			if (effectListComponent is null)
-                return;
+				return;
 
 			if (this is GamePlayer player)
 				player.Stealth(false);
@@ -1926,32 +1926,32 @@ namespace DOL.GS
 						EffectService.RequestImmediateCancelEffect(effects[i]);
 					}
 				}
-            }
+			}
 
-			if(ad != null && ad.Damage > 0)
+			if (ad != null && ad.Damage > 0)
 				TryCancelMovementSpeedBuffs(true);
 
 			var oProcEffects = effectListComponent.GetSpellEffects(eEffect.OffensiveProc);
-            //OffensiveProcs
-            if (ad != null && ad.Attacker == this && oProcEffects != null && ad.AttackType != AttackData.eAttackType.Spell && ad.AttackResult != eAttackResult.Missed)
-            {
-                for (int i = 0; i < oProcEffects.Count; i++)
-                {
-                    var oProcEffect = oProcEffects[i];
+			//OffensiveProcs
+			if (ad != null && ad.Attacker == this && oProcEffects != null && ad.AttackType != AttackData.eAttackType.Spell && ad.AttackResult != eAttackResult.Missed)
+			{
+				for (int i = 0; i < oProcEffects.Count; i++)
+				{
+					var oProcEffect = oProcEffects[i];
 
-                    (oProcEffect.SpellHandler as OffensiveProcSpellHandler).EventHandler(ad);
-                }
-            }
+					(oProcEffect.SpellHandler as OffensiveProcSpellHandler).EventHandler(ad);
+				}
+			}
 			DirtyTricksECSGameEffect dt = (DirtyTricksECSGameEffect)EffectListService.GetAbilityEffectOnTarget(this, eEffect.DirtyTricks);
 			if (dt != null)
-            {
+			{
 				dt.EventHandler(ad);
-            }
+			}
 			TripleWieldECSGameEffect tw = (TripleWieldECSGameEffect)EffectListService.GetAbilityEffectOnTarget(this, eEffect.TripleWield);
 			if (tw != null)
-            {
+			{
 				tw.EventHandler(ad);
-            }
+			}
 
 			if (ad.Target is GamePlayer && ad.Target != this)
 			{
@@ -1966,7 +1966,7 @@ namespace DOL.GS
 			{
 				var brain = npc.Brain as ControlledNpcBrain;
 
-                if (ad.Target is GamePlayer || ad.Target is MimicNPC)
+				if (ad.Target is GamePlayer || ad.Target is MimicNPC)
 				{
 					LastAttackTickPvP = GameLoop.GameLoopTime;
 					if (brain != null)
@@ -1983,28 +1983,28 @@ namespace DOL.GS
 			// Don't cancel offensive focus spell
 			if (ad.AttackType != eAttackType.Spell)
 				CancelFocusSpell();
-        }
+		}
 
-        public void CancelFocusSpell(bool moving = false)
-        {
-            foreach (var pulseSpell in effectListComponent.GetSpellEffects(eEffect.Pulse))
-            {
+		public void CancelFocusSpell(bool moving = false)
+		{
+			foreach (var pulseSpell in effectListComponent.GetSpellEffects(eEffect.Pulse))
+			{
 				if (pulseSpell.SpellHandler.Spell.IsFocus)
-                {
+				{
 					((SpellHandler)pulseSpell.SpellHandler).FocusSpellAction(moving);
 					EffectService.RequestImmediateCancelEffect(pulseSpell);
 					if (((SpellHandler)pulseSpell.SpellHandler).Target.effectListComponent.Effects.TryGetValue(eEffect.FocusShield, out var petEffect))
-                    {
+					{
 						if (petEffect is not null)
-                        {
+						{
 							//verify the effect is a focus shield and not a timer based damage shield
 							if (petEffect.FirstOrDefault().SpellHandler.Spell.IsFocus)
 								EffectService.RequestImmediateCancelEffect(petEffect.FirstOrDefault());
 						}
 					}
 				}
-            }
-        }
+			}
+		}
 
 		/// <summary>
 		/// This method is called at the end of the attack sequence to
@@ -2103,18 +2103,18 @@ namespace DOL.GS
 			else if (ad.IsSpellResisted && ad.Target is GameNPC npc)
 				npc.CancelReturnToSpawnPoint();
 
-            if (Group != null)
-            {
-                if (Group.GetMembersInTheGroup().Any())
+			if (Group != null)
+			{
+				if (Group.GetMembersInTheGroup().Any())
 				{
-                    foreach (GameLiving groupMember in Group.GetMembersInTheGroup())
+					foreach (GameLiving groupMember in Group.GetMembersInTheGroup())
 					{
 						if (groupMember is MimicNPC mimic && groupMember != this)
-                            ((MimicBrain)mimic.Brain).OnGroupMemberAttacked(ad);
+							((MimicBrain)mimic.Brain).OnGroupMemberAttacked(ad);
 					}
-                }
-            }
-        }
+				}
+			}
+		}
 
 		public void HandleDamageShields(AttackData ad)
 		{
@@ -2179,23 +2179,23 @@ namespace DOL.GS
 				}
 				// Most resisted harmful spells break mez. There are some exceptions which can be added here.
 				else if (ad.IsSpellResisted)
-                {
-					removeMez = true;
-                }
-				// Non-Damaging, non-resisted spells that break mez.
-				else if (ad.SpellHandler is NearsightSpellHandler || ad.SpellHandler is AmnesiaSpellHandler || ad.SpellHandler is DiseaseSpellHandler
-						 || ad.SpellHandler is SpeedDecreaseSpellHandler || ad.SpellHandler is StunSpellHandler || ad.SpellHandler is ConfusionSpellHandler
-						 || ad.SpellHandler is AbstractResistDebuff) 
 				{
 					removeMez = true;
 				}
-				
+				// Non-Damaging, non-resisted spells that break mez.
+				else if (ad.SpellHandler is NearsightSpellHandler || ad.SpellHandler is AmnesiaSpellHandler || ad.SpellHandler is DiseaseSpellHandler
+						 || ad.SpellHandler is SpeedDecreaseSpellHandler || ad.SpellHandler is StunSpellHandler || ad.SpellHandler is ConfusionSpellHandler
+						 || ad.SpellHandler is AbstractResistDebuff)
+				{
+					removeMez = true;
+				}
+
 				if (this is GameNPC && ad.SpellHandler is not MesmerizeSpellHandler)
 					removeMez = true;
 			}
 
 			// Remove Mez
-            if (removeMez && effectListComponent.Effects.ContainsKey(eEffect.Mez))
+			if (removeMez && effectListComponent.Effects.ContainsKey(eEffect.Mez))
 			{
 				var effect = EffectListService.GetEffectOnTarget(this, eEffect.Mez);
 
@@ -2212,9 +2212,9 @@ namespace DOL.GS
 					EffectService.RequestImmediateCancelEffect(effect);
 			}
 
-            // Remove MovementSpeedDebuff
-            if (removeMovementSpeedDebuff)
-            {
+			// Remove MovementSpeedDebuff
+			if (removeMovementSpeedDebuff)
+			{
 				var effect = EffectListService.GetEffectOnTarget(this, eEffect.MovementSpeedDebuff);
 
 				if (effect != null && effect is ECSGameSpellEffect spellEffect && spellEffect.SpellHandler.Spell.SpellType != eSpellType.UnbreakableSpeedDecrease)
@@ -2223,15 +2223,15 @@ namespace DOL.GS
 				var ichor_effect = EffectListService.GetEffectOnTarget(this, eEffect.Ichor);
 				if (ichor_effect != null)
 					EffectService.RequestImmediateCancelEffect(ichor_effect);
-            }
+			}
 
-            return removeMez || removeSnare || removeMovementSpeedDebuff;
+			return removeMez || removeSnare || removeMovementSpeedDebuff;
 		}
 
-        public virtual void HandleMovementSpeedEffectsOnAttacked(AttackData ad)
-        {
-            if (effectListComponent == null || ad == null)
-                return;
+		public virtual void HandleMovementSpeedEffectsOnAttacked(AttackData ad)
+		{
+			if (effectListComponent == null || ad == null)
+				return;
 
 			//Cancel SpeedOfTheRealm (Hastener Speed) 
 			if (effectListComponent.Effects.ContainsKey(eEffect.MovementSpeedBuff))
@@ -2247,19 +2247,19 @@ namespace DOL.GS
 					if (spellEffect != null && spellEffect.SpellHandler.Spell.ID is 2430) // Speed of the Realm
 						EffectService.RequestImmediateCancelEffect(effects[i]);
 				}
-            }
+			}
 
-            // Cancel movement speed buffs when attacked only if damaged
+			// Cancel movement speed buffs when attacked only if damaged
 			if (ad != null & ad.Damage > 0)
 				TryCancelMovementSpeedBuffs(false);
 		}
 
-        public virtual void TryCancelMovementSpeedBuffs(bool isAttacker)
-        {
-            if (effectListComponent == null)
-                return;
+		public virtual void TryCancelMovementSpeedBuffs(bool isAttacker)
+		{
+			if (effectListComponent == null)
+				return;
 
-            if (effectListComponent.Effects.ContainsKey(eEffect.MovementSpeedBuff))
+			if (effectListComponent.Effects.ContainsKey(eEffect.MovementSpeedBuff))
 			{
 				var effects = effectListComponent.GetSpellEffects(eEffect.MovementSpeedBuff);
 
@@ -2275,13 +2275,13 @@ namespace DOL.GS
 							or (>= 895 and <= 897)) // Tracker, Chaser, Pursuer Enhancement
 							continue;
 					}
-					
+
 					EffectService.RequestImmediateCancelEffect(effects[i]);
 				}
-            }
+			}
 
 			if (this is GameNPC npc && npc.Brain is ControlledNpcBrain || this is GameSummonedPet)
-            {
+			{
 				List<ECSGameSpellEffect> ownerEffects;
 				ControlledNpcBrain pBrain = (this as GameNPC).Brain as ControlledNpcBrain;
 				GameSummonedPet pet = this as GameSummonedPet;
@@ -2295,16 +2295,16 @@ namespace DOL.GS
 				{
 					if (isAttacker || ownerEffects[i] is not ECSGameSpellEffect spellEffect || spellEffect.SpellHandler.Spell.Target != eSpellTarget.SELF)
 						EffectService.RequestImmediateCancelEffect(ownerEffects[i]);
-				}				
-            }
-        }
+				}
+			}
+		}
 
-        /// <summary>
-        /// This method is called whenever this living is dealing
-        /// damage to some object
-        /// </summary>
-        /// <param name="ad">AttackData</param>
-        public virtual void DealDamage(AttackData ad)
+		/// <summary>
+		/// This method is called whenever this living is dealing
+		/// damage to some object
+		/// </summary>
+		/// <param name="ad">AttackData</param>
+		public virtual void DealDamage(AttackData ad)
 		{
 			ad.Target.TakeDamage(ad);
 		}
@@ -2319,9 +2319,9 @@ namespace DOL.GS
 		{
 			lock (m_xpGainers.SyncRoot)
 			{
-				if( m_xpGainers.Contains( xpGainer ) == false )
+				if (m_xpGainers.Contains(xpGainer) == false)
 				{
-					m_xpGainers.Add( xpGainer, 0.0f );
+					m_xpGainers.Add(xpGainer, 0.0f);
 				}
 				m_xpGainers[xpGainer] = (float)m_xpGainers[xpGainer] + damageAmount;
 			}
@@ -2383,12 +2383,12 @@ namespace DOL.GS
 		/// <returns>the amount really changed</returns>
 		public virtual int ChangeEndurance(GameObject changeSource, eEnduranceChangeType enduranceChangeType, int changeAmount)
 		{
-			
+
 			//TODO fire event that might increase or reduce the amount
 			int oldEndurance = Endurance;
 			Endurance += changeAmount;
 
-			return 
+			return
 				Endurance - oldEndurance;
 		}
 
@@ -2505,7 +2505,7 @@ namespace DOL.GS
 				//Let's send the notification at the end
 				Notify(GameLivingEvent.Dying, this, new DyingEventArgs(killer));
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				Console.WriteLine(e.Message);
 			}
@@ -2585,7 +2585,7 @@ namespace DOL.GS
 		public byte VisibleActiveWeaponSlots
 		{
 			get { return m_visibleActiveWeaponSlots; }
-			set { m_visibleActiveWeaponSlots=value; }
+			set { m_visibleActiveWeaponSlots = value; }
 		}
 
 		/// <summary>
@@ -2639,10 +2639,10 @@ namespace DOL.GS
 			if (Inventory == null)
 				return;
 
-            //Clean up range attack variables, no matter to what
-            //weapon we switch
-            rangeAttackComponent.RangedAttackState = eRangedAttackState.None;
-            rangeAttackComponent.RangedAttackType = eRangedAttackType.Normal;
+			//Clean up range attack variables, no matter to what
+			//weapon we switch
+			rangeAttackComponent.RangedAttackState = eRangedAttackState.None;
+			rangeAttackComponent.RangedAttackType = eRangedAttackType.Normal;
 
 			DbInventoryItem rightHandSlot = Inventory.GetItem(eInventorySlot.RightHandWeapon);
 			DbInventoryItem leftHandSlot = Inventory.GetItem(eInventorySlot.LeftHandWeapon);
@@ -2815,12 +2815,12 @@ namespace DOL.GS
 		{
 			get { return m_specDebuffBonus; }
 		}
-		
+
 		/// <summary>
 		/// property calculators for each property
 		/// look at PropertyCalculator class for more description
 		/// </summary>
-		internal static readonly IPropertyCalculator[] m_propertyCalc = new IPropertyCalculator[(int)eProperty.MaxProperty+1];
+		internal static readonly IPropertyCalculator[] m_propertyCalc = new IPropertyCalculator[(int)eProperty.MaxProperty + 1];
 
 		/// <summary>
 		/// retrieve a property value of that living
@@ -3121,7 +3121,7 @@ namespace DOL.GS
 		/// </summary>
 		public virtual void StartPowerRegeneration()
 		{
-			
+
 			if (ObjectState != eObjectState.Active)
 				return;
 			lock (m_regenTimerLock)
@@ -3212,7 +3212,7 @@ namespace DOL.GS
 
 			#region PVP DAMAGE
 
-			
+
 			if (this is NecromancerPet)
 			{
 				GamePlayer this_necro_pl = null;
@@ -3268,15 +3268,15 @@ namespace DOL.GS
 		/// <param name="selfRegenerationTimer">timer calling this function</param>
 		protected virtual int PowerRegenerationTimerCallback(ECSGameTimer selfRegenerationTimer)
 		{
-			
+
 			if (this is GamePlayer &&
-			    (((GamePlayer)this).CharacterClass.ID == (int)eCharacterClass.Vampiir ||
-			     (((GamePlayer)this).CharacterClass.ID > 59 && ((GamePlayer)this).CharacterClass.ID < 63))) // Maulers
+				(((GamePlayer)this).CharacterClass.ID == (int)eCharacterClass.Vampiir ||
+				 (((GamePlayer)this).CharacterClass.ID > 59 && ((GamePlayer)this).CharacterClass.ID < 63))) // Maulers
 			{
 				double MinMana = MaxMana * 0.15;
 				double OnePercMana = Math.Ceiling(MaxMana * 0.01);
 				log.WarnFormat("current MaxMana is {0} and OnePercMana is {1}", MaxMana, OnePercMana);
-				
+
 
 				if (!InCombat)
 				{
@@ -3319,10 +3319,10 @@ namespace DOL.GS
 			}
 
 			if (IsSitting)
-            {
-	            totalRegenPeriod = (int)(totalRegenPeriod / 2);
-            }
-			
+			{
+				totalRegenPeriod = (int)(totalRegenPeriod / 2);
+			}
+
 			#region Calculation : AtlasOF_Serenity
 			// --- [START] --- AtlasOF_Serenity -----------------------------------------------------------
 			AtlasOF_SerenityAbility raSerenity = GetAbility<AtlasOF_SerenityAbility>();
@@ -3357,7 +3357,7 @@ namespace DOL.GS
 
 			return EnduranceRegenerationPeriod;
 		}
-        #endregion
+		#endregion
 
 		#region Components
 
@@ -3375,11 +3375,11 @@ namespace DOL.GS
 
 		#endregion
 
-        #region Mana/Health/Endurance/Concentration/Delete
-        /// <summary>
-        /// Amount of mana
-        /// </summary>
-        protected int m_mana;
+		#region Mana/Health/Endurance/Concentration/Delete
+		/// <summary>
+		/// Amount of mana
+		/// </summary>
+		protected int m_mana;
 		/// <summary>
 		/// Amount of endurance
 		/// </summary>
@@ -3420,7 +3420,7 @@ namespace DOL.GS
 
 		public override int MaxHealth
 		{
-			get {	return GetModified(eProperty.MaxHealth); }
+			get { return GetModified(eProperty.MaxHealth); }
 		}
 
 		public virtual int Mana
@@ -3435,7 +3435,7 @@ namespace DOL.GS
 				m_mana = Math.Min(value, maxmana);
 				m_mana = Math.Max(m_mana, 0);
 				if (IsAlive && (m_mana < maxmana || (this is GamePlayer && ((GamePlayer)this).CharacterClass.ID == (int)eCharacterClass.Vampiir)
-				                || (this is GamePlayer && ((GamePlayer)this).CharacterClass.ID > 59 && ((GamePlayer)this).CharacterClass.ID < 63)))
+								|| (this is GamePlayer && ((GamePlayer)this).CharacterClass.ID > 59 && ((GamePlayer)this).CharacterClass.ID < 63)))
 				{
 					StartPowerRegeneration();
 				}
@@ -3526,7 +3526,7 @@ namespace DOL.GS
 			}
 		}
 
-		
+
 
 		/// <summary>
 		/// Cancels all concentration effects by this living and on this living
@@ -3543,9 +3543,9 @@ namespace DOL.GS
 		{
 			// cancel conc spells
 			for (int i = 0; i < effectListComponent.ConcentrationEffects.Count; i++)
-            {
+			{
 				EffectService.RequestCancelConcEffect(effectListComponent.ConcentrationEffects[i]);
-            }
+			}
 
 			//cancel all active conc spell effects from other casters
 			if (effectListComponent != null)
@@ -3556,35 +3556,35 @@ namespace DOL.GS
 						EffectService.RequestCancelConcEffect((IConcentrationEffect)effect, false);
 				}
 			}
-        }
+		}
 
-        // 			ArrayList concEffects = new ArrayList();
-        // 			lock (EffectList)
-        // 			{
-        // 				foreach (IGameEffect effect in EffectList)
-        // 				{
-        // 					if (effect is GameSpellEffect && ((GameSpellEffect)effect).Spell.Concentration > 0)
-        // 					{
-        // 						if (!leaveSelf || leaveSelf && ((GameSpellEffect)effect).SpellHandler.Caster != this)
-        // 							concEffects.Add(effect);
-        // 					}
-        // 				}
-        // 			}
-        // 			foreach (GameSpellEffect effect in concEffects)
-        // 			{
-        // 				effect.Cancel(false);
-        // 			}
-        // 		}
+		// 			ArrayList concEffects = new ArrayList();
+		// 			lock (EffectList)
+		// 			{
+		// 				foreach (IGameEffect effect in EffectList)
+		// 				{
+		// 					if (effect is GameSpellEffect && ((GameSpellEffect)effect).Spell.Concentration > 0)
+		// 					{
+		// 						if (!leaveSelf || leaveSelf && ((GameSpellEffect)effect).SpellHandler.Caster != this)
+		// 							concEffects.Add(effect);
+		// 					}
+		// 				}
+		// 			}
+		// 			foreach (GameSpellEffect effect in concEffects)
+		// 			{
+		// 				effect.Cancel(false);
+		// 			}
+		// 		}
 
-        #endregion
-        #region Speed/Heading/Target/GroundTarget/GuildName/SitState/Level
-        /// <summary>
-        /// The targetobject of this living
-        /// This is a weak reference to a GameObject, which
-        /// means that the gameobject can be cleaned up even
-        /// when this living has a reference on it ...
-        /// </summary>
-        protected readonly WeakReference m_targetObjectWeakReference;
+		#endregion
+		#region Speed/Heading/Target/GroundTarget/GuildName/SitState/Level
+		/// <summary>
+		/// The targetobject of this living
+		/// This is a weak reference to a GameObject, which
+		/// means that the gameobject can be cleaned up even
+		/// when this living has a reference on it ...
+		/// </summary>
+		protected readonly WeakReference m_targetObjectWeakReference;
 
 		/// <summary>
 		/// Holds the Living's Coordinate inside the current Region
@@ -3738,7 +3738,7 @@ namespace DOL.GS
 		/// </summary>
 		public override int X
 		{
-			get => IsMoving ? (int) (base.X + MovementElapsedTicks * movementComponent.TickSpeedX) : base.X;
+			get => IsMoving ? (int)(base.X + MovementElapsedTicks * movementComponent.TickSpeedX) : base.X;
 			set => base.X = value;
 		}
 
@@ -3747,7 +3747,7 @@ namespace DOL.GS
 		/// </summary>
 		public override int Y
 		{
-			get => IsMoving ? (int) (base.Y + MovementElapsedTicks * movementComponent.TickSpeedY) : base.Y;
+			get => IsMoving ? (int)(base.Y + MovementElapsedTicks * movementComponent.TickSpeedY) : base.Y;
 			set => base.Y = value;
 		}
 
@@ -3756,7 +3756,7 @@ namespace DOL.GS
 		/// </summary>
 		public override int Z
 		{
-			get => IsMoving ? (int) (base.Z + MovementElapsedTicks * movementComponent.TickSpeedZ) : base.Z;
+			get => IsMoving ? (int)(base.Z + MovementElapsedTicks * movementComponent.TickSpeedZ) : base.Z;
 			set => base.Z = value;
 		}
 
@@ -3813,9 +3813,9 @@ namespace DOL.GS
 			{
 				return false;
 			}
-			
+
 			Notify(GameLivingEvent.SayReceive, this, new SayReceiveEventArgs(source, this, str));
-			
+
 			return true;
 		}
 
@@ -3830,9 +3830,9 @@ namespace DOL.GS
 			{
 				return false;
 			}
-			
+
 			Notify(GameLivingEvent.Say, this, new SayEventArgs(str));
-			
+
 			foreach (GameNPC npc in GetNPCsInRadius(WorldMgr.SAY_DISTANCE))
 			{
 				GameNPC receiver = npc;
@@ -3855,7 +3855,7 @@ namespace DOL.GS
 					}
 				}
 			}
-			
+
 			foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.SAY_DISTANCE))
 			{
 				GamePlayer receiver = player;
@@ -3864,14 +3864,14 @@ namespace DOL.GS
 					receiver.SayReceive(this, str);
 				}
 			}
-			
+
 			// whisper to Targeted NPC.
 			if (TargetObject != null && TargetObject is GameNPC)
 			{
 				GameNPC targetNPC = (GameNPC)TargetObject;
 				targetNPC.WhisperReceive(this, str);
 			}
-			
+
 			return true;
 		}
 
@@ -3887,9 +3887,9 @@ namespace DOL.GS
 			{
 				return false;
 			}
-			
+
 			Notify(GameLivingEvent.YellReceive, this, new YellReceiveEventArgs(source, this, str));
-			
+
 			return true;
 		}
 
@@ -3904,9 +3904,9 @@ namespace DOL.GS
 			{
 				return false;
 			}
-			
+
 			Notify(GameLivingEvent.Yell, this, new YellEventArgs(str));
-			
+
 			foreach (GameNPC npc in GetNPCsInRadius(WorldMgr.YELL_DISTANCE))
 			{
 				GameNPC receiver = npc;
@@ -3915,7 +3915,7 @@ namespace DOL.GS
 					receiver.YellReceive(this, str);
 				}
 			}
-			
+
 			foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.YELL_DISTANCE))
 			{
 				GamePlayer receiver = player;
@@ -3924,7 +3924,7 @@ namespace DOL.GS
 					receiver.YellReceive(this, str);
 				}
 			}
-			
+
 			return true;
 		}
 
@@ -3951,7 +3951,7 @@ namespace DOL.GS
 					//player.Out.SendMessage("Speak slower!", eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow);
 					return false;
 				}
-				
+
 				player.TempProperties.SetProperty("WHISPERDELAY", GameLoop.GameLoopTime);
 
 				foreach (DOL.GS.Quests.DataQuest q in DataQuestList)
@@ -3977,20 +3977,20 @@ namespace DOL.GS
 			{
 				return false;
 			}
-			
+
 			if (!this.IsWithinRadius(target, WorldMgr.WHISPER_DISTANCE))
 			{
 				if (target is not MimicNPC)
 					return false;
 			}
-			
+
 			Notify(GameLivingEvent.Whisper, this, new WhisperEventArgs(target, str));
-			
+
 			if (target is GameLiving)
 			{
 				return ((GameLiving)target).WhisperReceive(this, str);
 			}
-			
+
 			return false;
 		}
 		/// <summary>
@@ -4115,13 +4115,13 @@ namespace DOL.GS
 			return new GameEffectList(this);
 		}
 
-        #endregion
-        #region Abilities
+		#endregion
+		#region Abilities
 
-        /// <summary>
-        /// Holds all abilities of the living (KeyName -> Ability)
-        /// </summary>
-        protected readonly Dictionary<string, Ability> m_abilities = new Dictionary<string, Ability>();
+		/// <summary>
+		/// Holds all abilities of the living (KeyName -> Ability)
+		/// </summary>
+		protected readonly Dictionary<string, Ability> m_abilities = new Dictionary<string, Ability>();
 
 		protected readonly Object m_lockAbilities = new Object();
 
@@ -4133,24 +4133,24 @@ namespace DOL.GS
 		public virtual bool HasAbility(string keyName)
 		{
 			bool hasit = false;
-			
+
 			lock (m_lockAbilities)
 			{
 				hasit = m_abilities.ContainsKey(keyName);
 			}
-			
+
 			return hasit;
 		}
 
 		public bool HasAbilityType(Type type)
 		{
 			bool hasit = false;
-			
+
 			lock (m_lockAbilities)
 			{
 				hasit = (m_abilities.Values.Count(x => x.GetType() == type) > 0 ? true : false);
 			}
-			
+
 			return hasit;
 		}
 
@@ -4175,7 +4175,7 @@ namespace DOL.GS
 			{
 				Ability oldAbility = null;
 				m_abilities.TryGetValue(ability.KeyName, out oldAbility);
-				
+
 				if (oldAbility == null)
 				{
 					isNewAbility = true;
@@ -4186,10 +4186,10 @@ namespace DOL.GS
 				{
 					int oldLevel = oldAbility.Level;
 					oldAbility.Level = ability.Level;
-					
+
 					isNewAbility |= oldAbility.Level > oldLevel;
 				}
-				
+
 				if (sendUpdates && (isNewAbility && (this is GamePlayer)))
 				{
 					(this as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((this as GamePlayer).Client.Account.Language, "GamePlayer.AddAbility.YouLearn", ability.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -4208,14 +4208,14 @@ namespace DOL.GS
 			lock (m_lockAbilities)
 			{
 				m_abilities.TryGetValue(abilityKeyName, out ability);
-				
+
 				if (ability == null)
 					return false;
-				
+
 				ability.Deactivate(this, true);
 				m_abilities.Remove(ability.KeyName);
 			}
-			
+
 			if (this is GamePlayer)
 				(this as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((this as GamePlayer).Client.Account.Language, "GamePlayer.RemoveAbility.YouLose", ability.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 			return true;
@@ -4233,7 +4233,7 @@ namespace DOL.GS
 			{
 				m_abilities.TryGetValue(abilityKey, out ab);
 			}
-			
+
 			return ab;
 		}
 
@@ -4248,7 +4248,7 @@ namespace DOL.GS
 			{
 				tmp = (T)m_abilities.Values.FirstOrDefault(a => a.GetType().Equals(typeof(T)));
 			}
-			
+
 			return tmp;
 		}
 
@@ -4280,12 +4280,12 @@ namespace DOL.GS
 		public int GetAbilityLevel(string keyName)
 		{
 			Ability ab = null;
-			
+
 			lock (m_lockAbilities)
 			{
 				m_abilities.TryGetValue(keyName, out ab);
 			}
-			
+
 			if (ab == null)
 				return 0;
 
@@ -4303,7 +4303,7 @@ namespace DOL.GS
 			{
 				list = new List<Ability>(m_abilities.Values);
 			}
-			
+
 			return list;
 		}
 
@@ -4359,10 +4359,10 @@ namespace DOL.GS
 			lock ((m_disabledSkills as ICollection).SyncRoot)
 			{
 				List<Skill> skillList = new List<Skill>();
-				
-				foreach(KeyValuePair<long, Skill> disabled in m_disabledSkills.Values)
+
+				foreach (KeyValuePair<long, Skill> disabled in m_disabledSkills.Values)
 					skillList.Add(disabled.Value);
-				
+
 				return skillList;
 			}
 		}
@@ -4398,7 +4398,7 @@ namespace DOL.GS
 				{
 					Skill skill = tuple.Item1;
 					int duration = tuple.Item2;
-					
+
 					KeyValuePair<int, Type> key = new(skill.ID, skill.GetType());
 
 					if (duration > 0)
@@ -4418,7 +4418,7 @@ namespace DOL.GS
 			lock ((m_disabledSkills as ICollection).SyncRoot)
 			{
 				KeyValuePair<int, Type> key = new KeyValuePair<int, Type>(skill.ID, skill.GetType());
-				if(m_disabledSkills.ContainsKey(key))
+				if (m_disabledSkills.ContainsKey(key))
 					m_disabledSkills.Remove(key);
 			}
 		}
@@ -4432,18 +4432,18 @@ namespace DOL.GS
 		{
 			if (ObjectState != eObjectState.Active)
 				return;
-			
+
 			foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
 			{
 				if (player == null)
 					continue;
-				
+
 				player.Out.SendLivingEquipmentUpdate(this);
 			}
 		}
-		
+
 		#endregion
-		
+
 		#region Region
 
 		/// <summary>
@@ -4508,7 +4508,7 @@ namespace DOL.GS
 						GameSpellEffect spellEffect = effect as GameSpellEffect;
 
 						if (spellEffect.Spell.SpellType == spell.SpellType &&
-						    spellEffect.Spell.EffectGroup == spell.EffectGroup)
+							spellEffect.Spell.EffectGroup == spell.EffectGroup)
 							return true;
 					}
 				}
@@ -4550,6 +4550,10 @@ namespace DOL.GS
 
 		public virtual bool CastSpell(Spell spell, SpellLine line)
 		{
+			// if (this is MimicNPC mimicNPC)
+			// 	if (mimicNPC.CharacterClass.ID == (int)eCharacterClass.Minstrel ||
+			// 					mimicNPC.CharacterClass.ID == (int)eCharacterClass.Bard)
+			// 		log.Info($"RequestingToStartCasting: {spell.Name} {line.Name}");
 			return castingComponent.RequestStartCastSpell(spell, line, null, TargetObject as GameLiving);
 		}
 
@@ -4720,7 +4724,7 @@ namespace DOL.GS
 			set { m_groupIndex = value; }
 		}
 		#endregion
-		
+
 		/// <summary>
 		/// Handle event notifications.
 		/// </summary>
@@ -4739,7 +4743,7 @@ namespace DOL.GS
 
 			base.Notify(e, sender, args);
 		}
-		
+
 		/// <summary>
 		/// Constructor to create a new GameLiving
 		/// </summary>

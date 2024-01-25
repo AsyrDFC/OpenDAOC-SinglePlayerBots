@@ -9,6 +9,7 @@ using DOL.GS.ServerProperties;
 using DOL.GS.SkillHandler;
 using DOL.GS.Spells;
 using DOL.Language;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -134,8 +135,8 @@ namespace DOL.AI.Brain
                 case eAttackResult.HitUnstyled:
                 case eAttackResult.Missed:
                 case eAttackResult.Parried:
-                AddToAggroList(ad.Attacker, ad.Attacker.EffectiveLevel + ad.Damage + ad.CriticalDamage);
-                break;
+                    AddToAggroList(ad.Attacker, ad.Attacker.EffectiveLevel + ad.Damage + ad.CriticalDamage);
+                    break;
             }
 
             if (FSM.GetState(eFSMStateType.AGGRO) != FSM.GetCurrentState())
@@ -164,6 +165,8 @@ namespace DOL.AI.Brain
             {
                 int distance = Body.GetDistanceTo(Body.SpawnPoint);
                 int maxDistance = Body.MaxDistance > 0 ? Body.MaxDistance : -Body.MaxDistance * AggroRange / 100;
+                log.Info("Distance: " + distance + " MaxDistance: " + maxDistance);
+                log.Info("IsBeyondTetherRange: " + (maxDistance > 0 && distance > maxDistance));
                 return maxDistance > 0 && distance > maxDistance;
             }
             else
@@ -323,38 +326,38 @@ namespace DOL.AI.Brain
                 switch (ab.KeyName)
                 {
                     case Abilities.Intercept:
-                    {
-                        //if (Body.Group != null)
-                        //{
-                        //    GameLiving interceptTarget;
-                        //    List<GameLiving> interceptTargets = new List<GameLiving>();
+                        {
+                            //if (Body.Group != null)
+                            //{
+                            //    GameLiving interceptTarget;
+                            //    List<GameLiving> interceptTargets = new List<GameLiving>();
 
-                        //    foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
-                        //    {
-                        //        if (groupMember is MimicNPC mimic)
-                        //        {
-                        //            if (mimic.CharacterClass.ID == (int)eCharacterClass.Cleric ||
-                        //                mimic.CharacterClass.ID == (int)eCharacterClass.Druid ||
-                        //                mimic.CharacterClass.ID == (int)eCharacterClass.Healer ||
-                        //                mimic.CharacterClass.ID == (int)eCharacterClass.Friar ||
-                        //                mimic.CharacterClass.ID == (int)eCharacterClass.Bard ||
-                        //                mimic.CharacterClass.ID == (int)eCharacterClass.Shaman)
-                        //            {
-                        //                interceptTargets.Add(groupMember);
-                        //            }
-                        //        }
-                        //    }
-                        //}
-                        break;
-                    }
+                            //    foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
+                            //    {
+                            //        if (groupMember is MimicNPC mimic)
+                            //        {
+                            //            if (mimic.CharacterClass.ID == (int)eCharacterClass.Cleric ||
+                            //                mimic.CharacterClass.ID == (int)eCharacterClass.Druid ||
+                            //                mimic.CharacterClass.ID == (int)eCharacterClass.Healer ||
+                            //                mimic.CharacterClass.ID == (int)eCharacterClass.Friar ||
+                            //                mimic.CharacterClass.ID == (int)eCharacterClass.Bard ||
+                            //                mimic.CharacterClass.ID == (int)eCharacterClass.Shaman)
+                            //            {
+                            //                interceptTargets.Add(groupMember);
+                            //            }
+                            //        }
+                            //    }
+                            //}
+                            break;
+                        }
                     case Abilities.Guard:
-                    {
-                        break;
-                    }
+                        {
+                            break;
+                        }
                     case Abilities.Protect:
-                    {
-                        break;
-                    }
+                        {
+                            break;
+                        }
                 }
             }
         }
@@ -373,87 +376,87 @@ namespace DOL.AI.Brain
                         switch (ab.KeyName)
                         {
                             case Abilities.Berserk:
-                            {
-                                if (Body.TargetObject is GameLiving target)
                                 {
-                                    if (Body.IsWithinRadius(Body.TargetObject, Body.AttackRange) &&
-                                        GameServer.ServerRules.IsAllowedToAttack(Body, target, true))
+                                    if (Body.TargetObject is GameLiving target)
                                     {
-                                        new BerserkECSGameEffect(new ECSGameEffectInitParams(Body, 20000, 1));
-                                        Body.DisableSkill(ab, 420000);
+                                        if (Body.IsWithinRadius(Body.TargetObject, Body.AttackRange) &&
+                                            GameServer.ServerRules.IsAllowedToAttack(Body, target, true))
+                                        {
+                                            new BerserkECSGameEffect(new ECSGameEffectInitParams(Body, 20000, 1));
+                                            Body.DisableSkill(ab, 420000);
+                                        }
                                     }
-                                }
 
-                                break;
-                            }
+                                    break;
+                                }
 
                             case Abilities.Stag:
-                            {
-                                if (Body.TargetObject is GameLiving target)
                                 {
-                                    if (Body.IsWithinRadius(Body.TargetObject, Body.AttackRange) &&
-                                        GameServer.ServerRules.IsAllowedToAttack(Body, target, true) || Body.HealthPercent < 75)
+                                    if (Body.TargetObject is GameLiving target)
                                     {
-                                        new StagECSGameEffect(new ECSGameEffectInitParams(Body, 30000, 1), ab.Level);
-                                        Body.DisableSkill(ab, 900000);
+                                        if (Body.IsWithinRadius(Body.TargetObject, Body.AttackRange) &&
+                                            GameServer.ServerRules.IsAllowedToAttack(Body, target, true) || Body.HealthPercent < 75)
+                                        {
+                                            new StagECSGameEffect(new ECSGameEffectInitParams(Body, 30000, 1), ab.Level);
+                                            Body.DisableSkill(ab, 900000);
+                                        }
                                     }
-                                }
 
-                                break;
-                            }
+                                    break;
+                                }
 
                             case Abilities.Triple_Wield:
-                            {
-                                if (Body.TargetObject is GameLiving target)
                                 {
-                                    if (Body.IsWithinRadius(Body.TargetObject, Body.AttackRange) &&
-                                        GameServer.ServerRules.IsAllowedToAttack(Body, target, true))
+                                    if (Body.TargetObject is GameLiving target)
                                     {
-                                        new TripleWieldECSGameEffect(new ECSGameEffectInitParams(Body, 30000, 1));
-                                        Body.DisableSkill(ab, 420000);
+                                        if (Body.IsWithinRadius(Body.TargetObject, Body.AttackRange) &&
+                                            GameServer.ServerRules.IsAllowedToAttack(Body, target, true))
+                                        {
+                                            new TripleWieldECSGameEffect(new ECSGameEffectInitParams(Body, 30000, 1));
+                                            Body.DisableSkill(ab, 420000);
+                                        }
                                     }
-                                }
 
-                                break;
-                            }
+                                    break;
+                                }
 
                             case Abilities.DirtyTricks:
-                            {
-                                if (Body.TargetObject is GameLiving target)
                                 {
-                                    GamePlayer gamePlayer = target as GamePlayer;
-                                    MimicNPC mimic = target as MimicNPC;
-
-                                    if ((gamePlayer != null && gamePlayer.CharacterClass.ClassType == eClassType.ListCaster) ||
-                                        (mimic != null && mimic.CharacterClass.ClassType == eClassType.ListCaster))
-                                        break;
-
-                                    if (Body.IsWithinRadius(Body.TargetObject, Body.AttackRange) &&
-                                        GameServer.ServerRules.IsAllowedToAttack(Body, target, true))
+                                    if (Body.TargetObject is GameLiving target)
                                     {
-                                        new DirtyTricksECSGameEffect(new ECSGameEffectInitParams(Body, 30000, 1));
-                                        Body.DisableSkill(ab, 420000);
-                                    }
-                                }
+                                        GamePlayer gamePlayer = target as GamePlayer;
+                                        MimicNPC mimic = target as MimicNPC;
 
-                                break;
-                            }
+                                        if ((gamePlayer != null && gamePlayer.CharacterClass.ClassType == eClassType.ListCaster) ||
+                                            (mimic != null && mimic.CharacterClass.ClassType == eClassType.ListCaster))
+                                            break;
+
+                                        if (Body.IsWithinRadius(Body.TargetObject, Body.AttackRange) &&
+                                            GameServer.ServerRules.IsAllowedToAttack(Body, target, true))
+                                        {
+                                            new DirtyTricksECSGameEffect(new ECSGameEffectInitParams(Body, 30000, 1));
+                                            Body.DisableSkill(ab, 420000);
+                                        }
+                                    }
+
+                                    break;
+                                }
 
                             case Abilities.ChargeAbility:
-                            {
-                                MimicBody.DevOut("I charged.");
-                                if (Body.TargetObject is GameLiving target &&
-                                    GameServer.ServerRules.IsAllowedToAttack(Body, target, true) &&
-                                    !Body.IsWithinRadius(target, 500))
                                 {
-                                    ChargeAbility charge = Body.GetAbility<ChargeAbility>();
+                                    MimicBody.DevOut("I charged.");
+                                    if (Body.TargetObject is GameLiving target &&
+                                        GameServer.ServerRules.IsAllowedToAttack(Body, target, true) &&
+                                        !Body.IsWithinRadius(target, 500))
+                                    {
+                                        ChargeAbility charge = Body.GetAbility<ChargeAbility>();
 
-                                    if (charge != null && Body.GetSkillDisabledDuration(charge) <= 0)
-                                        charge.Execute(Body);
+                                        if (charge != null && Body.GetSkillDisabledDuration(charge) <= 0)
+                                            charge.Execute(Body);
+                                    }
+
+                                    break;
                                 }
-
-                                break;
-                            }
                         }
                     }
                 }
@@ -542,7 +545,7 @@ namespace DOL.AI.Brain
                 if (AggroTable.Count > 0)
                 {
                     GameLiving closestTarget;
-                    
+
                     if (Body.Group.MimicGroup.PullFromPoint != null)
                         closestTarget = AggroTable.Where(pair => Body.GetConLevel(pair.Key) >= Body.Group.MimicGroup.ConLevelFilter).
                                                    OrderBy(pair => pair.Key.GetDistance(Body.Group.MimicGroup.PullFromPoint)).
@@ -667,7 +670,7 @@ namespace DOL.AI.Brain
 
             GameLiving target = null;
             List<GameLiving> listOfTargets = null;
-            
+
             if (AggroTable.Count > 0)
             {
                 listOfTargets = (AggroTable.Keys.Where(key => key.TargetObject is GameLiving livingTarget && livingTarget != Body &&
@@ -902,7 +905,7 @@ namespace DOL.AI.Brain
                 PrintAggroTable();
 
             //if (PvPMode || CheckAssist == null)
-            
+
             if (!CheckMainTankTarget())
                 Body.TargetObject = CalculateNextAttackTarget();
 
@@ -1098,19 +1101,19 @@ namespace DOL.AI.Brain
             switch (positional)
             {
                 case ePositional.Side:
-                if (Util.RandomBool())
-                    heading = (ushort)(living.Heading - 1024);
-                else
-                    heading = (ushort)(living.Heading + 1024);
-                break;
+                    if (Util.RandomBool())
+                        heading = (ushort)(living.Heading - 1024);
+                    else
+                        heading = (ushort)(living.Heading + 1024);
+                    break;
 
                 case ePositional.Back:
-                heading = (ushort)(living.Heading - 2048);
-                break;
+                    heading = (ushort)(living.Heading - 2048);
+                    break;
 
                 case ePositional.Front:
-                heading = living.Heading;
-                break;
+                    heading = living.Heading;
+                    break;
             }
 
             if (heading < 0)
@@ -1578,13 +1581,13 @@ namespace DOL.AI.Brain
                         livingToHeal = Body;
                     }
                 }
-
                 // Just pick a rando for now.
                 Spell spellToCast = Body.HealSpells[Util.Random(Body.HealSpells.Count - 1)];
                 if (CheckHealSpells(spellToCast, numNeedHealing, singleEmergency, groupEmergency, livingToHeal))
                 {
                     casted = true;
                 }
+
             }
 
             if (!casted && type == eCheckSpellType.CrowdControl)
@@ -1795,35 +1798,35 @@ namespace DOL.AI.Brain
                     case eSpellType.PBAoEHeal:
                     case eSpellType.SpreadHeal:
 
-                    if (spell.IsInstantCast)
-                    {
-                        if (groupEmergency || singleEmergency)
+                        if (spell.IsInstantCast)
                         {
-                            if (Body.IsWithinRadius(livingToHeal, spell.Range))
-                                Body.TargetObject = livingToHeal;
+                            if (groupEmergency || singleEmergency)
+                            {
+                                if (Body.IsWithinRadius(livingToHeal, spell.Range))
+                                    Body.TargetObject = livingToHeal;
+                                break;
+                            }
+                        }
+
+                        if (spell.Target == eSpellTarget.GROUP && numNeedHealing < 2)
+                            break;
+
+                        if (spell.Target == eSpellTarget.SELF && numNeedHealing < 2)
+                            break;
+
+                        if (!LivingHasEffect(livingToHeal, spell) && Body.IsWithinRadius(livingToHeal, spell.Range))
+                        {
+                            Body.TargetObject = livingToHeal;
                             break;
                         }
-                    }
 
-                    if (spell.Target == eSpellTarget.GROUP && numNeedHealing < 2)
                         break;
-
-                    if (spell.Target == eSpellTarget.SELF && numNeedHealing < 2)
-                        break;
-
-                    if (!LivingHasEffect(livingToHeal, spell) && Body.IsWithinRadius(livingToHeal, spell.Range))
-                    {
-                        Body.TargetObject = livingToHeal;
-                        break;
-                    }
-
-                    break;
                 }
             }
 
             if (Body.TargetObject != null)
             {
-                //log.Info("Tried to cast " + spell.Name + " " + spell.SpellType.ToString());
+
                 Body.CastSpell(spell, m_mobSpellLine, false);
                 return true;
             }
@@ -1845,99 +1848,105 @@ namespace DOL.AI.Brain
             Body.TargetObject = null;
 
             // TODO: Instrument classes need special logic.
-            //if (spell.NeedInstrument)
-            //{
-            //    switch (spell.SpellType)
-            //    {
-            //        case eSpellType.PowerRegenBuff:
-            //        {
-            //            if (!Body.InCombat && !Body.IsMoving)
-            //            {
-            //                if (Body.Group != null)
-            //                {
-            //                    if (Body.Group.GetMembersInTheGroup().Any(groupMember => groupMember.MaxMana > 0 && groupMember.ManaPercent < 80) && !LivingHasEffect(Body, spell))
-            //                    {
-            //                        Body.SwitchWeapon(eActiveWeaponSlot.Distance);
-            //                        Body.TargetObject = Body;
-            //                    }
-            //                }
-            //                else if (Body.ManaPercent < 75 && !LivingHasEffect(Body, spell))
-            //                {
-            //                    Body.SwitchWeapon(eActiveWeaponSlot.Distance);
-            //                    Body.TargetObject = Body;
-            //                }
-            //                else if (LivingHasEffect(Body, spell))
-            //                {
-            //                    Body.TargetObject = Body;
-            //                }
-            //            }
-            //        }
-            //        break;
+            if (spell.NeedInstrument)
+            {
+                switch (spell.SpellType)
+                {
+                    case eSpellType.PowerRegenBuff:
+                        {
+                            if (!Body.InCombat && !Body.IsMoving)
+                            {
+                                if (Body.Group != null)
+                                {
+                                    if (Body.Group.GetMembersInTheGroup().Any(groupMember => groupMember.MaxMana > 0 && groupMember.ManaPercent < 80) && !LivingHasEffect(Body, spell))
+                                    {
+                                        // log.Info($"Power Regen Buff Group: {spell.Name}, Type: {spell.SpellType}");
+                                        Body.SwitchWeapon(eActiveWeaponSlot.Distance);
+                                        Body.TargetObject = Body;
+                                    }
+                                }
+                                else if (Body.ManaPercent < 75 && !LivingHasEffect(Body, spell))
+                                {
+                                    // log.Info($"Self Power Regen Buff Group: {spell.Name}, Type: {spell.SpellType}");
+                                    Body.SwitchWeapon(eActiveWeaponSlot.Distance);
+                                    Body.TargetObject = Body;
+                                }
+                                else if (LivingHasEffect(Body, spell))
+                                {
+                                    Body.TargetObject = Body;
+                                }
+                            }
+                        }
+                        break;
 
-            //        case eSpellType.HealthRegenBuff:
+                    case eSpellType.HealthRegenBuff:
 
-            //        if (!Body.InCombat && !Body.IsMoving && !LivingHasEffect(Body, spell))
-            //        {
-            //            ECSGameEffect powerRegen = EffectListService.GetEffectOnTarget(Body, eEffect.Pulse, eSpellType.PowerRegenBuff);
+                        if (!Body.InCombat && !Body.IsMoving && !LivingHasEffect(Body, spell))
+                        {
+                            ECSGameEffect powerRegen = EffectListService.GetEffectOnTarget(Body, eEffect.Pulse, eSpellType.PowerRegenBuff);
 
-            //            if (powerRegen == null)
-            //            {
-            //                if (!Body.InCombat && !Body.IsMoving)
-            //                {
-            //                    if (Body.Group != null)
-            //                    {
-            //                        if (Body.Group.GetMembersInTheGroup().Any(groupMember => groupMember.HealthPercent < 80) && !LivingHasEffect(Body, spell))
-            //                        {
-            //                            Body.SwitchWeapon(eActiveWeaponSlot.Distance);
-            //                            Body.TargetObject = Body;
-            //                        }
-            //                    }
-            //                    else if (Body.HealthPercent < 80 && !LivingHasEffect(Body, spell))
-            //                    {
-            //                        Body.SwitchWeapon(eActiveWeaponSlot.Distance);
-            //                        Body.TargetObject = Body;
-            //                    }
-            //                    else if (LivingHasEffect(Body, spell))
-            //                    {
-            //                        Body.TargetObject = Body;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //        break;
+                            if (powerRegen == null)
+                            {
+                                if (!Body.InCombat && !Body.IsMoving)
+                                {
+                                    if (Body.Group != null)
+                                    {
+                                        if (Body.Group.GetMembersInTheGroup().Any(groupMember => groupMember.HealthPercent < 80) && !LivingHasEffect(Body, spell))
+                                        {
+                                            // log.Info($"Health Regen Buff Group: {spell.Name}, Type: {spell.SpellType}");
+                                            Body.SwitchWeapon(eActiveWeaponSlot.Distance);
+                                            Body.TargetObject = Body;
+                                        }
+                                    }
+                                    else if (Body.HealthPercent < 80 && !LivingHasEffect(Body, spell))
+                                    {
+                                        // log.Info($"Self Health Regen Buff Group: {spell.Name}, Type: {spell.SpellType}");
+                                        Body.SwitchWeapon(eActiveWeaponSlot.Distance);
+                                        Body.TargetObject = Body;
+                                    }
+                                    else if (LivingHasEffect(Body, spell))
+                                    {
+                                        Body.TargetObject = Body;
+                                    }
+                                }
+                            }
+                        }
+                        break;
 
-            //        case eSpellType.EnduranceRegenBuff:
+                    case eSpellType.EnduranceRegenBuff:
 
-            //        if (Body.InCombat)
-            //        {
-            //            if (Body.Group != null)
-            //            {
-            //                if (Body.Group.GetMembersInTheGroup().Any(groupMember => groupMember.EndurancePercent < 95) && !LivingHasEffect(Body, spell))
-            //                {
-            //                    Body.SwitchWeapon(eActiveWeaponSlot.Distance);
-            //                    Body.TargetObject = Body;
-            //                }
-            //            }
-            //        }
+                        if (Body.InCombat)
+                        {
+                            if (Body.Group != null)
+                            {
+                                if (Body.Group.GetMembersInTheGroup().Any(groupMember => groupMember.EndurancePercent < 95) && !LivingHasEffect(Body, spell))
+                                {
+                                    // log.Info($"Endurance Regen Buff Group: {spell.Name}, Type: {spell.SpellType}");
+                                    Body.SwitchWeapon(eActiveWeaponSlot.Distance);
+                                    Body.TargetObject = Body;
+                                }
+                            }
+                        }
 
-            //        break;
+                        break;
 
-            //        case eSpellType.SpeedEnhancement:
-            //        {
-            //            if (!Body.InCombat && Body.IsMoving && !LivingHasEffect(Body, spell))
-            //            {
-            //                Body.SwitchWeapon(eActiveWeaponSlot.Distance);
-            //                Body.TargetObject = Body;
-            //            }
-            //        }
-            //        break;
-            //    }
-            //}
-            //else
-            //{
+                    case eSpellType.SpeedEnhancement:
+                        {
+                            if (!Body.InCombat && Body.IsMoving && !LivingHasEffect(Body, spell))
+                            {
+                                // log.Info($"Speed Enhance: {spell.Name}, Type: {spell.SpellType}");
+                                Body.SwitchWeapon(eActiveWeaponSlot.Distance);
+                                Body.TargetObject = Body;
+                            }
+                        }
+                        break;
+                }
+            }
+            else
 
                 switch (spell.SpellType)
                 {
+
                     #region Summon
 
                     case eSpellType.SummonMinion:
@@ -1946,45 +1955,45 @@ namespace DOL.AI.Brain
                     case eSpellType.SummonCommander:
                     case eSpellType.SummonSimulacrum:
                     case eSpellType.SummonSpiritFighter:
-                    if (Body.ControlledBrain != null)
+                        if (Body.ControlledBrain != null)
+                            break;
+
+                        if (Body.ControlledNpcList == null)
+                            Body.SetControlledBrain(Body.ControlledBrain);
+                        else
+                        {
+                            //Let's check to see if the list is full - if it is, we can't cast another minion.
+                            //If it isn't, let them cast.
+                            IControlledBrain[] icb = Body.ControlledNpcList;
+                            int numberofpets = 0;
+
+                            for (int i = 0; i < icb.Length; i++)
+                            {
+                                if (icb[i] != null)
+                                    numberofpets++;
+                            }
+
+                            if (numberofpets >= icb.Length)
+                                break;
+                        }
+
+                        Body.TargetObject = Body;
+
                         break;
 
-                    if (Body.ControlledNpcList == null)
-                        Body.SetControlledBrain(Body.ControlledBrain);
-                    else
-                    {
-                        //Let's check to see if the list is full - if it is, we can't cast another minion.
-                        //If it isn't, let them cast.
-                        IControlledBrain[] icb = Body.ControlledNpcList;
-                        int numberofpets = 0;
-
-                        for (int i = 0; i < icb.Length; i++)
-                        {
-                            if (icb[i] != null)
-                                numberofpets++;
-                        }
-
-                        if (numberofpets >= icb.Length)
-                            break;
-                    }
-
-                    Body.TargetObject = Body;
-
-                    break;
-
                     case eSpellType.PetSpell:
-                    if (Body.ControlledBrain != null)
-                    {
-                        if (Body.ControlledBrain.Body != null)
+                        if (Body.ControlledBrain != null)
                         {
-                            if (spell.Target == eSpellTarget.PET && !LivingHasEffect(Body.ControlledBrain.Body, spell))
-                                Body.TargetObject = Body.ControlledBrain.Body;
+                            if (Body.ControlledBrain.Body != null)
+                            {
+                                if (spell.Target == eSpellTarget.PET && !LivingHasEffect(Body.ControlledBrain.Body, spell))
+                                    Body.TargetObject = Body.ControlledBrain.Body;
+                            }
                         }
-                    }
-                    break;
+                        break;
 
                     case eSpellType.Pet:
-                    break;
+                        break;
 
                     #endregion Summon
 
@@ -1992,10 +2001,10 @@ namespace DOL.AI.Brain
 
                     case eSpellType.SpeedEnhancement:
 
-                    if (!Body.InCombat && !LivingHasEffect(Body, spell))
-                        Body.TargetObject = Body;
+                        if (!Body.InCombat && !LivingHasEffect(Body, spell))
+                            Body.TargetObject = Body;
 
-                    break;
+                        break;
 
                     #endregion Pulse
 
@@ -2049,36 +2058,35 @@ namespace DOL.AI.Brain
                     case eSpellType.DefensiveProc:
                     case eSpellType.DamageShield:
                     case eSpellType.Bladeturn:
-                    {
-                        if (spell.Target == eSpellTarget.PET)
-                            break;
-
-                        // Buff self
-                        if (!LivingHasEffect(Body, spell))
                         {
-                            Body.TargetObject = Body;
-                            break;
-                        }
-
-                        if (Body.Group != null)
-                        {
-                            if (spell.Target == eSpellTarget.REALM || spell.Target == eSpellTarget.GROUP)
+                            if (spell.Target == eSpellTarget.PET)
+                                break;
+                            // Buff self
+                            if (!LivingHasEffect(Body, spell))
                             {
-                                foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
+                                Body.TargetObject = Body;
+                                break;
+                            }
+
+                            if (Body.Group != null)
+                            {
+                                if (spell.Target == eSpellTarget.REALM || spell.Target == eSpellTarget.GROUP)
                                 {
-                                    if (groupMember != Body)
+                                    foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
                                     {
-                                        if (!LivingHasEffect(groupMember, spell) && Body.IsWithinRadius(groupMember, spell.Range) && groupMember.IsAlive)
+                                        if (groupMember != Body)
                                         {
-                                            Body.TargetObject = groupMember;
-                                            break;
+                                            if (!LivingHasEffect(groupMember, spell) && Body.IsWithinRadius(groupMember, spell.Range) && groupMember.IsAlive)
+                                            {
+                                                Body.TargetObject = groupMember;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
-                    break;
+                        break;
 
                     #endregion Buffs
 
@@ -2086,154 +2094,153 @@ namespace DOL.AI.Brain
 
                     case eSpellType.CureDisease:
 
-                    //Cure self
-                    if (Body.IsDiseased)
-                    {
-                        Body.TargetObject = Body;
-                        break;
-                    }
-
-                    // Cure group members
-                    if (Body.Group != null)
-                    {
-                        foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
+                        //Cure self
+                        if (Body.IsDiseased)
                         {
-                            if (groupMember != Body)
+                            Body.TargetObject = Body;
+                            break;
+                        }
+
+                        // Cure group members
+                        if (Body.Group != null)
+                        {
+                            foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
                             {
-                                if (groupMember.IsDiseased && Body.IsWithinRadius(groupMember, spell.Range))
+                                if (groupMember != Body)
                                 {
-                                    Body.TargetObject = groupMember;
-                                    break;
+                                    if (groupMember.IsDiseased && Body.IsWithinRadius(groupMember, spell.Range))
+                                    {
+                                        Body.TargetObject = groupMember;
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
-                    break;
+                        break;
 
                     case eSpellType.CurePoison:
-                    //Cure self
-                    if (LivingIsPoisoned(Body))
-                    {
-                        Body.TargetObject = Body;
-                        break;
-                    }
-
-                    // Cure group members
-                    if (Body.Group != null)
-                    {
-                        foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
+                        //Cure self
+                        if (LivingIsPoisoned(Body))
                         {
-                            if (groupMember != Body)
+                            Body.TargetObject = Body;
+                            break;
+                        }
+
+                        // Cure group members
+                        if (Body.Group != null)
+                        {
+                            foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
                             {
-                                if (LivingIsPoisoned(groupMember) && Body.IsWithinRadius(groupMember, spell.Range))
+                                if (groupMember != Body)
                                 {
-                                    Body.TargetObject = groupMember;
-                                    break;
+                                    if (LivingIsPoisoned(groupMember) && Body.IsWithinRadius(groupMember, spell.Range))
+                                    {
+                                        Body.TargetObject = groupMember;
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
-                    break;
+                        break;
 
                     case eSpellType.CureMezz:
-                    if (Body.Group != null)
-                    {
-                        foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
+                        if (Body.Group != null)
                         {
-                            if (groupMember != Body)
+                            foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
                             {
-                                if (groupMember.IsMezzed && Body.IsWithinRadius(groupMember, spell.Range))
+                                if (groupMember != Body)
                                 {
-                                    Body.TargetObject = groupMember;
-                                    break;
+                                    if (groupMember.IsMezzed && Body.IsWithinRadius(groupMember, spell.Range))
+                                    {
+                                        Body.TargetObject = groupMember;
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
-                    break;
+                        break;
 
                     case eSpellType.CureNearsightCustom:
-                    if (Body.Group != null)
-                    {
-                        foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
+                        if (Body.Group != null)
                         {
-                            if (groupMember != Body)
+                            foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
                             {
-                                if (LivingHasEffect(groupMember, spell) && Body.IsWithinRadius(groupMember, spell.Range))
+                                if (groupMember != Body)
                                 {
-                                    Body.TargetObject = groupMember;
-                                    break;
+                                    if (LivingHasEffect(groupMember, spell) && Body.IsWithinRadius(groupMember, spell.Range))
+                                    {
+                                        Body.TargetObject = groupMember;
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
-                    break;
+                        break;
 
                     #endregion Cure Disease/Poison/Mezz
 
                     #region Charms
 
                     case eSpellType.Charm:
-                    break;
+                        break;
 
                     #endregion Charms
 
                     case eSpellType.Resurrect:
 
-                    if (Body.Group != null)
-                    {
-                        foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
+                        if (Body.Group != null)
                         {
-                            if (!groupMember.IsAlive && Body.IsWithinRadius(groupMember, spell.Range))
+                            foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
                             {
-                                Body.TargetObject = groupMember; 
-                                break;
+                                if (!groupMember.IsAlive && Body.IsWithinRadius(groupMember, spell.Range))
+                                {
+                                    Body.TargetObject = groupMember;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    break;
+                        break;
 
                     case eSpellType.LifeTransfer:
 
-                    if (Body.Group != null)
-                    {
-                        if (Body.HealthPercent > 50)
+                        if (Body.Group != null)
                         {
-                            GameLiving livingToHeal = null;
-                            int threshold = Properties.NPC_HEAL_THRESHOLD / 2;
-                            int lowestHealth = 100;
-
-                            foreach(GameLiving groupMember in Body.Group.GetMembersInTheGroup())
+                            if (Body.HealthPercent > 50)
                             {
-                                if (groupMember.HealthPercent < threshold)
+                                GameLiving livingToHeal = null;
+                                int threshold = Properties.NPC_HEAL_THRESHOLD / 2;
+                                int lowestHealth = 100;
+
+                                foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
                                 {
-                                    if (groupMember.HealthPercent < lowestHealth)
+                                    if (groupMember.HealthPercent < threshold)
                                     {
-                                        livingToHeal = groupMember;
-                                        lowestHealth = groupMember.HealthPercent;
+                                        if (groupMember.HealthPercent < lowestHealth)
+                                        {
+                                            livingToHeal = groupMember;
+                                            lowestHealth = groupMember.HealthPercent;
+                                        }
                                     }
                                 }
+
+                                if (livingToHeal != null && livingToHeal.IsAlive)
+                                    Body.TargetObject = livingToHeal;
                             }
-
-                            if (livingToHeal != null && livingToHeal.IsAlive)
-                                Body.TargetObject = livingToHeal;
                         }
-                    }
 
-                    break;
+                        break;
 
                     case eSpellType.PetConversion:
-                    break;
+                        break;
 
                     default:
-                    log.Warn($"CheckDefensiveSpells() encountered an unknown spell type [{spell.SpellType}] for {Body?.Name}");
-                    break;
+                        log.Warn($"CheckDefensiveSpells() encountered an unknown spell type [{spell.SpellType}] for {Body?.Name}");
+                        break;
                 }
-            
+
 
             if (Body?.TargetObject != null)
             {
-                //log.Info("Tried to cast " + spell.Name + spell.SpellType.ToString());
                 casted = Body.CastSpell(spell, m_mobSpellLine, false);
             }
 
@@ -2302,19 +2309,19 @@ namespace DOL.AI.Brain
                 case eSpellType.SavageParryBuff:
                 case eSpellType.SavageEvadeBuff:
 
-                //if (Body.HealthPercent < 10)
-                //    break;
+                    //if (Body.HealthPercent < 10)
+                    //    break;
 
-                if (spell.SpellType == eSpellType.SavageCrushResistanceBuff ||
-                    spell.SpellType == eSpellType.SavageSlashResistanceBuff ||
-                    spell.SpellType == eSpellType.SavageThrustResistanceBuff &&
-                    !CheckSavageResistSpell(spell.SpellType))
+                    if (spell.SpellType == eSpellType.SavageCrushResistanceBuff ||
+                        spell.SpellType == eSpellType.SavageSlashResistanceBuff ||
+                        spell.SpellType == eSpellType.SavageThrustResistanceBuff &&
+                        !CheckSavageResistSpell(spell.SpellType))
+                        break;
+
+                    if (!LivingHasEffect(Body, spell))
+                        Body.TargetObject = Body;
+
                     break;
-
-                if (!LivingHasEffect(Body, spell))
-                    Body.TargetObject = Body;
-
-                break;
 
                 case eSpellType.CombatHeal:
                 case eSpellType.DamageAdd:
@@ -2333,18 +2340,18 @@ namespace DOL.AI.Brain
                 case eSpellType.BodyResistBuff:
                 case eSpellType.SummonHunterPet:
 
-                if (spell.SpellType == eSpellType.CombatSpeedBuff)
-                {
-                    if (!Body.IsWithinRadius(lastTarget, Body.AttackRange))
-                        break;
-                }
-                    
-                if (!LivingHasEffect(Body, spell))
-                {
-                    Body.TargetObject = Body;
-                }
+                    if (spell.SpellType == eSpellType.CombatSpeedBuff)
+                    {
+                        if (!Body.IsWithinRadius(lastTarget, Body.AttackRange))
+                            break;
+                    }
 
-                break;
+                    if (!LivingHasEffect(Body, spell))
+                    {
+                        Body.TargetObject = Body;
+                    }
+
+                    break;
             }
 
             if (Body.TargetObject != null)
@@ -2375,10 +2382,10 @@ namespace DOL.AI.Brain
 
                 case eSpellType.Taunt:
 
-                if (Body.Group?.MimicGroup.MainTank == Body)
-                    Body.TargetObject = lastTarget;
+                    if (Body.Group?.MimicGroup.MainTank == Body)
+                        Body.TargetObject = lastTarget;
 
-                break;
+                    break;
 
                 case eSpellType.DirectDamage:
                 case eSpellType.Lifedrain:
@@ -2397,23 +2404,23 @@ namespace DOL.AI.Brain
                 case eSpellType.Mez:
                 case eSpellType.Mesmerize:
 
-                if (spell.IsPBAoE && !Body.IsWithinRadius(lastTarget, spell.Radius))
+                    if (spell.IsPBAoE && !Body.IsWithinRadius(lastTarget, spell.Radius))
+                        break;
+
+                    // Try to limit the debuffs cast to save mana and time spent doing so.
+                    if (spell.IsInstantCast && MimicBody.CharacterClass.ClassType == eClassType.ListCaster)
+                    {
+                        if (!Util.Chance(20))
+                            break;
+                    }
+
+                    if (!LivingHasEffect(lastTarget as GameLiving, spell))
+                    {
+                        Body.TargetObject = lastTarget;
+                    }
                     break;
 
-                // Try to limit the debuffs cast to save mana and time spent doing so.
-                if (spell.IsInstantCast && MimicBody.CharacterClass.ClassType == eClassType.ListCaster)
-                {
-                    if (!Util.Chance(20))
-                        break;
-                }
-
-                if (!LivingHasEffect(lastTarget as GameLiving, spell))
-                {
-                    Body.TargetObject = lastTarget;
-                }
-                break;
-
-                #endregion Enemy Spells
+                    #endregion Enemy Spells
             }
 
             ECSGameEffect pulseEffect = EffectListService.GetPulseEffectOnTarget(Body, spell);
@@ -2442,16 +2449,16 @@ namespace DOL.AI.Brain
             switch (spellType)
             {
                 case eSpellType.SavageCrushResistanceBuff:
-                damageType = eDamageType.Crush;
-                break;
+                    damageType = eDamageType.Crush;
+                    break;
 
                 case eSpellType.SavageSlashResistanceBuff:
-                damageType = eDamageType.Slash;
-                break;
+                    damageType = eDamageType.Slash;
+                    break;
 
                 case eSpellType.SavageThrustResistanceBuff:
-                damageType = eDamageType.Thrust;
-                break;
+                    damageType = eDamageType.Thrust;
+                    break;
             }
 
             if (Body.attackComponent.Attackers.Count > 0)
@@ -2522,27 +2529,27 @@ namespace DOL.AI.Brain
             switch (spellEffect)
             {
                 case eEffect.Stun:
-                {
-                    immunityToCheck = eEffect.StunImmunity;
-                    break;
-                }
+                    {
+                        immunityToCheck = eEffect.StunImmunity;
+                        break;
+                    }
                 case eEffect.Mez:
-                {
-                    immunityToCheck = eEffect.MezImmunity;
-                    break;
-                }
+                    {
+                        immunityToCheck = eEffect.MezImmunity;
+                        break;
+                    }
                 case eEffect.Snare:
                 case eEffect.MovementSpeedDebuff:
                 case eEffect.MeleeSnare:
-                {
-                    immunityToCheck = eEffect.SnareImmunity;
-                    break;
-                }
+                    {
+                        immunityToCheck = eEffect.SnareImmunity;
+                        break;
+                    }
                 case eEffect.Nearsight:
-                {
-                    immunityToCheck = eEffect.NearsightImmunity;
-                    break;
-                }
+                    {
+                        immunityToCheck = eEffect.NearsightImmunity;
+                        break;
+                    }
             }
 
             return immunityToCheck != eEffect.Unknown && EffectListService.GetEffectOnTarget(target, immunityToCheck) != null;

@@ -252,28 +252,28 @@ namespace DOL.GS
 			int levelMinusOne = Level - 1;
 
 			if (Strength < 1)
-				Strength = (short) (Properties.MOB_AUTOSET_STR_BASE + levelMinusOne * Properties.MOB_AUTOSET_STR_MULTIPLIER);
+				Strength = (short)(Properties.MOB_AUTOSET_STR_BASE + levelMinusOne * Properties.MOB_AUTOSET_STR_MULTIPLIER);
 
 			if (Constitution < 1)
-				Constitution = (short) (Properties.MOB_AUTOSET_CON_BASE + levelMinusOne * Properties.MOB_AUTOSET_CON_MULTIPLIER);
+				Constitution = (short)(Properties.MOB_AUTOSET_CON_BASE + levelMinusOne * Properties.MOB_AUTOSET_CON_MULTIPLIER);
 
 			if (Quickness < 1)
-				Quickness = (short) (Properties.MOB_AUTOSET_QUI_BASE + levelMinusOne * Properties.MOB_AUTOSET_QUI_MULTIPLIER);
+				Quickness = (short)(Properties.MOB_AUTOSET_QUI_BASE + levelMinusOne * Properties.MOB_AUTOSET_QUI_MULTIPLIER);
 
 			if (Dexterity < 1)
-				Dexterity = (short) (Properties.MOB_AUTOSET_DEX_BASE + levelMinusOne * Properties.MOB_AUTOSET_DEX_MULTIPLIER);
+				Dexterity = (short)(Properties.MOB_AUTOSET_DEX_BASE + levelMinusOne * Properties.MOB_AUTOSET_DEX_MULTIPLIER);
 
 			if (Intelligence < 1)
-				Intelligence = (short) (Properties.MOB_AUTOSET_INT_BASE + levelMinusOne * Properties.MOB_AUTOSET_INT_MULTIPLIER);
+				Intelligence = (short)(Properties.MOB_AUTOSET_INT_BASE + levelMinusOne * Properties.MOB_AUTOSET_INT_MULTIPLIER);
 
 			if (Empathy < 1)
-				Empathy = (short) (30 + levelMinusOne);
+				Empathy = (short)(30 + levelMinusOne);
 
 			if (Piety < 1)
-				Piety = (short) (30 + levelMinusOne);
+				Piety = (short)(30 + levelMinusOne);
 
 			if (Charisma < 1)
-				Charisma = (short) (30 + levelMinusOne);
+				Charisma = (short)(30 + levelMinusOne);
 		}
 
 		/*
@@ -771,10 +771,10 @@ namespace DOL.GS
 				double movementAmount = MovementElapsedTicks * movementComponent.TickSpeedX;
 
 				if (!IsTargetPositionValid)
-					return (int) (m_x + movementAmount);
+					return (int)(m_x + movementAmount);
 
 				double absMovementAmount = Math.Abs(movementAmount);
-				return Math.Abs(TargetPosition.X - m_x) < absMovementAmount ? TargetPosition.X : (int) (m_x + movementAmount);
+				return Math.Abs(TargetPosition.X - m_x) < absMovementAmount ? TargetPosition.X : (int)(m_x + movementAmount);
 			}
 		}
 
@@ -795,10 +795,10 @@ namespace DOL.GS
 				double movementAmount = MovementElapsedTicks * movementComponent.TickSpeedY;
 
 				if (!IsTargetPositionValid)
-					return (int) (m_y + movementAmount);
+					return (int)(m_y + movementAmount);
 
 				double absMovementAmount = Math.Abs(movementAmount);
-				return Math.Abs(TargetPosition.Y - m_y) < absMovementAmount ? TargetPosition.Y : (int) (m_y + movementAmount);
+				return Math.Abs(TargetPosition.Y - m_y) < absMovementAmount ? TargetPosition.Y : (int)(m_y + movementAmount);
 			}
 		}
 
@@ -819,10 +819,10 @@ namespace DOL.GS
 				double movementAmount = MovementElapsedTicks * movementComponent.TickSpeedZ;
 
 				if (!IsTargetPositionValid)
-					return (int) (m_z + movementAmount);
+					return (int)(m_z + movementAmount);
 
 				double absMovementAmount = Math.Abs(movementAmount);
-				return Math.Abs(TargetPosition.Z - m_z) < absMovementAmount ? TargetPosition.Z : (int) (m_z + movementAmount);
+				return Math.Abs(TargetPosition.Z - m_z) < absMovementAmount ? TargetPosition.Z : (int)(m_z + movementAmount);
 			}
 		}
 
@@ -1052,8 +1052,8 @@ namespace DOL.GS
 			m_x = dbMob.X;
 			m_y = dbMob.Y;
 			m_z = dbMob.Z;
-			_heading = (ushort) (dbMob.Heading & 0xFFF);
-			MaxSpeedBase = (short) dbMob.Speed;
+			_heading = (ushort)(dbMob.Heading & 0xFFF);
+			MaxSpeedBase = (short)dbMob.Speed;
 			CurrentRegionID = dbMob.Region;
 			Realm = (eRealm)dbMob.Realm;
 			Model = dbMob.Model;
@@ -1089,7 +1089,7 @@ namespace DOL.GS
 					ABrain brain = null;
 					foreach (Assembly asm in ScriptMgr.GameServerScripts)
 					{
-						brain = (ABrain) asm.CreateInstance(dbMob.Brain, false);
+						brain = (ABrain)asm.CreateInstance(dbMob.Brain, false);
 
 						if (brain != null)
 							break;
@@ -1228,7 +1228,7 @@ namespace DOL.GS
 			mob.Charisma = Charisma;
 
 			mob.ClassType = GetType().ToString();
-			mob.Flags = (uint) Flags;
+			mob.Flags = (uint)Flags;
 			mob.Speed = MaxSpeedBase;
 			mob.RespawnInterval = m_respawnInterval / 1000;
 			mob.HouseNumber = HouseNumber;
@@ -1248,7 +1248,7 @@ namespace DOL.GS
 			if (m_faction != null)
 				mob.FactionID = m_faction.Id;
 
-			mob.MeleeDamageType = (int) MeleeDamageType;
+			mob.MeleeDamageType = (int)MeleeDamageType;
 
 			if (NPCTemplate != null)
 				mob.NPCTemplateID = NPCTemplate.TemplateId;
@@ -1360,7 +1360,7 @@ namespace DOL.GS
 
 			#region Misc Stats
 			MaxDistance = template.MaxDistance;
-			Race = (short) template.Race;
+			Race = (short)template.Race;
 			BodyType = template.BodyType;
 			MaxSpeedBase = template.MaxSpeed;
 			Flags = (eFlags)template.Flags;
@@ -1482,7 +1482,7 @@ namespace DOL.GS
 				AggroRange = template.AggroRange
 			};
 		}
-		
+
 		public void UpdateNPCEquipmentAppearance()
 		{
 			if (ObjectState != eObjectState.Active) return;
@@ -2283,7 +2283,7 @@ namespace DOL.GS
 			if (Faction != null && aggroBrain != null && aggroBrain.AggroLevel > 0 && aggroBrain.AggroRange > 0)
 			{
 				aggroLevel = Faction.GetAggroToFaction(player);
-				
+
 				if (GameServer.ServerRules.IsSameRealm(this, player, true))
 				{
 					if (firstLetterUppercase) aggroLevelString = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameNPC.GetAggroLevelString.Friendly2");
@@ -2422,12 +2422,12 @@ namespace DOL.GS
 			switch (player.Client.Account.Language)
 			{
 				case "EN":
-				{
-					IList list = base.GetExamineMessages(player);
-					// Message: You examine {0}. {1} is {2}.
-					list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameNPC.GetExamineMessages.YouExamine", GetName(0, false), GetPronoun(0, true), GetAggroLevelString(player, false)));
-					return list;
-				}
+					{
+						IList list = base.GetExamineMessages(player);
+						// Message: You examine {0}. {1} is {2}.
+						list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameNPC.GetExamineMessages.YouExamine", GetName(0, false), GetPronoun(0, true), GetAggroLevelString(player, false)));
+						return list;
+					}
 				default:
 					{
 						IList list = new ArrayList(4);
@@ -2539,7 +2539,7 @@ namespace DOL.GS
 					player.Out.SendMessage($"This siege equipment is owned by an enemy realm!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 					return false;
 				}
-				
+
 
 				if (RiderSlot(player) != -1)
 				{
@@ -2565,7 +2565,7 @@ namespace DOL.GS
 
 				player.MountSteed(this, true);
 			}
-			
+
 			FireAmbientSentence(eAmbientTrigger.interact, player);
 			return true;
 		}
@@ -2700,7 +2700,7 @@ namespace DOL.GS
 
 		private int scalingFactor = Properties.GAMENPC_SCALING;
 		private int orbsReward = 0;
-		
+
 		public override double GetWeaponSkill(DbInventoryItem weapon)
 		{
 			double weaponSkill = (Level + 1) * (ScalingFactor / 7.5) * (1 + 0.01 * GetWeaponStat(weapon) / 2);
@@ -2768,7 +2768,7 @@ namespace DOL.GS
 					return false;
 				if (this.Brain is IControlledBrain)
 					return false;
-				
+
 				HybridDictionary XPGainerList = new HybridDictionary();
 				lock (m_xpGainers.SyncRoot)
 				{
@@ -2804,7 +2804,7 @@ namespace DOL.GS
 					}
 				}
 				return true;
-				
+
 			}
 			set
 			{
@@ -3168,8 +3168,8 @@ namespace DOL.GS
 			}
 
 			int respawnInt = RespawnInterval;
-			int minBound = (int) Math.Floor(respawnInt * .95);
-			int maxBound = (int) Math.Floor(respawnInt * 1.05);
+			int minBound = (int)Math.Floor(respawnInt * .95);
+			int maxBound = (int)Math.Floor(respawnInt * 1.05);
 			respawnInt = Util.Random(minBound, maxBound);
 			if (respawnInt > 0)
 			{
@@ -3301,7 +3301,7 @@ namespace DOL.GS
 			ArrayList droplist = new ArrayList();
 			ArrayList autolootlist = new ArrayList();
 			ArrayList aplayer = new ArrayList();
-			
+
 			HybridDictionary XPGainerList = new HybridDictionary();
 			lock (m_xpGainers.SyncRoot)
 			{
@@ -3310,15 +3310,15 @@ namespace DOL.GS
 					XPGainerList.Add(gainer.Key, gainer.Value);
 				}
 			}
-			
-			if (XPGainerList.Keys.Count == 0) 
+
+			if (XPGainerList.Keys.Count == 0)
 				return;
 
 			DbItemTemplate[] lootTemplates = LootMgr.GetLoot(this, killer);
 
 			foreach (DbItemTemplate lootTemplate in lootTemplates)
 			{
-				if (lootTemplate == null) 
+				if (lootTemplate == null)
 					continue;
 
 				GameStaticItem loot = null;
@@ -3420,14 +3420,14 @@ namespace DOL.GS
 
 				if (killer is GamePlayer playerKiller && activeBG != null)
 					activeBG = playerKiller.TempProperties.GetProperty<BattleGroup>(BattleGroup.BATTLEGROUP_PROPERTY, null);
-				
+
 				foreach (GameObject gainer in XPGainerList.Keys)
 				{
 					//if a battlegroup killed the mob, filter out any non BG players
 					if (activeBG != null && gainer is GamePlayer p &&
 						p.TempProperties.GetProperty<BattleGroup>(BattleGroup.BATTLEGROUP_PROPERTY, null) != activeBG)
 						continue;
-					
+
 					if (gainer is GamePlayer)
 					{
 						playerAttacker = gainer as GamePlayer;
@@ -3450,9 +3450,9 @@ namespace DOL.GS
 
 
 				droplist.Add(loot.GetName(1, false));
-				Diagnostics.StartPerfCounter("ReaperService-NPC-DropLoot-AddToWorld-loot("+loot.GetHashCode()+")");
+				Diagnostics.StartPerfCounter("ReaperService-NPC-DropLoot-AddToWorld-loot(" + loot.GetHashCode() + ")");
 				loot.AddToWorld();
-				Diagnostics.StopPerfCounter("ReaperService-NPC-DropLoot-AddToWorld-loot("+loot.GetHashCode()+")");
+				Diagnostics.StopPerfCounter("ReaperService-NPC-DropLoot-AddToWorld-loot(" + loot.GetHashCode() + ")");
 
 				foreach (GameObject gainer in XPGainerList.Keys)
 				{
@@ -3469,11 +3469,11 @@ namespace DOL.GS
 				}
 			}
 
-			Diagnostics.StartPerfCounter("ReaperService-NPC-DropLoot-BroadcastLoot-npc("+this.GetHashCode()+")");
+			Diagnostics.StartPerfCounter("ReaperService-NPC-DropLoot-BroadcastLoot-npc(" + this.GetHashCode() + ")");
 			BroadcastLoot(droplist);
-			Diagnostics.StopPerfCounter("ReaperService-NPC-DropLoot-BroadcastLoot-npc("+this.GetHashCode()+")");
+			Diagnostics.StopPerfCounter("ReaperService-NPC-DropLoot-BroadcastLoot-npc(" + this.GetHashCode() + ")");
 
-			Diagnostics.StartPerfCounter("ReaperService-NPC-DropLoot-PickupLoot-npc("+this.GetHashCode()+")");
+			Diagnostics.StartPerfCounter("ReaperService-NPC-DropLoot-PickupLoot-npc(" + this.GetHashCode() + ")");
 			if (autolootlist.Count > 0)
 			{
 				foreach (GameObject obj in autolootlist)
@@ -3485,7 +3485,7 @@ namespace DOL.GS
 					}
 				}
 			}
-			Diagnostics.StopPerfCounter("ReaperService-NPC-DropLoot-PickupLoot-npc("+this.GetHashCode()+")");
+			Diagnostics.StopPerfCounter("ReaperService-NPC-DropLoot-PickupLoot-npc(" + this.GetHashCode() + ")");
 		}
 
 		/// <summary>
@@ -3619,7 +3619,7 @@ namespace DOL.GS
 				{
 					m_spells = value.Cast<Spell>().ToList();
 					//if(!SortedSpells)
-						SortSpells();
+					SortSpells();
 				}
 			}
 		}
@@ -3806,10 +3806,10 @@ namespace DOL.GS
 					spellToCast = (Spell)spell.Clone();
 					spellToCast.Level = Level;
 				}
-				else
-					spellToCast = spell;
-
-				casted = base.CastSpell(spellToCast, line);
+				else					
+				spellToCast = spell;
+                casted = base.CastSpell(spellToCast, line);
+				
 			}
 
 			return casted;
@@ -4028,7 +4028,7 @@ namespace DOL.GS
 								StylesFront.Add(s);
 								break;
 							default:
-								log.Warn($"GameNPC.SortStyles(): Invalid OpeningRequirementValue for positional style {s.Name }, ID {s.ID}, ClassId {s.ClassID}");
+								log.Warn($"GameNPC.SortStyles(): Invalid OpeningRequirementValue for positional style {s.Name}, ID {s.ID}, ClassId {s.ClassID}");
 								break;
 						}
 						break;
@@ -4184,7 +4184,7 @@ namespace DOL.GS
 			string controller = string.Empty;
 			if (Brain is IControlledBrain) // Used for '{controller}' trigger keyword, use the name of the mob's owner (else returns blank)--this is used when a pet has an ambient trigger.
 			{
-				GamePlayer playerOwner = ((IControlledBrain) Brain).GetPlayerOwner();
+				GamePlayer playerOwner = ((IControlledBrain)Brain).GetPlayerOwner();
 				if (playerOwner != null)
 					controller = playerOwner.Name;
 			}
@@ -4196,10 +4196,10 @@ namespace DOL.GS
 				text = chosen.Text.Replace("{sourcename}", Brain?.Body?.Name) // '{sourcename}' returns the mob or NPC name
 					.Replace("{targetname}", living?.Name) // '{targetname}' returns the mob/NPC target's name
 					.Replace("{controller}", controller); // '{controller}' returns the result of the controller var (use this when pets have dialogue)
-				
+
 				// Replace trigger keywords
 				if (living is GamePlayer)
-					text = text.Replace("{class}", ((GamePlayer) living).CharacterClass.Name).Replace("{race}", ((GamePlayer) living).RaceName);
+					text = text.Replace("{class}", ((GamePlayer)living).CharacterClass.Name).Replace("{race}", ((GamePlayer)living).RaceName);
 				if (living is GameNPC)
 					text = text.Replace("{class}", "NPC").Replace("{race}", "NPC");
 			}
@@ -4208,10 +4208,10 @@ namespace DOL.GS
 				text = chosen.Text.Replace("{sourcename}", Brain.Body.Name) // '{sourcename}' returns the mob or NPC name
 					.Replace("{targetname}", TargetObject == null ? string.Empty : TargetObject.Name) // '{targetname}' returns the mob/NPC target's name
 					.Replace("{controller}", controller); // '{controller}' returns the result of the controller var (use this when pets have dialogue)
-				
+
 				// Replace trigger keywords
 				if (TargetObject is GamePlayer)
-					text = text.Replace("{class}", ((GamePlayer) TargetObject).CharacterClass.Name).Replace("{race}", ((GamePlayer) TargetObject).RaceName);
+					text = text.Replace("{class}", ((GamePlayer)TargetObject).CharacterClass.Name).Replace("{race}", ((GamePlayer)TargetObject).RaceName);
 				if (TargetObject is GameNPC)
 					text = text.Replace("{class}", "NPC").Replace("{race}", "NPC");
 			}
@@ -4221,13 +4221,13 @@ namespace DOL.GS
 			{
 				Emote((eEmote)chosen.Emote);
 			}
-			
+
 			// Replace trigger keywords
 			if (TargetObject is GamePlayer && living is GamePlayer)
-				text = text.Replace("{class}", ((GamePlayer) living).CharacterClass.Name).Replace("{race}", ((GamePlayer) living).RaceName);
+				text = text.Replace("{class}", ((GamePlayer)living).CharacterClass.Name).Replace("{race}", ((GamePlayer)living).RaceName);
 			if (TargetObject is GameNPC && living is GameNPC)
 				text = text.Replace("{class}", "NPC").Replace("{race}", "NPC");
-			
+
 			/*// Determines message delivery method for trigger voice
 			if (chosen.Voice.StartsWith("b")) // Broadcast message without "[Broadcast] {0}:" string start
 			{
@@ -4242,44 +4242,44 @@ namespace DOL.GS
 				Yell(text);
 				return;
 			}*/
-			
+
 			// Determines message delivery method for triggers
 			switch (chosen.Voice)
 			{
 				case "b": // Broadcast message without "[Broadcast] {0}:" string start
-				{
-					foreach (GamePlayer player in GetPlayersInRadius(25000))
 					{
-					  player.Out.SendMessage(text, eChatType.CT_Broadcast, eChatLoc.CL_ChatWindow);
+						foreach (GamePlayer player in GetPlayersInRadius(25000))
+						{
+							player.Out.SendMessage(text, eChatType.CT_Broadcast, eChatLoc.CL_ChatWindow);
+						}
+						return;
 					}
-					return;
-				}
 				case "y": // Yell message (increased range) without "{0} yells," string start
-				{
-					Yell(text);
-					return;
-				}
+					{
+						Yell(text);
+						return;
+					}
 				case "s": // Return custom System message in System/Combat window to all players within range
-				{
-					Message.MessageToArea(Brain.Body, text, eChatType.CT_System, eChatLoc.CL_SystemWindow, 512, null);
-					return;
-				}
+					{
+						Message.MessageToArea(Brain.Body, text, eChatType.CT_System, eChatLoc.CL_SystemWindow, 512, null);
+						return;
+					}
 				case "c": // Return custom Say message in Chat window to all players within range, without "{0} says," string start
-				{
-					Message.MessageToArea(Brain.Body, text, eChatType.CT_Say, eChatLoc.CL_ChatWindow, 512, null);
-					return;
-				}
+					{
+						Message.MessageToArea(Brain.Body, text, eChatType.CT_Say, eChatLoc.CL_ChatWindow, 512, null);
+						return;
+					}
 				case "p": // Return custom System message in popup dialog only to player interating with the NPC
-					// For interact triggers
-				{
-					((GamePlayer) living).Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
-					return;
-				}
+						  // For interact triggers
+					{
+						((GamePlayer)living).Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+						return;
+					}
 				default: // Return Say message with "{0} says," string start included (contrary to parameter description)
-				{
-					Say(text);
-					return;
-				}
+					{
+						Say(text);
+						return;
+					}
 			}
 		}
 		#endregion
@@ -4519,7 +4519,7 @@ namespace DOL.GS
 		public GameNPC(ABrain defaultBrain) : base()
 		{
 			if (movementComponent == null)
-				movementComponent = (NpcMovementComponent) base.movementComponent;
+				movementComponent = (NpcMovementComponent)base.movementComponent;
 
 			Level = 1;
 			m_health = MaxHealth;

@@ -12,6 +12,7 @@ namespace DOL.GS
     // This component will hold all data related to casting spells.
     public class CastingComponent : IManagedEntity
     {
+        public static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private ConcurrentQueue<StartCastSpellRequest> _startCastSpellRequests = new(); // This isn't the actual spell queue.
 
         public GameLiving Owner { get; private set; }
@@ -46,10 +47,11 @@ namespace DOL.GS
         {
             if (RequestStartCastSpellInternal(new StartCastSpellRequest(spell, spellLine, spellCastingAbilityHandler, target)))
             {
+                // log.Info($"{Owner} is casting {spell.Name}.");
                 EntityManager.Add(this);
                 return true;
             }
-
+            // log.Info($"{Owner.Name} is NOT casting {spell.Name}.");
             return false;
         }
 

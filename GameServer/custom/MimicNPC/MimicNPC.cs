@@ -143,7 +143,7 @@ namespace DOL.GS.Scripts
             player.Out.SendMessage("[State] [Prevent Combat] [Brain]\n " +
                 "[Group] - [Leader] - [MainPuller] - [MainCC] - [MainTank] - [MainAssist]\n " +
                 "[Spells] - [Inst Harmful] - [Harmful Spells] - [Inst Misc] - [Misc Spells] - [Inst Heal] - [Heal Spells]\n " +
-                "[Styles] - [Abilities]\n " +
+                "[Effects] - [Styles] - [Abilities]\n " +
                 "[Spec] - [Stats]\n " +
                 "[Hood] [Weapon] [Helm] [Torso] [Legs] [Arms] [Hands] [Boots] [Jewelry]\n " +
                 "[Delete]", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
@@ -7322,6 +7322,10 @@ namespace DOL.GS.Scripts
 
             // then buffs drop messages
             //GameLivingProcessDeath(killer);
+
+            //BRENT ADDED
+            // if (Group != null)
+            //     Group.RemoveMember(this);
             base.ProcessDeath(killer);
 
             //lock (m_LockObject)
@@ -7704,7 +7708,7 @@ namespace DOL.GS.Scripts
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
-        public override int GetDamageResist(eProperty property)
+        public int GetDamageResist(eProperty property)
         {
             int res = 0;
             int classResist = 0;

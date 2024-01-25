@@ -7,6 +7,7 @@ namespace DOL.AI
     {
         protected Dictionary<eFSMStateType, FSMState> _states = new();
         protected FSMState _state;
+        protected FSMState _previousState;
 
         public FSM() { }
 
@@ -29,7 +30,10 @@ namespace DOL.AI
         public virtual void SetCurrentState(eFSMStateType stateType)
         {
             if (_state != null)
+            {
                 _state.Exit();
+                _previousState = _state; // Save the current state as the previous state before changing
+            }
 
             _states.TryGetValue(stateType, out _state);
 
@@ -40,6 +44,11 @@ namespace DOL.AI
         public virtual FSMState GetCurrentState()
         {
             return _state;
+        }
+
+          public virtual FSMState GetPreviousState()
+        {
+            return _previousState; // Method to get the previous state
         }
 
         public virtual void Think()

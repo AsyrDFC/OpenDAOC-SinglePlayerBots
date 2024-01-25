@@ -2,6 +2,7 @@
 using DOL.Database;
 using DOL.Events;
 using DOL.GS.Realm;
+using GameServerScripts.Titles;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -18,14 +19,15 @@ namespace DOL.GS.Scripts
 
         public static MimicBattleground ThidBattleground;
 
+        //BRENT CHANGED FROM 6 min to 24 min and 60 max to 104 max
         public static void Initialize()
         {
             ThidBattleground = new MimicBattleground(252,
                                                     new Point3D(37200, 51200, 3950),
                                                     new Point3D(19820, 19305, 4050),
                                                     new Point3D(53300, 26100, 4270),
-                                                    6,
-                                                    60,
+                                                    150,
+                                                    200,
                                                     20,
                                                     24);
         }
@@ -47,7 +49,8 @@ namespace DOL.GS.Scripts
             private ECSGameTimer m_masterTimer;
             private ECSGameTimer m_spawnTimer;
 
-            private int m_timerInterval = 600000; // 10 minutes
+            //BRENT CHANGEDFROM 10 min to 5 min
+            private int m_timerInterval = 600000; // 5 minutes
             private long m_resetMaxTime = 0;
 
             private List<MimicNPC> m_albMimics = new List<MimicNPC>();
@@ -69,7 +72,7 @@ namespace DOL.GS.Scripts
 
             private byte m_minLevel;
             private byte m_maxLevel;
-            
+
             private int m_minTotalMimics;
             private int m_maxTotalMimics;
 
@@ -80,6 +83,7 @@ namespace DOL.GS.Scripts
             private int m_currentMaxHib;
             private int m_currentMaxMid;
 
+            //BRENT CHANGED FROM 35 to 100
             private int m_groupChance = 35;
 
             public void Start()
@@ -401,7 +405,8 @@ namespace DOL.GS.Scripts
                 List<BattleStats> sortedList = masterStatList.OrderByDescending(obj => obj.TotalKills).ToList();
 
                 string message = "----------------------------------------\n\n";
-                int index = Math.Min(25, sortedList.Count);
+                //BRENT CHANGED FROM 25 to 60
+                int index = Math.Min(200, sortedList.Count);
 
                 if (sortedList.Any())
                 {
@@ -426,22 +431,83 @@ namespace DOL.GS.Scripts
                 switch (player.Realm)
                 {
                     case eRealm.Albion:
-                    if (m_albMimics.Any())
-                        message += "Alb count: " + m_albMimics.Count;
-                    break;
+                        if (m_albMimics.Any())
+                            message += "Alb count: " + m_albMimics.Count;
+                        break;
 
                     case eRealm.Hibernia:
-                    if (m_hibMimics.Any())
-                        message += "Hib count: " + m_hibMimics.Count;
-                    break;
+                        if (m_hibMimics.Any())
+                            message += "Hib count: " + m_hibMimics.Count;
+                        break;
 
                     case eRealm.Midgard:
-                    if (m_midMimics.Any())
-                        message += "Mid count: " + m_midMimics.Count;
-                    break;
+                        if (m_midMimics.Any())
+                            message += "Mid count: " + m_midMimics.Count;
+                        break;
                 }
 
-                player.Out.SendMessage(message, PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_PopupWindow);
+                //BRENT ADDED FOR ADMIN TO SEE TOTAL MIMICS
+                if (player.Client.Account.PrivLevel == 3)
+                {
+                    message += "\n\nTotal Mimics: " + currentMimics.Count;
+
+                    if (m_albMimics.Any())
+                    {
+                        message += "\nAlb count: " + m_albMimics.Count;
+                        foreach (MimicNPC mimic in m_albMimics)
+                        {
+                            string stats = string.Format("{0} - {1} - {2} - Kills: {3}",
+                                mimic.Name,
+                                mimic.RaceName,
+                                mimic.CharacterClass.Name,
+                                mimic.Kills);
+
+                            if (mimic.isDeadOrDying)
+                                stats += " - DEAD";
+
+                            message += "\n" + stats;
+                        }
+                    }
+
+                    if (m_hibMimics.Any())
+                    {
+                        message += "\nHib count: " + m_hibMimics.Count;
+                        foreach (MimicNPC mimic in m_hibMimics)
+                        {
+                            string stats = string.Format("{0} - {1} - {2} - Kills: {3}",
+                                mimic.Name,
+                                mimic.RaceName,
+                                mimic.CharacterClass.Name,
+                                mimic.Kills);
+
+                            if (mimic.isDeadOrDying)
+                                stats += " - DEAD";
+
+                            message += "\n" + stats;
+                        }
+                    }
+
+                    if (m_midMimics.Any())
+                    {
+                        message += "\nMid count: " + m_midMimics.Count;
+                        foreach (MimicNPC mimic in m_midMimics)
+                        {
+                            string stats = string.Format("{0} - {1} - {2} - Kills: {3}",
+                                mimic.Name,
+                                mimic.RaceName,
+                                mimic.CharacterClass.Name,
+                                mimic.Kills);
+
+                            if (mimic.isDeadOrDying)
+                                stats += " - DEAD";
+
+                            message += "\n" + stats;
+                        }
+                    }
+                }
+                //BRENT COMMENTED OUT FOR NOW
+                // player.Out.SendMessage(message, PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_PopupWindow);
+                log.Info(message);
             }
 
             public List<MimicNPC> GetMasterList()
@@ -537,7 +603,7 @@ namespace DOL.GS.Scripts
                 mimic.Z = position.Z;
 
                 mimic.CurrentRegionID = region;
-                
+
                 if (mimic.AddToWorld())
                     return true;
             }
@@ -554,45 +620,45 @@ namespace DOL.GS.Scripts
 
             switch (mimicClass)
             {
-                case eMimicClasses.Armsman:      mimic = new MimicArmsman(level); break;
-                case eMimicClasses.Cabalist:     mimic = new MimicCabalist(level); break;
-                case eMimicClasses.Cleric:       mimic = new MimicCleric(level); break;
-                case eMimicClasses.Friar:        mimic = new MimicFriar(level); break;
-                case eMimicClasses.Infiltrator:  mimic = new MimicInfiltrator(level); break;
-                case eMimicClasses.Mercenary:    mimic = new MimicMercenary(level); break;
-                case eMimicClasses.Minstrel:     mimic = new MimicMinstrel(level); break;
-                case eMimicClasses.Paladin:      mimic = new MimicPaladin(level); break;
-                case eMimicClasses.Reaver:       mimic = new MimicReaver(level); break;
-                case eMimicClasses.Scout:        mimic = new MimicScout(level); break;
-                case eMimicClasses.Sorcerer:     mimic = new MimicSorcerer(level); break;
-                case eMimicClasses.Theurgist:    mimic = new MimicTheurgist(level); break;
-                case eMimicClasses.Wizard:       mimic = new MimicWizard(level); break;
+                case eMimicClasses.Armsman: mimic = new MimicArmsman(level); break;
+                case eMimicClasses.Cabalist: mimic = new MimicCabalist(level); break;
+                case eMimicClasses.Cleric: mimic = new MimicCleric(level); break;
+                case eMimicClasses.Friar: mimic = new MimicFriar(level); break;
+                case eMimicClasses.Infiltrator: mimic = new MimicInfiltrator(level); break;
+                case eMimicClasses.Mercenary: mimic = new MimicMercenary(level); break;
+                case eMimicClasses.Minstrel: mimic = new MimicMinstrel(level); break;
+                case eMimicClasses.Paladin: mimic = new MimicPaladin(level); break;
+                case eMimicClasses.Reaver: mimic = new MimicReaver(level); break;
+                case eMimicClasses.Scout: mimic = new MimicScout(level); break;
+                case eMimicClasses.Sorcerer: mimic = new MimicSorcerer(level); break;
+                case eMimicClasses.Theurgist: mimic = new MimicTheurgist(level); break;
+                case eMimicClasses.Wizard: mimic = new MimicWizard(level); break;
 
-                case eMimicClasses.Bard:         mimic = new MimicBard(level); break;
-                case eMimicClasses.Blademaster:  mimic = new MimicBlademaster (level); break;
-                case eMimicClasses.Champion:     mimic = new MimicChampion(level); break;
-                case eMimicClasses.Druid:        mimic = new MimicDruid(level); break;
-                case eMimicClasses.Eldritch:     mimic = new MimicEldritch(level); break;
-                case eMimicClasses.Enchanter:    mimic = new MimicEnchanter(level); break;
-                case eMimicClasses.Hero:         mimic = new MimicHero(level); break;
-                case eMimicClasses.Mentalist:    mimic = new MimicMentalist(level); break;
-                case eMimicClasses.Nightshade:   mimic = new MimicNightshade(level); break;
-                case eMimicClasses.Ranger:       mimic = new MimicRanger(level); break;
-                case eMimicClasses.Valewalker:   mimic = new MimicValewalker(level); break;
-                case eMimicClasses.Warden:       mimic = new MimicWarden(level); break;
+                case eMimicClasses.Bard: mimic = new MimicBard(level); break;
+                case eMimicClasses.Blademaster: mimic = new MimicBlademaster(level); break;
+                case eMimicClasses.Champion: mimic = new MimicChampion(level); break;
+                case eMimicClasses.Druid: mimic = new MimicDruid(level); break;
+                case eMimicClasses.Eldritch: mimic = new MimicEldritch(level); break;
+                case eMimicClasses.Enchanter: mimic = new MimicEnchanter(level); break;
+                case eMimicClasses.Hero: mimic = new MimicHero(level); break;
+                case eMimicClasses.Mentalist: mimic = new MimicMentalist(level); break;
+                case eMimicClasses.Nightshade: mimic = new MimicNightshade(level); break;
+                case eMimicClasses.Ranger: mimic = new MimicRanger(level); break;
+                case eMimicClasses.Valewalker: mimic = new MimicValewalker(level); break;
+                case eMimicClasses.Warden: mimic = new MimicWarden(level); break;
 
-                case eMimicClasses.Berserker:    mimic = new MimicBerserker(level); break;
-                case eMimicClasses.Bonedancer:   mimic = new MimicBonedancer(level); break;
-                case eMimicClasses.Healer:       mimic = new MimicHealer(level); break;
-                case eMimicClasses.Hunter:       mimic = new MimicHunter(level); break;
-                case eMimicClasses.Runemaster:   mimic = new MimicRunemaster(level); break;
-                case eMimicClasses.Savage:       mimic = new MimicSavage(level); break;
-                case eMimicClasses.Shadowblade:  mimic = new MimicShadowblade (level); break;
-                case eMimicClasses.Shaman:       mimic = new MimicShaman(level); break;
-                case eMimicClasses.Skald:        mimic = new MimicSkald(level); break;
+                case eMimicClasses.Berserker: mimic = new MimicBerserker(level); break;
+                case eMimicClasses.Bonedancer: mimic = new MimicBonedancer(level); break;
+                case eMimicClasses.Healer: mimic = new MimicHealer(level); break;
+                case eMimicClasses.Hunter: mimic = new MimicHunter(level); break;
+                case eMimicClasses.Runemaster: mimic = new MimicRunemaster(level); break;
+                case eMimicClasses.Savage: mimic = new MimicSavage(level); break;
+                case eMimicClasses.Shadowblade: mimic = new MimicShadowblade(level); break;
+                case eMimicClasses.Shaman: mimic = new MimicShaman(level); break;
+                case eMimicClasses.Skald: mimic = new MimicSkald(level); break;
                 case eMimicClasses.Spiritmaster: mimic = new MimicSpiritmaster(level); break;
-                case eMimicClasses.Thane:        mimic = new MimicThane(level); break;
-                case eMimicClasses.Warrior:      mimic = new MimicWarrior(level); break;
+                case eMimicClasses.Thane: mimic = new MimicThane(level); break;
+                case eMimicClasses.Warrior: mimic = new MimicWarrior(level); break;
             }
 
             if (mimic != null)
@@ -738,10 +804,10 @@ namespace DOL.GS.Scripts
             DbItemTemplate itemToCreate = new GeneratedUniqueItem(false, realm, charClass, level, objectType, slot, instrumentType);
 
             GameInventoryItem item = GameInventoryItem.Create(itemToCreate);
-            //if (!living.Inventory.AddItem(slot, item))
-            //    log.Info("Could not add " + item.Name + " to slot " + slot);
-            //else
-            //    log.Info("Added " + item.Name + " to slot " + slot);
+            if (!living.Inventory.AddItem(slot, item))
+               log.Info("Could not add " + item.Name + " to slot " + slot);
+            else
+               log.Info("Added " + item.Name + " to slot " + slot);
         }
 
         public static void SetMeleeWeapon(GameLiving living, string weapType, eHand hand, eWeaponDamageType damageType = 0)
@@ -1167,70 +1233,70 @@ namespace DOL.GS.Scripts
             switch (realm)
             {
                 case eRealm.Albion:
-                {
-                    if (_respawnTimeAlb == 0)
                     {
-                        _respawnTimeAlb = GameLoop.GameLoopTime + Util.Random(minRespawnTime, maxRespawnTime);
-                        LFGListAlb = GenerateList(LFGListAlb, realm, level);
-                    }
-
-                    lock (LFGListAlb)
-                    {
-                        LFGListAlb = ValidateList(LFGListAlb);
-
-                        if (GameLoop.GameLoopTime > _respawnTimeAlb)
+                        if (_respawnTimeAlb == 0)
                         {
-                            LFGListAlb = GenerateList(LFGListAlb, realm, level);
                             _respawnTimeAlb = GameLoop.GameLoopTime + Util.Random(minRespawnTime, maxRespawnTime);
+                            LFGListAlb = GenerateList(LFGListAlb, realm, level);
                         }
-                    }
 
-                    return LFGListAlb;
-                }
+                        lock (LFGListAlb)
+                        {
+                            LFGListAlb = ValidateList(LFGListAlb);
+
+                            if (GameLoop.GameLoopTime > _respawnTimeAlb)
+                            {
+                                LFGListAlb = GenerateList(LFGListAlb, realm, level);
+                                _respawnTimeAlb = GameLoop.GameLoopTime + Util.Random(minRespawnTime, maxRespawnTime);
+                            }
+                        }
+
+                        return LFGListAlb;
+                    }
 
                 case eRealm.Hibernia:
-                {
-                    if (_respawnTimeHib == 0)
                     {
-                        _respawnTimeHib = GameLoop.GameLoopTime + Util.Random(minRespawnTime, maxRespawnTime);
-                        LFGListHib = GenerateList(LFGListHib, realm, level);
-                    }
-
-                    lock (LFGListHib)
-                    {
-                        LFGListHib = ValidateList(LFGListHib);
-
-                        if (GameLoop.GameLoopTime > _respawnTimeHib)
+                        if (_respawnTimeHib == 0)
                         {
-                            LFGListHib = GenerateList(LFGListHib, realm, level);
                             _respawnTimeHib = GameLoop.GameLoopTime + Util.Random(minRespawnTime, maxRespawnTime);
+                            LFGListHib = GenerateList(LFGListHib, realm, level);
                         }
-                    }
 
-                    return LFGListHib;
-                }
+                        lock (LFGListHib)
+                        {
+                            LFGListHib = ValidateList(LFGListHib);
+
+                            if (GameLoop.GameLoopTime > _respawnTimeHib)
+                            {
+                                LFGListHib = GenerateList(LFGListHib, realm, level);
+                                _respawnTimeHib = GameLoop.GameLoopTime + Util.Random(minRespawnTime, maxRespawnTime);
+                            }
+                        }
+
+                        return LFGListHib;
+                    }
 
                 case eRealm.Midgard:
-                {
-                    if (_respawnTimeMid == 0)
                     {
-                        _respawnTimeMid = GameLoop.GameLoopTime + Util.Random(minRespawnTime, maxRespawnTime);
-                        LFGListMid = GenerateList(LFGListMid, realm, level);
-                    }
-
-                    lock (LFGListMid)
-                    {
-                        LFGListMid = ValidateList(LFGListMid);
-
-                        if (GameLoop.GameLoopTime > _respawnTimeMid)
+                        if (_respawnTimeMid == 0)
                         {
-                            LFGListMid = GenerateList(LFGListMid, realm, level);
                             _respawnTimeMid = GameLoop.GameLoopTime + Util.Random(minRespawnTime, maxRespawnTime);
+                            LFGListMid = GenerateList(LFGListMid, realm, level);
                         }
-                    }
 
-                    return LFGListMid;
-                }
+                        lock (LFGListMid)
+                        {
+                            LFGListMid = ValidateList(LFGListMid);
+
+                            if (GameLoop.GameLoopTime > _respawnTimeMid)
+                            {
+                                LFGListMid = GenerateList(LFGListMid, realm, level);
+                                _respawnTimeMid = GameLoop.GameLoopTime + Util.Random(minRespawnTime, maxRespawnTime);
+                            }
+                        }
+
+                        return LFGListMid;
+                    }
             }
 
             return null;
@@ -1241,55 +1307,55 @@ namespace DOL.GS.Scripts
             switch (realm)
             {
                 case eRealm.Albion:
-                if (LFGListAlb.Any())
-                {
-                    lock (LFGListAlb)
+                    if (LFGListAlb.Any())
                     {
-                        foreach (MimicLFGEntry entry in LFGListAlb)
+                        lock (LFGListAlb)
                         {
-                            if (entry == entryToRemove)
+                            foreach (MimicLFGEntry entry in LFGListAlb)
                             {
-                                entry.RemoveTime = GameLoop.GameLoopTime - 1;
-                                break;
+                                if (entry == entryToRemove)
+                                {
+                                    entry.RemoveTime = GameLoop.GameLoopTime - 1;
+                                    break;
+                                }
                             }
                         }
                     }
-                }
-                break;
+                    break;
 
                 case eRealm.Hibernia:
-                if (LFGListHib.Any())
-                {
-                    lock (LFGListHib)
+                    if (LFGListHib.Any())
                     {
-                        foreach (MimicLFGEntry entry in LFGListHib)
+                        lock (LFGListHib)
                         {
-                            if (entry == entryToRemove)
+                            foreach (MimicLFGEntry entry in LFGListHib)
                             {
-                                entry.RemoveTime = GameLoop.GameLoopTime;
-                                break;
+                                if (entry == entryToRemove)
+                                {
+                                    entry.RemoveTime = GameLoop.GameLoopTime;
+                                    break;
+                                }
                             }
                         }
                     }
-                }
-                break;
+                    break;
 
                 case eRealm.Midgard:
-                if (LFGListMid.Any())
-                {
-                    lock (LFGListMid)
+                    if (LFGListMid.Any())
                     {
-                        foreach (MimicLFGEntry entry in LFGListMid)
+                        lock (LFGListMid)
                         {
-                            if (entry == entryToRemove)
+                            foreach (MimicLFGEntry entry in LFGListMid)
                             {
-                                entry.RemoveTime = GameLoop.GameLoopTime;
-                                break;
+                                if (entry == entryToRemove)
+                                {
+                                    entry.RemoveTime = GameLoop.GameLoopTime;
+                                    break;
+                                }
                             }
                         }
                     }
-                }
-                break;
+                    break;
             }
         }
 
@@ -1378,15 +1444,17 @@ namespace DOL.GS.Scripts
     // Just a quick way to get names...
     public static class MimicNames
     {
-        private const string albMaleNames = "Gareth,Lancelot,Cedric,Tristan,Percival,Gawain,Arthur,Merlin,Galahad,Ector,Uther,Mordred,Bors,Lionel,Agravain,Bedivere,Kay,Lamorak,Erec,Gaheris,Pellinore,Loholt,Leodegrance,Aglovale,Tor,Ywain,Uri,Cador,Elayne,Tristram,Cei,Gavain,Kei,Launcelot,Meleri,Isolde,Dindrane,Ragnelle,Lunete,Morgause,Yseult,Bellicent,Brangaine,Blanchefleur,Enid,Vivian,Laudine,Selivant,Lisanor,Ganelon,Cundrie,Guinevere,Norgal,Vivienne,Clarissant,Ettard,Morgaine,Serene,Serien,Selwod,Siraldus,Corbenic,Gurnemanz,Terreban,Malory,Dodinel,Serien,Gurnemanz,Manessen,Herzeleide,Taulat,Serien,Bohort,Ysabele,Karados,Dodinel,Peronell,Dinadan,Segwarides,Lucan,Lamorat,Enide,Parzival,Aelfric,Geraint,Rivalin,Blanchefleur,Gurnemanz,Terreban,Launceor,Clarissant,Herzeleide,Taulat,Zerbino,Serien,Bohort,Ysabele,Dodinel,Peronell,Serenadine,Dinadan,Caradoc,Segwarides,Lucan,Lamorat,Enide,Parzival,Aelfric,Geraint,Rivalin,Blanchefleur,Kaherdin,Gurnemanz,Terreban,Launceor,Clarissant,Patrise,Navarre,Taulat,Iseut,Guivret,Madouc,Ygraine,Tristran,Perceval,Lanzarote,Lamorat,Ysolt,Evaine,Guenever,Elisena,Rowena,Deirdre,Maelis,Clarissant,Palamedes,Yseult,Iseult,Palomides,Brangaine,Laudine,Herlews,Tristram,Alundyne,Blasine,Dinas";
-        private const string albFemaleNames = "Guinevere,Isolde,Morgana,Elaine,Vivienne,Nimue,Lynette,Rhiannon,Enid,Iseult,Bellicent,Brangaine,Blanchefleur,Laudine,Selivant,Lisanor,Elidor,Brisen,Linet,Serene,Serien,Selwod,Ysabele,Karados,Peronell,Serenadine,Dinadan,Clarissant,Igraine,Aelfric,Herzeleide,Taulat,Zerbino,Iseut,Guivret,Madouc,Ygraine,Elisena,Rowena,Deirdre,Maelis,Herlews,Alundyne,Blasine,Dinas,Evalach,Rohais,Soredamors,Orguelleuse,Egletine,Fenice,Amide,Lionesse,Eliduc,Silvayne,Amadas,Amadis,Iaonice,Emerause,Ysabeau,Idonia,Alardin,Lessele,Evelake,Herzeleide,Carahes,Elyabel,Igrayne,Laudine,Guenloie,Isolt,Urgan,Yglais,Nimiane,Arabele,Amabel,Clarissant,Patrise,Navarre,Iseut,Guivret,Madouc,Ygraine,Elisena,Rowena,Deirdre,Maelis,Herlews,Alundyne,Blasine,Dinas,Evalach,Rohais,Soredamors,Orguelleuse,Egletine,Fenice,Amide,Lionesse,Eliduc,Silvayne,Amadas,Amadis,Iaonice,Emerause,Ysabeau,Idonia,Alardin,Lessele,Evelake,Herzeleide,Carahes,Elyabel,Igrayne,Laudine,Guenloie,Isolt,Urgan,Yglais,Nimiane,Arabele,Amabel";
+        private const string albMaleNames = "EloraOrozco,KeanuHughes,SamanthaSheppard,TrentLawrence,LaurenKaur,AugustineTyler,HelenaDunn,DawsonHoffman,AspenRobertson,EmilianoWillis,AlexaBarber,SolomonBradford,RheaBond,RogerEdwards,IvyMason,BrandonGolden,GiulianaSaunders,KasenPeck,CrystalWinters,DeandrePetersen,FernandaMills,AlexTownsend,AzaleaMaynard,LandryWilkerson,JaniyahDavidson,DanteCollins,KinsleyMcFarland,DaneWeeks,KarenRamsey,LucianoBailey,KennedyMorse,BodeEspinoza,LucilleHarrington,OmariBarry,WaverlyMack,EstebanMacdonald,RosaliaRomero,BrysonMcDonald,DaisyTodd,BaylorFrost,PaulaMitchell,JaxonUnderwood,EnsleyYu,BryantMason,SiennaMedrano,ArianBeltran,KaydenceHarper,HayesVentura,ZoraSutton,WarrenLozano,CeceliaCaldwell,RylanSalas,AmberBowman,FranciscoMcCullough,HanaHawkins,VictorMcDowell,RaynaStewart,NolanPena,RachelEnriquez,ElishaLi,PaigeSchroeder,IzaiahSilva,LuciaFuentes,BowenSerrano,AllieErickson,JohnnyWard,ArianaPreston,VincenzoHuang,FrancescaCarrillo,WadeLove,AviannaStanley,ManuelAyala,BlairNolan,MaximoLarson,AlaynaPena,MarcusKnight,GracieMurray,AshtonHall,LeahWilliamson,EmersonChavez,NevaehTucker,IvanPowell,VivianCantu,AnakinStephenson,KhaleesiParks,GianniDuke,MelaniCortez,ZaynHayes,IrisPierce,NicolasHensley,MalayaAyers,UlisesZimmerman,AriyahEllison,KyeReeves,LanaCrane,FoxJarvis,ElisabethStafford,AlfredoVargas,AndreaLucas,ChanceGlover";
 
-        private const string hibMaleNames = "Aonghus,Breandán,Cian,Dallán,Eógan,Fearghal,Gréagóir,Iomhar,Lorcán,Máirtín,Neachtan,Odhrán,Páraic,Ruairí,Seosamh,Toiréasa,Áed,Beircheart,Colm,Domhnall,Éanna,Fergus,Goll,Irial,Liam,MacCon,Naoimhín,Ódhran,Pádraig,Ronán,Seánán,Tadhgán,Úilliam,Ailill,Bran,Cairbre,Daithi,Eoghan,Faolan,Gorm,Iollan,Lughaidh,Manannan,Niall,Oisin,Pádraig,Rónán,Séadna,Tadhg,Ultán,Alastar,Bairre,Caoilte,Dáire,Énna,Fiachra,Gairm,Imleach,Jarlath,Kian,Laoiseach,Malachy,Naoise,Odhrán,Páidín,Roibéard,Seamus,Turlough,Uilleag,Alastriona,Bairrfhionn,Caoimhe,Dymphna,Éabha,Fionnuala,Gráinne,Isolt,Laoise,Máire,Niamh,Oonagh,Pádraigín,Róisín,Saoirse,Teagan,Úna,Aoife,Bríd,Caitríona,Deirdre,Éibhlin,Fia,Gormlaith,Iseult,Jennifer,Kerstin,Léan,Máighréad,Nóirín,Órlaith,Plurabelle,Ríoghnach,Siobhán,Treasa,Úrsula,Aodh,Baird,Caoimhín,Dáire,Éamon,Fearghas,Gartlach,Íomhar,József,Lochlainn,Mánus,Naois,Óisin,Páidín,Roibeárd,Seaán,Tomás,Uilliam,Ailbhe,Bairrionn,Caoilinn,Dairine,Eabhnat,Fearchara,Gormfhlaith,Ite,Juliana,Kaitlín,Laochlann,Nollaig,Órnait,Pála,Roise,Seaghdha,Tomaltach,Uinseann,Ailbín,Bairrionn,Caoimhín,Dairine,Eabhnat,Fearchara,Gormfhlaith,Ite,Juliana,Kaitlín,Laochlann,Nollaig,Órnait,Pála,Roise,Seaghdha,Tomaltach,Uinseann";
-        private const string hibFemaleNames = "Aibhlinn,Brighid,Caoilfhionn,Deirdre,Éabha,Fionnuala,Gráinne,Iseult,Jennifer,Kerstin,Léan,Máire,Niamh,Oonagh,Pádraigín,Róisín,Saoirse,Teagan,Úna,Aoife,Aisling,Bláthnat,Clíodhna,Dymphna,Éidín,Fíneachán,Gormfhlaith,Íomhar,Juliana,Kaitlín,Laoise,Máighréad,Nóirín,Órlaith,Plurabelle,Ríoghnach,Siobhán,Treasa,Úrsula,Ailbhe,Bairrfhionn,Caoilinn,Dairine,Éabhnat,Fearchara,Gormlaith,Ite,Laochlann,Máirtín,Nollaig,Órnait,Pála,Roise,Seaghdha,Tomaltach,Uinseann,Ailbín,Ailis,Bláth,Dairín,Éadaoin,Fionn,Grá,Iseabal,Jacinta,Káit,Laoiseach,Máire,Nuala,Órfhlaith,Póilín,Saibh,Téadgh";
+        private const string albFemaleNames = "AlessiaReilly,AlvaroPonce,AileenHinton,FrankieHampton,LeonaMcCormick,JasiahMcCarthy,KiraMelton,LennonAshley,KhalaniJohns,JoziahCherry,NyomiPruitt,GatlinGeorge,AdelynSchroeder,IzaiahGriffith,AliciaSmall,RudyCarpenter,LillyMaddox,LyricMaldonado,ElainaGibbs,DeaconKeller,LoganDavid,AlonsoSkinner,MaraLawrence,KalebPortillo,NathalieLang,WellsHerman,PaulinaCampos,GideonBates,MadilynDunn,DawsonBartlett,AubrielleSingh,LouisProctor,ChandlerCummings,RaidenYang,AngelinaEscobar,ZachariahNewman,OaklynnBrooks,JordanJohnston,LailaThompson,TheodoreSandoval,ElsieStanley,ManuelMcCarty,HaloWare,TadeoBenitez,AlizaMoreno,MylesKennedy,BriannaPerson,MosesHarrison,JasmineRichardson,RobertValencia,MaddisonLeblanc,BradenLawrence,LaurenAllison,DennisEstes,BrittanyAyers,UlisesSutton,IzabellaVillanueva,HuxleyHoover,VirginiaHunter,ArcherHuerta,DulceSaunders,KasenLeon,AmoraElliott,BlakeGould,VioletaRoberson,ShepherdWalsh,LeiaEnriquez,ElishaVelasquez,EsmeVillarreal,NikolaiWilson,LunaStout,CallahanBest,LexieShah,ZainMitchell,WillowMay,FinleyBerry,AnnabelleStrong,AxlBlevins,AilaReyes,EliHorn,AvahBall,ShaneDixon,BlakelyCuevas,BreckenWagner,MaeveChristian,LedgerEsquivel,JayleeMoran,TateDaniels,EmberThomas,LoganHarmon,MarenCorrea,ZakaiHensley,MalayaRubio,TitanYates,CharleyShields,DevonHouse,SariahOwen,CannonOrtiz,AnnaSchroeder,IzaiahPadilla,MaggieLittle";
 
-        private const string midMaleNames = "Agnar,Bjorn,Dagur,Eirik,Fjolnir,Geir,Haldor,Ivar,Jarl,Kjartan,Leif,Magnus,Njall,Orvar,Ragnald,Sigbjorn,Thrain,Ulf,Vifil,Arni,Bardi,Dain,Einar,Faldan,Grettir,Hogni,Ingvar,Jokul,Koll,Leiknir,Mord,Nikul,Ornolf,Ragnvald,Sigmund,Thorfinn,Ulfar,Vali,Yngvar,Asgeir,Bolli,Darri,Egill,Flosi,Gisli,Hjortur,Ingolf,Jokull,Kolbeinn,Leikur,Mordur,Nils,Orri,Ragnaldur,Sigurdur,Thormundur,Ulfur,Valur,Yngvi,Arnstein,Bardur,David,Egill,Flosi,Gisli,Hjortur,Ingolf,Jokull,Kolbeinn,Leikur,Mordur,Nils,Orri,Ragnaldur,Sigurdur,Thormundur,Ulfur,Valur,Yngvi,Arnstein,Bardur,David,Eik,Fridgeir,Grimur,Hafthor,Ivar,Jorundur,Kari,Ljotur,Mord,Nokkvi,Oddur,Rafn,Steinar,Thorir,Valgard,Yngve,Askur,Baldur,Dagr,Eirikur,Fridleif";
-        private const string midFemaleNames = "Aesa,Bjorg,Dalla,Edda,Fjola,Gerd,Halla,Inga,Jora,Kari,Lina,Marna,Njola,Orna,Ragna,Sif,Thora,Ulfhild,Vika,Alva,Bodil,Dagny,Eira,Frida,Gisla,Hildur,Ingibjorg,Jofrid,Kolfinna,Leidr,Mina,Olina,Ragnheid,Sigrid,Thordis,Una,Yrsa,Asgerd,Bergthora,Eilif,Flosa,Gudrid,Hjordis,Ingimund,Jolninna,Lidgerd,Mjoll,Oddny,Ranveig,Sigrun,Thorhalla,Valdis,Alfhild,Bardis,Davida,Eilika,Fridleif,Gudrun,Hjortur,Jokulina,Kolfinna,Leiknir,Mordur,Njall,Orvar,Ragnald,Sigbjorn,Thrain,Ulf,Vifil,Arnstein,Bardur,David,Egill,Fridgeir,Grimur,Hafthor,Ivar,Jorundur,Kari,Ljotur,Mord,Nokkvi,Oddur,Rafn,Steinar,Thorir,Valgard,Yngve,Askur,Baldur,Dagr,Eirikur,Fridleif,Grimur,Halfdan,Ivarr,Kjell,Ljung,Nikul,Ornolf,Ragnvald,Sigurdur,Thormundur,Ulfur,Valur,Yngvi";
+        private const string hibMaleNames = "LennoxRandolph,KaileyMarsh,BoHill,HannahGeorge,MarkSanford,EmeraldRosas,RemiNorris,AriellePitts,TreyNorman,MalaniSchmitt,MurphyBlanchard,LayneBarron,DustinJennings,PalmerCalhoun,GaryGood,NathaliaParsons,LewisBell,MelodyShepherd,RonaldReese,RosemaryStephens,MessiahMiddleton,MadalynFisher,GaelMercado,MckinleyRollins,WesCollier,IvoryHopkins,AliTerry,WrenReid,JosueZavala,LivJefferson,RaylanAguirre,AriahMcFarland,DaneArellano,FayeBryant,JonahGrant,AlainaStephenson,JoeBlack,MollyBean,MccoyFelix,PaisleighPeterson,SantiagoBurnett,EmberlyMiranda,RoryLyons,KenzieGoodwin,KaisonCarson,NalaniHarmon,RobertoGraham,AlaiaLugo,SantosTrujillo,DanielleMcMillan,RockyBaldwin,EsmeraldaLogan,RoccoVilla,JohannaBarry,EmeryThompson,MadisonCurry,BriggsShaffer,AlannaWatkins,NashBishop,BrooklynnEvans,EliasKoch,MilanaChoi,KhariLloyd,EmelyWallace,ChaseBennett,JosephineSchneider,RaymondCopeland,DayanaHuffman,ChrisGray,SarahGarza,JudahGuzman,AshleyMichael,BronsonMcLaughlin,StephanieHumphrey,KrewHunter,KhloeValentine,DemetriusHahn,FallonSmith,LiamCarlson,KaliMartinez,AlexanderRobinson,NoraDudley,ColterBartlett,AubrielleGriffith,FranklinJimenez,AdelineZimmerman,SergioErickson,SabrinaZuniga,SincereJaramillo,GuadalupePrince,AronRush,MaleahCruz,RyanFleming,FatimaCurry,BriggsLarsen,XiomaraOrr,BenicioDennis,MaisieHansen,CharlieRivas,AverieLester,LeeWaller";
 
+        private const string hibFemaleNames = "WhitleyParker,CalebMayer,AinhoaSosa,EmirRusso,TinsleyBautista,RaulWoodward,DrewDominguez,KadenHayden,AvayahLandry,JaxxCompton,ElinaUnderwood,ReeceOdom,LaylaniYork,LeandroBryant,ParkerHartman,BakerSingh,VivienneDunlap,AriesO’Neal,TreasureQuintana,KelvinEnriquez,NellieCain,BensonMcCoy,MckenzieMoyer,AhmirCochran,AlmaRomero,BrysonTorres,VioletHanson,KhalilMorse,KairiStephenson,JoeLarson,AlaynaBurnett,DavisHicks,AlinaArellano,KellanCortez,HavenPortillo,WallaceDennis,MaisieHardin,HassanPark,LiaFerguson,MiguelBeltran,KaydenceContreras,EmilioTapia,MichaelaOrtega,KobePrince,GretaWeaver,TuckerHarrell,KaraJames,JaxsonCampos,SuttonParra,DavionWagner,MaeveMurphy,CameronKerr,BayleeAbbott,KohenAguirre,AriahLam,BodieCastillo,EvaEstes,HakeemSuarez,JimenaVillarreal,NikolaiHurst,AdaleeDecker,TaylorHarrington,LegacyYu,BryantMunoz,KehlaniAvalos,CoenNorman,MalaniBonilla,AdenMyers,LydiaHanna,AydinArellano,FayeWise,FrederickGrimes,BraelynGallegos,JonasPace,GianaSullivan,EvanLevy,FloraHopkins,AliHickman,ScarletteSimpson,ElliottCook,AaliyahKent,MekhiArnold,FinleyCastaneda,CollinLucero,IlaBrowning,RohanLynn,SamiraHumphrey,KrewMorton,MalloryLi,JorgeParker,AubreyMcLaughlin,IbrahimMalone,SkylerMaddox,LyricSaunders,MeadowDay,KaysonMaldonado,ElainaBass,LandenWilson,LunaMurillo,LanceStafford,BridgetJenkins";
+
+        private const string midMaleNames = "DeclanMcMillan,OakleighMitchell,JaxonBranch,LuisaLam,BodiePollard,MarisolSummers,DariusLawson,PhoebeBaker,EzraOrr,AlaiyaCopeland,AxtonXiong,AmayahHartman,BakerHamilton,MackenzieBall,ShaneMcCarthy,KiraRandall,TrentonKnox,KallieSchmidt,ZaydenSloan,SeleneCastro,JasperBecker,LauraLeon,MarshallLarson,AlaynaSchmitt,MurphyCampos,SuttonGallagher,MarcosHines,PoppyMyers,AdamWheeler,SydneyFloyd,PierceGuzman,AshleyGutierrez,LucaPetersen,FernandaCampos,GideonTruong,JudithCamacho,TatumGuerrero,MargotYoung,AsherWeaver,TeaganSchultz,CodyWilliamson,CatherineDonovan,BrayanRowland,HarleighErickson,JohnnyHendricks,DaniJaramillo,RiggsStewart,MayaCrosby,TristenFox,JulietteAllen,CarterOwen,MikaylaKing,JulianWade,EvieAli,ArjunSawyer,MarinaVillanueva,HuxleyHorton,AitanaCampos,GideonBlake,AmandaPowell,BennettCook,AaliyahRoman,KianBarron,AnyaFlowers,SaulHenderson,MariaBenton,JamalSellers,MercyJaramillo,RiggsQuintero,KeylaMueller,AlbertWagner,MaeveAcosta,JensenVang,MadisynSingh,LouisDejesus,JulissaAcevedo,DakariMcGee,KayleighGood,DavianSandoval,ElsieMontoya,FordJenkins,RyleeMcDaniel,MajorMorrison,RebeccaMcIntosh,KristianMerritt,KaisleyReid,JosueSalazar,FreyaWolfe,DonovanWilkins,AmaliaSchmidt,ZaydenFrye,RayaLyons,CyrusBrowning,PrincessO’Neill,MarcelVillarreal,JazlynBowen,TrevorHouston,LylahBuchanan,EnriqueBartlett,AubrielleGlenn,ZaidCoffey";
+
+        private const string midFemaleNames = "PaolaLim,CalGillespie,AliannaAcosta,JensenChang,OpheliaSummers,DariusStout,ChanaLu,DuncanBecker,LauraLeal,CedricSanders,EverleighHouse,YehudaOrr,AlaiyaAcevedo,DakariPugh,LandryChen,EmmanuelPittman,MarieRuiz,AustinPage,CataleyaJefferson,RaylanMcLaughlin,StephanieFigueroa,SpencerCamacho,ArmaniHinton,FrankieYork,MilanFranco,GagePhan,ElsaBernal,EithanHancock,KatelynBeltran,RickyRivers,KianaArias,AlecCochran,AlmaSalinas,EdgarMiller,IsabellaFletcher,JayStanton,JayceeAdams,HudsonGlenn,BlairePineda,GerardoEsquivel,JayleeLe,DamienRichmond,WhitneyVo,GordonBaldwin,EsmeraldaAndersen,AlistairGlass,ClareGibson,TylerJimenez,AdelineQuintana,KelvinProctor,ChandlerWilkins,YusufArmstrong,PresleyKoch,SalvadorConley,SalemHuber,MacHuynh,OakleeSparks,DrakeKline,SevynFowler,KameronMonroe,CarlyAyala,TannerHarrison,JasmineMalone,RubenMiller,IsabellaWilcox,JerryHuber,RaquelBeil,ArielDonovan,AzariahSparks,DrakeBallard,AlejandraMcCarthy,DevinHolmes,BaileyFord,LuisO’brien,JoannaEllison,KyeMontgomery,EvangelineFinley,CalumSexton,EllenMolina,PrinceBanks,CaliHarris,SamuelWard,ArianaRobinson,MatthewMassey,ClementineWatts,DakotaDavid,HayleeBenitez,JusticeWright,LilyMays,JadielHarris,PenelopeTorres,JaydenSutton,IzabellaFrank,BraylenHopkins,GabrielaFuller,AndreSanchez,AriaArnold,AbrahamJuarez,JulietFrye,FrancoHurst,AdaleeRobbins";
         public static string GetName(eGender gender, eRealm realm)
         {
             string[] names = new string[0];
@@ -1394,25 +1462,25 @@ namespace DOL.GS.Scripts
             switch (realm)
             {
                 case eRealm.Albion:
-                if (gender == eGender.Male)
-                    names = albMaleNames.Split(',');
-                else
-                    names = albFemaleNames.Split(',');
-                break;
+                    if (gender == eGender.Male)
+                        names = albMaleNames.Split(',');
+                    else
+                        names = albFemaleNames.Split(',');
+                    break;
 
                 case eRealm.Hibernia:
-                if (gender == eGender.Male)
-                    names = hibMaleNames.Split(',');
-                else
-                    names = hibFemaleNames.Split(",");
-                break;
+                    if (gender == eGender.Male)
+                        names = hibMaleNames.Split(',');
+                    else
+                        names = hibFemaleNames.Split(",");
+                    break;
 
                 case eRealm.Midgard:
-                if (gender == eGender.Male)
-                    names = midMaleNames.Split(',');
-                else
-                    names = midFemaleNames.Split(",");
-                break;
+                    if (gender == eGender.Male)
+                        names = midMaleNames.Split(',');
+                    else
+                        names = midFemaleNames.Split(",");
+                    break;
             }
 
             int randomIndex = Util.Random(names.Length - 1);

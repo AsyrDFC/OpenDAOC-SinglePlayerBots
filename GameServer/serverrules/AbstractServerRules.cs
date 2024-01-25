@@ -1796,6 +1796,7 @@ namespace DOL.GS.ServerRules
 			foreach (DictionaryEntry de in XPGainerList)
 			{
 				GameObject obj = (GameObject)de.Key;
+
 				if (obj is GamePlayer)
 				{
 					//If a gameplayer with privlevel > 1 attacked the

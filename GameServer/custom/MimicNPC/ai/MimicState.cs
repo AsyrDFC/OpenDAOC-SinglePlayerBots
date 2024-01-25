@@ -7,6 +7,8 @@ using DOL.GS;
 using DOL.GS.Scripts;
 using DOL.GS.ServerProperties;
 using log4net;
+using log4net.Layout;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace DOL.AI.Brain
 {
@@ -32,6 +34,7 @@ namespace DOL.AI.Brain
     {
         public MimicState_WakingUp(MimicBrain brain) : base(brain)
         {
+
             StateType = eFSMStateType.WAKING_UP;
         }
 
@@ -39,17 +42,19 @@ namespace DOL.AI.Brain
         {
             if (!Init)
             {
+
                 _brain.AggroLevel = 100;
-                
                 _brain.PvPMode = _brain.Body.CurrentRegionID == 252 ? true : false;
                 _brain.AggroRange = _brain.PvPMode ? 3600 : 1500;
                 _brain.Roam = true;
                 _brain.Defend = false;
 
-                _brain.Body.RoamingRange = 10000;
+                //BRENT CHANGED FROM 10k to 125k
+                _brain.Body.RoamingRange = 100000;
+                log.Info($"{_brain.Body} is WAKING UP");
 
                 //_brain.CheckDefensiveAbilities();
-                //_brain.Body.SortSpells();
+                //_brain.CheckSpells(MimicBrain.eCheckSpellType.Defensive);
 
                 Init = true;
             }
@@ -96,6 +101,7 @@ namespace DOL.AI.Brain
 
     public class MimicState_Idle : MimicState
     {
+        bool switchedFromRoaming = false;
         public MimicState_Idle(MimicBrain brain) : base(brain)
         {
             StateType = eFSMStateType.IDLE;
@@ -103,40 +109,39 @@ namespace DOL.AI.Brain
 
         public override void Enter()
         {
-            if (ECS.Debug.Diagnostics.StateMachineDebugEnabled)
-                Console.WriteLine($"{_brain.Body} is entering IDLE");
 
             base.Enter();
         }
 
         public override void Think()
         {
-            //if (_brain.HasPatrolPath())
-            //{
+            // if (_brain.HasPatrolPath())
+            // {
             //    _brain.FSM.SetCurrentState(eFSMStateType.PATROLLING);
             //    return;
-            //}
+            // }
 
-            //if (_brain.Body.CanRoam)
-            //{
+            // if (_brain.Body.CanRoam)
+            // {
             //    _brain.FSM.SetCurrentState( eFSMStateType.ROAMING);
             //    return;
-            //}
+            // }
 
-            //if (_brain.IsBeyondTetherRange())
-            //{
+            // if (_brain.IsBeyondTetherRange())
+            // {
             //    _brain.FSM.SetCurrentState(eFSMStateType.RETURN_TO_SPAWN);
             //    return;
-            //}
+            // }
 
-            //if (!_brain.PreventCombat)
-            //{
+            // if (!_brain.PreventCombat)
+            // {
             //    if (_brain.CheckProximityAggro(_brain.AggroRange))
             //    {
             //        _brain.FSM.SetCurrentState(eFSMStateType.AGGRO);
             //        return;
             //    }
-            //}
+            // }
+
 
             _brain.CheckSpells(MimicBrain.eCheckSpellType.Defensive);
 
@@ -155,16 +160,15 @@ namespace DOL.AI.Brain
 
         public override void Enter()
         {
-            if (ECS.Debug.Diagnostics.StateMachineDebugEnabled)
-                Console.WriteLine($"{_brain.Body} is entering FOLLOW_THE_LEADER");
 
             if (_brain.Body.Group != null)
             {
                 leader = _brain.Body.Group.LivingLeader;
                 _brain.Body.Follow(_brain.Body.Group.LivingLeader, 200, 5000);
             }
-            else
-                _brain.FSM.SetCurrentState(eFSMStateType.IDLE);
+            // else
+            //     Console.WriteLine($"{_brain.Body} is entering IDLE from FOLLOW_THE_LEADER *ENTER*");
+            // _brain.FSM.SetCurrentState(eFSMStateType.IDLE);
 
             base.Enter();
         }
@@ -174,13 +178,14 @@ namespace DOL.AI.Brain
             if (_brain.Body.Group == null)
             {
                 _brain.Body.StopFollowing();
+                Console.WriteLine($"{_brain.Body} is WAKING UP");
                 _brain.FSM.SetCurrentState(eFSMStateType.WAKING_UP);
-                
+
                 return;
             }
 
             if (leader == null)
-                leader = _brain.Body.Group.LivingLeader;          
+                leader = _brain.Body.Group.LivingLeader;
 
             //if (!_brain.PreventCombat)
             //{
@@ -208,6 +213,7 @@ namespace DOL.AI.Brain
             }
 
             base.Think();
+
         }
 
         public override void Exit()
@@ -231,8 +237,6 @@ namespace DOL.AI.Brain
 
         public override void Enter()
         {
-            if (ECS.Debug.Diagnostics.StateMachineDebugEnabled)
-                Console.WriteLine($"{_brain.Body} is entering AGGRO");
 
             if (_brain.Body.IsSitting)
                 _brain.MimicBody.Sit(false);
@@ -276,6 +280,7 @@ namespace DOL.AI.Brain
                             if (_brain.Body.Group != null)
                             {
                                 if (_brain.Body.Group.LivingLeader == _brain.Body)
+
                                     _brain.FSM.SetCurrentState(eFSMStateType.ROAMING);
                                 else
                                     _brain.FSM.SetCurrentState(eFSMStateType.FOLLOW_THE_LEADER);
@@ -323,10 +328,8 @@ namespace DOL.AI.Brain
     {
         private const int ROAM_COOLDOWN = 25 * 1000;
         private long _lastRoamTick = 0;
-
         private const int ROAM_CHANCE_DEFEND = 20;
         private const int ROAM_CHANCE_ROAM = 99;
-
         private bool delayRoam;
 
         public MimicState_Roaming(MimicBrain brain) : base(brain)
@@ -368,38 +371,39 @@ namespace DOL.AI.Brain
             {
                 delayRoam = false;
 
-                if (!_brain.Body.InCombat)
+                // The condition of group members not moving might be due to this nested if statement
+                if (_brain.Body.Group != null)
                 {
-                    if (_brain.CheckSpells(MimicBrain.eCheckSpellType.Defensive) || _brain.MimicBody.Sit(_brain.CheckStats(75)))
-                        delayRoam = true;
-
-                    if (_brain.Body.Group != null)
-                    {
-                        foreach (GameLiving groupMember in _brain.Body.Group.GetMembersInTheGroup())
-                            if (groupMember is MimicNPC mimic)
-                                if (groupMember.IsCasting || groupMember.IsSitting ||
-                                    (mimic.MimicBrain.FSM.GetCurrentState() == mimic.MimicBrain.FSM.GetState(eFSMStateType.FOLLOW_THE_LEADER) &&
-                                    !_brain.Body.IsWithinRadius(groupMember, 1000)))
-                                    delayRoam = true;
-                    }
+                    foreach (GameLiving groupMember in _brain.Body.Group.GetMembersInTheGroup())
+                        if (groupMember is MimicNPC mimic)
+                            if (groupMember.IsCasting || groupMember.IsSitting ||
+                                (mimic.MimicBrain.FSM.GetCurrentState() == mimic.MimicBrain.FSM.GetState(eFSMStateType.FOLLOW_THE_LEADER) &&
+                                !_brain.Body.IsWithinRadius(groupMember, 1000)))
+                                delayRoam = true;
                 }
+                else
+                    if (!_brain.CheckSpells(MimicBrain.eCheckSpellType.Defensive))
+                        _brain.MimicBody.Sit(_brain.CheckStats(75));
 
                 if (_brain.Body.IsTargetPositionValid && delayRoam)
+                {
                     _brain.Body.StopMoving();
+                }
 
+                // Ensure that roaming only occurs if not delayed
                 if (!delayRoam && !_brain.Body.IsCasting && !_brain.Body.IsSitting)
                 {
                     int chance = Properties.GAMENPC_RANDOMWALK_CHANCE;
 
                     if (_brain.PvPMode)
-                    {
-                        if (_brain.Roam)
-                            chance = ROAM_CHANCE_ROAM;
-                    }
+                        chance = ROAM_CHANCE_ROAM;
 
                     if (_lastRoamTick + ROAM_COOLDOWN <= GameLoop.GameLoopTime && Util.Chance(chance))
                     {
-                        _brain.Body.Roam(_brain.Body.MaxSpeed);
+                        if (!_brain.Body.IsMoving)
+                        {
+                            _brain.Body.Roam(_brain.Body.MaxSpeed);
+                        }
                         _lastRoamTick = GameLoop.GameLoopTime;
                     }
                 }
@@ -523,7 +527,7 @@ namespace DOL.AI.Brain
                 {
                     if (_brain.Body.Group != null && _brain.Body.Group.MimicGroup.CampPoint != null)
                         _brain.FSM.SetCurrentState(eFSMStateType.CAMP);
-                    
+
                     _brain.FSM.SetCurrentState(eFSMStateType.AGGRO);
                     return;
                 }
@@ -554,6 +558,7 @@ namespace DOL.AI.Brain
         {
             if (_brain.IsBeyondTetherRange())
             {
+                log.Info($"{_brain.Body} is beyond tether range, returning to spawn.");
                 _brain.FSM.SetCurrentState(eFSMStateType.RETURN_TO_SPAWN);
             }
 
