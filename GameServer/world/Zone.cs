@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using DOL.Database;
+using DOL.GS.Scripts;
 using DOL.Language;
 using log4net;
 
@@ -329,7 +330,7 @@ namespace DOL.GS
             else
             {
                 LinkedListNode<GameObject> node = new(gameObject);
-                subZoneObject= new(node, null);
+                subZoneObject = new(node, null);
                 gameObject.SubZoneObject = subZoneObject;
 
                 if (subZoneObject.StartSubZoneChange)
@@ -359,7 +360,7 @@ namespace DOL.GS
             if (!_initialized)
                 InitializeZone();
 
-            uint sqRadius = (uint) radius * radius;
+            uint sqRadius = (uint)radius * radius;
             int referenceSubZoneIndex = GetSubZoneIndex(x, y);
 
             int xInZone = x - XOffset; // x in zone coordinates.
@@ -477,7 +478,7 @@ namespace DOL.GS
                     if (newZone == null)
                     {
                         if (log.IsErrorEnabled)
-                            log.Error($"Tried to relocate object to a non-existent zone (Object: {gameObject})");
+                            // log.Error($"Tried to relocate object to a non-existent zone (Object: {gameObject})");
 
                         AbortRelocation();
                         return;
@@ -507,10 +508,74 @@ namespace DOL.GS
 
             void AbortRelocation()
             {
+                // Handling GamePlayer objects
                 if (gameObject is GamePlayer player)
+                {
                     player.MoveToBind();
-                else
-                    gameObject.RemoveFromWorld();
+                }
+
+                // Handling MimicNPC objects
+                if (gameObject is MimicNPC mimic)
+                {
+                    // Check for specific region
+                    if (mimic.CurrentRegionID == 252) //thid
+                    {
+                        // Handle relocation based on the realm
+                        switch (mimic.Realm)
+                        {
+                            case eRealm.Albion:
+                                mimic.MoveInRegion(252, 24644, 47670, 3416, 2400, true);
+                                log.Error($"MimicNPC {mimic.Name} was relocated to Albion.");
+                                break;
+
+                            case eRealm.Midgard:
+                                mimic.MoveInRegion(252, 46906, 34758, 4235, 3986, true);
+                                log.Error($"MimicNPC {mimic.Name} was relocated to Midgard.");
+                                break;
+
+                            case eRealm.Hibernia:
+                                mimic.MoveInRegion(252, 28688, 29415, 4032, 3986, true);
+                                log.Error($"MimicNPC {mimic.Name} was relocated to Hibernia.");
+                                break;
+
+                            default:
+                                // Default action if realm doesn't match any case
+                                gameObject.RemoveFromWorld();
+                                break;
+                        }
+                    }
+                    if (mimic.CurrentRegionID == 165) //cathal
+                    {
+                        // Handle relocation based on the realm
+                        switch (mimic.Realm)
+                        {
+                            case eRealm.Albion:
+                                mimic.MoveInRegion(165, 583286, 583362, 4896, 1739, true);
+                                log.Error($"MimicNPC {mimic.Name} was relocated to Albion.");
+                                break;
+
+                            case eRealm.Midgard:
+                                mimic.MoveInRegion(165, 573633, 539146, 4812, 835, true);
+                                log.Error($"MimicNPC {mimic.Name} was relocated to Midgard.");
+                                break;
+
+                            case eRealm.Hibernia:
+                                mimic.MoveInRegion(165, 535683, 583739, 5800, 1828, true);
+                                log.Error($"MimicNPC {mimic.Name} was relocated to Hibernia.");
+                                break;
+
+                            default:
+                                // Default action if realm doesn't match any case
+                                gameObject.RemoveFromWorld();
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        // Action if not in region 252
+                        gameObject.RemoveFromWorld();
+                    }
+                }
             }
         }
 
@@ -529,19 +594,19 @@ namespace DOL.GS
         public static bool IsWithinSquaredRadius(int x1, int y1, int z1, int x2, int y2, int z2, uint sqDistance)
         {
             int xDiff = x1 - x2;
-            long dist = (long) xDiff * xDiff;
+            long dist = (long)xDiff * xDiff;
 
             if (dist > sqDistance)
                 return false;
 
             int yDiff = y1 - y2;
-            dist += (long) yDiff * yDiff;
+            dist += (long)yDiff * yDiff;
 
             if (dist > sqDistance)
                 return false;
 
             int zDiff = z1 - z2;
-            dist += (long) zDiff * zDiff;
+            dist += (long)zDiff * zDiff;
 
             return dist <= sqDistance;
         }
@@ -600,7 +665,7 @@ namespace DOL.GS
         {
             int xdiff = Math.Max(Math.Abs(x - xLeft), Math.Abs(x - xRight));
             int ydiff = Math.Max(Math.Abs(y - yTop), Math.Abs(y - yBottom));
-            long distance = (long) xdiff * xdiff + (long) ydiff * ydiff;
+            long distance = (long)xdiff * xdiff + (long)ydiff * ydiff;
             return distance <= squareRadius;
         }
 
@@ -692,7 +757,7 @@ namespace DOL.GS
 
                     for (LinkedListNode<GameObject> node = reader.Current(); node != null; node = reader.Next())
                     {
-                        currentNPC = (GameNPC) node.Value;
+                        currentNPC = (GameNPC)node.Value;
 
                         for (int i = 0; i < realms.Length; i++)
                         {

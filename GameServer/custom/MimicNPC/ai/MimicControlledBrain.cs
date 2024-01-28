@@ -35,7 +35,12 @@
 //	/// <summary>
 //	/// A brain that can be controlled
 //	/// </summary>
-//	public class MimicControlledBrain : MimicStandardMobBrain, IControlledBrain
+//	public class Mimic
+//	
+//	
+//	
+//	
+//	: MimicStandardMobBrain, IControlledBrain
 //	{ 
 //		/// <summary>
 //		/// Defines a logger for this class.

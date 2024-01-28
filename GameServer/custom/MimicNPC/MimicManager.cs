@@ -18,18 +18,31 @@ namespace DOL.GS.Scripts
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static MimicBattleground ThidBattleground;
+        public static MimicBattleground CathalBattleground;
 
         //BRENT CHANGED FROM 6 min to 24 min and 60 max to 104 max
         public static void Initialize()
         {
             ThidBattleground = new MimicBattleground(252,
-                                                    new Point3D(37200, 51200, 3950),
-                                                    new Point3D(19820, 19305, 4050),
-                                                    new Point3D(53300, 26100, 4270),
-                                                    150,
-                                                    200,
-                                                    20,
-                                                    24);
+                                                    new Point3D(24644, 47670, 3416),
+                                                    new Point3D(28688, 29415, 4032),
+                                                    new Point3D(46906, 34758, 4235),
+                                                    100,
+                                                    125,
+                                                    50,
+                                                    50);
+        }
+
+        public static void InitializeCathal()
+        {
+            CathalBattleground = new MimicBattleground(165,
+                                                    new Point3D(583286, 583362, 4896), //1739 heading
+                                                    new Point3D(535683, 583739, 5800), //1828 heading
+                                                    new Point3D(573633, 539146, 4812), //835 heading
+                                                    100,
+                                                    125,
+                                                    50,
+                                                    50);
         }
 
         public class MimicBattleground
@@ -49,8 +62,7 @@ namespace DOL.GS.Scripts
             private ECSGameTimer m_masterTimer;
             private ECSGameTimer m_spawnTimer;
 
-            //BRENT CHANGEDFROM 10 min to 5 min
-            private int m_timerInterval = 600000; // 5 minutes
+            private int m_timerInterval = 600000; // 10 minutes
             private long m_resetMaxTime = 0;
 
             private List<MimicNPC> m_albMimics = new List<MimicNPC>();
@@ -83,7 +95,7 @@ namespace DOL.GS.Scripts
             private int m_currentMaxHib;
             private int m_currentMaxMid;
 
-            //BRENT CHANGED FROM 35 to 100
+            //BRENT CHANGED FROM 35 to 0
             private int m_groupChance = 35;
 
             public void Start()
@@ -505,7 +517,7 @@ namespace DOL.GS.Scripts
                         }
                     }
                 }
-                //BRENT COMMENTED OUT FOR NOW
+                //BRENT COMMENTED OUT FOR NOW -- this breaking because it can't send out more than X amount of characters
                 // player.Out.SendMessage(message, PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_PopupWindow);
                 log.Info(message);
             }
@@ -590,6 +602,24 @@ namespace DOL.GS.Scripts
 
             // Battlegrounds
             MimicBattlegrounds.Initialize();
+
+            return true;
+        }
+
+        public static bool InitializeCathal()
+        {
+            // Factions
+            alb.AddEnemyFaction(hib);
+            alb.AddEnemyFaction(mid);
+
+            hib.AddEnemyFaction(alb);
+            hib.AddEnemyFaction(mid);
+
+            mid.AddEnemyFaction(alb);
+            mid.AddEnemyFaction(hib);
+
+            // Battlegrounds
+            MimicBattlegrounds.InitializeCathal();
 
             return true;
         }
@@ -1434,7 +1464,7 @@ namespace DOL.GS.Scripts
         [ScriptLoadedEvent]
         public static void OnScriptsCompiled(DOLEvent e, object sender, EventArgs args)
         {
-            if (MimicManager.Initialize())
+            if (MimicManager.Initialize() || MimicManager.InitializeCathal())
                 log.Info("MimicNPCs Initialized.");
             else
                 log.Error("MimicNPCs Failed to Initialize.");

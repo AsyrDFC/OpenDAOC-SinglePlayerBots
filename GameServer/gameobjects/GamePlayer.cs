@@ -54,6 +54,7 @@ namespace DOL.GS
         public double SpecLock { get; set; }
         public long LastWorldUpdate { get; set; }
         public ChainedActions ChainedActions { get; private set; }
+        public bool LeadsMimic {get; set;}
 
         public ECSGameTimer EnduRegenTimer { get { return m_enduRegenerationTimer; } }
         public ECSGameTimer PredatorTimeoutTimer

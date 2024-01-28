@@ -1,29 +1,43 @@
 {
   "version": "2.0.0",
   "tasks": [
-      {
-          "label": "build",
-          "command": "dotnet",
-          "type": "process",
-          "args": [
-              "build",
-              "${workspaceFolder}/Net5/DOLdotnetLinux.sln",
-              "/property:GenerateFullPaths=true",
-              "/consoleloggerparameters:NoSummary"
-          ],
-          "problemMatcher": "$msCompile"
-      },
-      {
-          "label": "publish",
-          "command": "dotnet",
-          "type": "process",
-          "args": [
-              "publish",
-              "${workspaceFolder}/Net5/DOLdotnetLinux.sln",
-              "/property:GenerateFullPaths=true",
-              "/consoleloggerparameters:NoSummary"
-          ],
-          "problemMatcher": "$msCompile"
-      }
-  ]
+    {
+        "label": "build",
+        "command": "dotnet",
+        "type": "process",
+        "args": [
+            "build",
+            "${workspaceFolder}/Net5/DOLdotnetLinux.sln",
+            "/property:GenerateFullPaths=true",
+            "/consoleloggerparameters:NoSummary"
+        ],
+        "problemMatcher": "$msCompile"
+    },
+    {
+        "label": "publish",
+        "command": "dotnet",
+        "type": "process",
+        "args": [
+            "publish",
+            "${workspaceFolder}/Net5/DOLdotnetLinux.sln",
+            "/property:GenerateFullPaths=true",
+            "/consoleloggerparameters:NoSummary"
+        ],
+        "problemMatcher": "$msCompile"
+    },
+    {
+        "type": "dotnet",
+        "task": "watch CoreServer",
+        "file": "C:\\OpenDAOC\\OpenDAOC-SinglePlayerBots\\CoreServer\\CoreServer.csproj",
+        "problemMatcher": [],
+        "label": "dotnet: watch CoreServer"
+    },
+    {
+        "type": "dotnet",
+        "task": "clean",
+        "group": "clean",
+        "problemMatcher": [],
+        "label": "dotnet: clean"
+    }
+]
 }

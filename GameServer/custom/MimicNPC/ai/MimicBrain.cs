@@ -2001,9 +2001,47 @@ namespace DOL.AI.Brain
 
                     case eSpellType.SpeedEnhancement:
 
-                        if (!Body.InCombat && !LivingHasEffect(Body, spell))
-                            Body.TargetObject = Body;
+                        //checking for cabalist pet speed buff
+                        if (spell.Target == eSpellTarget.PET)
+                        {
+                            //BRENT TODO this isn't casting on the pet for some reason, will need to check later
+                            //if (Body.ControlledBrain != null)
+                            //{
+                            //    if (Body.ControlledBrain.Body != null)
+                            //    {
+                            //        if (!Body.ControlledBrain.Body.InCombat && !LivingHasEffect(Body.ControlledBrain.Body, spell))
+                            //            Body.TargetObject = Body.ControlledBrain.Body;
+                            //    }
+                            //}
+                            break;
 
+                        }
+                        if (Body.Group != null)
+                        {
+                            if (spell.Target == eSpellTarget.REALM || spell.Target == eSpellTarget.GROUP)
+                            {
+                                foreach (GameLiving groupMember in Body.Group.GetMembersInTheGroup())
+                                {
+                                    if (groupMember != Body)
+                                    {
+                                        if (!LivingHasEffect(groupMember, spell) && Body.IsWithinRadius(groupMember, spell.Range) && groupMember.IsAlive)
+                                        {
+                                            Body.TargetObject = groupMember;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        //if the body is not a cab, cast on self
+                        if (Body is not MimicCabalist)
+                        {
+                            if (!Body.InCombat && !LivingHasEffect(Body, spell))
+                            {
+                                Body.TargetObject = Body;
+                            }
+                        }
                         break;
 
                     #endregion Pulse
@@ -2061,6 +2099,7 @@ namespace DOL.AI.Brain
                         {
                             if (spell.Target == eSpellTarget.PET)
                                 break;
+
                             // Buff self
                             if (!LivingHasEffect(Body, spell))
                             {

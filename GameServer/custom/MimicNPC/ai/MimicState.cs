@@ -48,9 +48,7 @@ namespace DOL.AI.Brain
                 _brain.AggroRange = _brain.PvPMode ? 3600 : 1500;
                 _brain.Roam = true;
                 _brain.Defend = false;
-
-                //BRENT CHANGED FROM 10k to 125k
-                _brain.Body.RoamingRange = 100000;
+                _brain.Body.RoamingRange = 5000;
                 log.Info($"{_brain.Body} is WAKING UP");
 
                 //_brain.CheckDefensiveAbilities();
@@ -101,7 +99,6 @@ namespace DOL.AI.Brain
 
     public class MimicState_Idle : MimicState
     {
-        bool switchedFromRoaming = false;
         public MimicState_Idle(MimicBrain brain) : base(brain)
         {
             StateType = eFSMStateType.IDLE;
@@ -109,23 +106,23 @@ namespace DOL.AI.Brain
 
         public override void Enter()
         {
-
             base.Enter();
         }
 
         public override void Think()
         {
+            _brain.CheckSpells(MimicBrain.eCheckSpellType.Defensive);
             // if (_brain.HasPatrolPath())
             // {
             //    _brain.FSM.SetCurrentState(eFSMStateType.PATROLLING);
             //    return;
             // }
 
-            // if (_brain.Body.CanRoam)
-            // {
-            //    _brain.FSM.SetCurrentState( eFSMStateType.ROAMING);
-            //    return;
-            // }
+            //if (_brain.Body.CanRoam)
+            //{
+            //   _brain.FSM.SetCurrentState(eFSMStateType.ROAMING);
+            //   return;
+            //}
 
             // if (_brain.IsBeyondTetherRange())
             // {
@@ -141,9 +138,6 @@ namespace DOL.AI.Brain
             //        return;
             //    }
             // }
-
-
-            _brain.CheckSpells(MimicBrain.eCheckSpellType.Defensive);
 
             base.Think();
         }
@@ -167,7 +161,6 @@ namespace DOL.AI.Brain
                 _brain.Body.Follow(_brain.Body.Group.LivingLeader, 200, 5000);
             }
             // else
-            //     Console.WriteLine($"{_brain.Body} is entering IDLE from FOLLOW_THE_LEADER *ENTER*");
             // _brain.FSM.SetCurrentState(eFSMStateType.IDLE);
 
             base.Enter();
@@ -175,10 +168,10 @@ namespace DOL.AI.Brain
 
         public override void Think()
         {
+
             if (_brain.Body.Group == null)
             {
                 _brain.Body.StopFollowing();
-                Console.WriteLine($"{_brain.Body} is WAKING UP");
                 _brain.FSM.SetCurrentState(eFSMStateType.WAKING_UP);
 
                 return;
@@ -210,6 +203,14 @@ namespace DOL.AI.Brain
             {
                 if (!_brain.CheckSpells(MimicBrain.eCheckSpellType.Defensive))
                     _brain.MimicBody.Sit(_brain.CheckStats(75));
+            }
+            var distance = _brain.Body.IsWithinRadius(leader, 5000);
+            if (!distance && _brain.Body != leader)
+            {
+                if (leader is MimicNPC mimicNPC)
+                    mimicNPC.MoveInRegion(252, _brain.Body.X, _brain.Body.Y, _brain.Body.Z, _brain.Body.Heading, true);
+                // _brain.FSM.SetCurrentState(eFSMStateType.IDLE);
+                return;
             }
 
             base.Think();
@@ -370,8 +371,6 @@ namespace DOL.AI.Brain
             if (!_brain.Body.InCombat)
             {
                 delayRoam = false;
-
-                // The condition of group members not moving might be due to this nested if statement
                 if (_brain.Body.Group != null)
                 {
                     foreach (GameLiving groupMember in _brain.Body.Group.GetMembersInTheGroup())
@@ -382,8 +381,9 @@ namespace DOL.AI.Brain
                                 delayRoam = true;
                 }
                 else
-                    if (!_brain.CheckSpells(MimicBrain.eCheckSpellType.Defensive))
-                        _brain.MimicBody.Sit(_brain.CheckStats(75));
+                //check for self buffs
+                if (!_brain.CheckSpells(MimicBrain.eCheckSpellType.Defensive))
+                    _brain.MimicBody.Sit(_brain.CheckStats(75));
 
                 if (_brain.Body.IsTargetPositionValid && delayRoam)
                 {
@@ -400,11 +400,12 @@ namespace DOL.AI.Brain
 
                     if (_lastRoamTick + ROAM_COOLDOWN <= GameLoop.GameLoopTime && Util.Chance(chance))
                     {
-                        if (!_brain.Body.IsMoving)
+                        if(!_brain.Body.IsMoving)
                         {
                             _brain.Body.Roam(_brain.Body.MaxSpeed);
+                            _lastRoamTick = GameLoop.GameLoopTime;
                         }
-                        _lastRoamTick = GameLoop.GameLoopTime;
+                        
                     }
                 }
             }

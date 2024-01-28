@@ -50,8 +50,29 @@ namespace DOL.GS
             _pathCalculator = new(npcOwner);
         }
 
+        // //BRENTS CODE. Not sure if i'll keep or if it even works yet
+        //  // New method to check if the bot is near the border of its zone
+        // private bool IsNearZoneBorder()
+        // {
+        //     var currentZone = Owner.CurrentRegion.GetZone(Owner.X, Owner.Y);
+        //     if (currentZone == null) return false;
+
+        //     ushort borderThreshold = 100; // Distance from the border to be considered 'near the border'
+        //     var objectsNearBorder = Owner.CurrentRegion.GetInRadius<MimicNPC>(new Point3D(Owner.X, Owner.Y, Owner.Z), eGameObjectType.NPC, borderThreshold);
+
+        //     // If objects are found near the border, it indicates the bot is close to the border
+        //     return objectsNearBorder.Count > 0;
+        // }
         public override void Tick(long tick)
         {
+            //  // Check if the bot is near the zone border
+            // if (IsNearZoneBorder())
+            // {
+            //     log.Info($"Bot {Owner.Name} is near the border of its zone, returning to spawn point");
+            //     // Move the bot to its spawn location
+            //     WalkTo(Owner.SpawnPoint, DEFAULT_WALK_SPEED);
+            //     return;
+            // }
             if (IsSet(MovementType.FOLLOW))
             {
                 if (_lastFollowTick + _followTickInterval < tick)

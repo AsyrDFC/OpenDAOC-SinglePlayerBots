@@ -1584,8 +1584,8 @@
   </DBRegions>
   <DBRegions>
     <LastTimeRowUpdated>2014-12-09T17:40:23.8005693Z</LastTimeRowUpdated>
-    <RegionID>238</RegionID>
-    <Name>Region238</Name>
+    <RegionID>252</RegionID>
+    <Name>Region252</Name>
     <Description>Thidranki</Description>
     <IP>127.0.0.1</IP>
     <Port>10400</Port>

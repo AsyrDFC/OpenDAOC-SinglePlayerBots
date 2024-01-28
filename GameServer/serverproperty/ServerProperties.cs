@@ -227,7 +227,7 @@ namespace DOL.GS.ServerProperties
 		/// <summary>
 		/// Should users be able to create characters in all realms using the same account
 		/// </summary>
-		[ServerProperty("system", "allow_all_realms", "should we allow characters to be created on all realms using a single account", false)]
+		[ServerProperty("system", "allow_all_realms", "should we allow characters to be created on all realms using a single account", true)]
 		public static bool ALLOW_ALL_REALMS;
 
 		/// <summary>
@@ -729,7 +729,8 @@ namespace DOL.GS.ServerProperties
 		/// <summary>
 		/// Perform a LoS check on client during cast
 		/// </summary>
-		[ServerProperty("world", "check_los_during_cast", "Perform LOS checks during a spell cast.", true)]
+		/// //BRENT CHANGED FRROM FALSE TO TRUE
+		[ServerProperty("world", "check_los_during_cast", "Perform LOS checks during a spell cast.", false)]
 		public static bool CHECK_LOS_DURING_CAST;
 
 		/// <summary>
@@ -1851,7 +1852,8 @@ namespace DOL.GS.ServerProperties
 		/// <summary>
 		/// Should players that exceed BG level cap be moved out of BG when logging in?
 		/// </summary>
-		[ServerProperty("keeps", "teleport_login_bg_level_exceeded", "Should players that exceed BG level cap be moved out of BG when logging in?", true)]
+		/// BRENT CHANGED FROM TRUE TO FALSE
+		[ServerProperty("keeps", "teleport_login_bg_level_exceeded", "Should players that exceed BG level cap be moved out of BG when logging in?", false)]
 		public static bool TELEPORT_LOGIN_BG_LEVEL_EXCEEDED;
 
 		/// <summary>
