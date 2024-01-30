@@ -151,7 +151,11 @@ namespace DOL.AI.Brain
             if (AggroLevel > 0 && aggroRange > 0 && !HasAggro && !Body.AttackState && Body.CurrentSpellHandler == null)
             {
                 CheckPlayerAggro();
-                CheckNPCAggro(aggroRange);
+                //brent changed to prevent npc aggro in rvr or pvp zones
+                if (!Body.CurrentRegion.IsRvR || Body.CurrentRegion.ID != 252)
+                {
+                    CheckNPCAggro(aggroRange);
+                }
             }
 
             // Some calls rely on this method to return if there's something in the aggro list, not necessarily to perform a proximity aggro check.
@@ -983,7 +987,7 @@ namespace DOL.AI.Brain
                                 TargetFlankPosition = GetStylePositionPoint(livingTarget, GetPositional());
                                 Body.StopAttack();
                                 Body.StopFollowing();
-                                Body.WalkTo(new Point3D(TargetFlankPosition.X, TargetFlankPosition.Y, livingTarget.Z), Body.MaxSpeed);
+                                Body.PathTo(new Point3D(TargetFlankPosition.X, TargetFlankPosition.Y, livingTarget.Z), Body.MaxSpeed);
                                 return;
                             }
 

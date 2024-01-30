@@ -45,7 +45,7 @@ namespace DOL.GS.Behaviour.Actions
             GamePlayer player = BehaviourUtils.GuessGamePlayerFromNotify(e, sender, args);
             IPoint3D location = (P is IPoint3D) ? (IPoint3D)P : player;            
 
-            Q.WalkTo(location, Q.CurrentSpeed);
+            Q.PathTo(location, Q.CurrentSpeed);
             
         }
     }

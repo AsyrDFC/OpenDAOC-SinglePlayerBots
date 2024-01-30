@@ -154,7 +154,7 @@ namespace DOL.AI.Brain
 	            {
 		            _lastRoamIndex = 0;
 	            }
-	            else if(!Body.IsMoving) Body.WalkTo(_roamingPathPoints[_lastRoamIndex], 120);
+	            else if(!Body.IsMoving) Body.PathTo(_roamingPathPoints[_lastRoamIndex], 120);
                 
             }
             #endregion

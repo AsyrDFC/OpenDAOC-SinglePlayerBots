@@ -92,7 +92,7 @@ namespace DOL.AI.Brain
 				#region Walk points
 				if (!Body.IsWithinRadius(point1, 30) && point1check == false)
 				{
-					Body.WalkTo(point1, 100);
+					Body.PathTo(point1, 100);
 				}
 				else
 				{
@@ -100,7 +100,7 @@ namespace DOL.AI.Brain
 					point8check = false;
 					if (!Body.IsWithinRadius(point2, 30) && point1check == true && point2check == false)
 					{
-						Body.WalkTo(point2, 100);
+						Body.PathTo(point2, 100);
 					}
 					else
 					{
@@ -108,7 +108,7 @@ namespace DOL.AI.Brain
 						if (!Body.IsWithinRadius(point3, 30) && point1check == true && point2check == true &&
 							point3check == false)
 						{
-							Body.WalkTo(point3, 100);
+							Body.PathTo(point3, 100);
 						}
 						else
 						{
@@ -116,7 +116,7 @@ namespace DOL.AI.Brain
 							if (!Body.IsWithinRadius(point4, 30) && point1check == true && point2check == true &&
 								point3check == true && point4check == false)
 							{
-								Body.WalkTo(point4, 100);
+								Body.PathTo(point4, 100);
 							}
 							else
 							{
@@ -124,7 +124,7 @@ namespace DOL.AI.Brain
 								if (!Body.IsWithinRadius(point5, 30) && point1check == true && point2check == true &&
 									point3check == true && point4check == true && point5check == false)
 								{
-									Body.WalkTo(point5, 100);
+									Body.PathTo(point5, 100);
 								}
 								else
 								{
@@ -132,7 +132,7 @@ namespace DOL.AI.Brain
 									if (!Body.IsWithinRadius(point6, 30) && point1check == true && point2check == true &&
 									point3check == true && point4check == true && point5check == true && point6check == false)
 									{
-										Body.WalkTo(point6, 100);
+										Body.PathTo(point6, 100);
 									}
 									else
 									{
@@ -141,7 +141,7 @@ namespace DOL.AI.Brain
 										point3check == true && point4check == true && point5check == true && point6check == true 
 										&& point7check == false)
 										{
-											Body.WalkTo(point7, 100);
+											Body.PathTo(point7, 100);
 										}
 										else
 										{
@@ -150,7 +150,7 @@ namespace DOL.AI.Brain
 											point3check == true && point4check == true && point5check == true && point6check == true
 											&& point7check == true && point8check == false)
 											{
-												Body.WalkTo(point8, 100);
+												Body.PathTo(point8, 100);
 											}
 											else
 											{

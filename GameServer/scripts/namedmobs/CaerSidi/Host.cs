@@ -227,7 +227,7 @@ namespace DOL.GS
 
         public override double AttackDamage(DbInventoryItem weapon)
         {
-            return base.AttackDamage(weapon) * Strength / 150  * ServerProperties.Properties.EPICS_DMG_MULTIPLIER;
+            return base.AttackDamage(weapon) * Strength / 150 * ServerProperties.Properties.EPICS_DMG_MULTIPLIER;
         }
 
         public override int AttackRange
@@ -679,7 +679,7 @@ namespace DOL.AI.Brain
 
                 if (!Body.IsWithinRadius(point1, 30) && path1 == false)
                 {
-                    Body.WalkTo(point1, 100);
+                    Body.PathTo(point1, 100);
                 }
                 else
                 {
@@ -687,14 +687,14 @@ namespace DOL.AI.Brain
                     walkback = false;
                     if (!Body.IsWithinRadius(point2, 30) && path1 == true && path2 == false)
                     {
-                        Body.WalkTo(point2, 100);
+                        Body.PathTo(point2, 100);
                     }
                     else
                     {
                         path2 = true;
                         if (!Body.IsWithinRadius(point3, 30) && path1 == true && path2 == true && path3 == false)
                         {
-                            Body.WalkTo(point3, 100);
+                            Body.PathTo(point3, 100);
                         }
                         else
                         {
@@ -702,7 +702,7 @@ namespace DOL.AI.Brain
                             if (!Body.IsWithinRadius(point4, 30) && path1 == true && path2 == true && path3 == true &&
                                 path4 == false)
                             {
-                                Body.WalkTo(point4, 100);
+                                Body.PathTo(point4, 100);
                             }
                             else
                             {
@@ -710,7 +710,7 @@ namespace DOL.AI.Brain
                                 if (!Body.IsWithinRadius(point5, 30) && path1 == true && path2 == true &&
                                     path3 == true && path4 == true && path5 == false)
                                 {
-                                    Body.WalkTo(point5, 100);
+                                    Body.PathTo(point5, 100);
                                 }
                                 else
                                 {
@@ -718,7 +718,7 @@ namespace DOL.AI.Brain
                                     if (!Body.IsWithinRadius(point6, 30) && path1 == true && path2 == true &&
                                         path3 == true && path4 == true && path5 == true && path6 == false)
                                     {
-                                        Body.WalkTo(point6, 100);
+                                        Body.PathTo(point6, 100);
                                     }
                                     else
                                     {
@@ -727,7 +727,7 @@ namespace DOL.AI.Brain
                                             path3 == true && path4 == true && path5 == true && path6 == true &&
                                             path7 == false)
                                         {
-                                            Body.WalkTo(point7, 100);
+                                            Body.PathTo(point7, 100);
                                         }
                                         else
                                         {
@@ -736,7 +736,7 @@ namespace DOL.AI.Brain
                                                 path3 == true && path4 == true && path5 == true && path6 == true &&
                                                 path7 == true && path8 == false)
                                             {
-                                                Body.WalkTo(point8, 100);
+                                                Body.PathTo(point8, 100);
                                             }
                                             else
                                             {
@@ -745,7 +745,7 @@ namespace DOL.AI.Brain
                                                     path2 == true && path3 == true && path4 == true && path5 == true &&
                                                     path6 == true && path7 == true && path8 == true && path9 == false)
                                                 {
-                                                    Body.WalkTo(point9, 100);
+                                                    Body.PathTo(point9, 100);
                                                 }
                                                 else
                                                 {
@@ -755,7 +755,7 @@ namespace DOL.AI.Brain
                                                         path5 == true && path6 == true && path7 == true &&
                                                         path8 == true && path9 == true && path10 == false)
                                                     {
-                                                        Body.WalkTo(point10, 100);
+                                                        Body.PathTo(point10, 100);
                                                     }
                                                     else
                                                     {
@@ -766,7 +766,7 @@ namespace DOL.AI.Brain
                                                             path8 == true && path9 == true && path10 == true
                                                             && path11 == false)
                                                         {
-                                                            Body.WalkTo(point11, 100);
+                                                            Body.PathTo(point11, 100);
                                                         }
                                                         else
                                                         {
@@ -777,7 +777,7 @@ namespace DOL.AI.Brain
                                                                 path8 == true && path9 == true && path10 == true
                                                                 && path11 == true && path12 == false)
                                                             {
-                                                                Body.WalkTo(point12, 100);
+                                                                Body.PathTo(point12, 100);
                                                             }
                                                             else
                                                             {
@@ -790,7 +790,7 @@ namespace DOL.AI.Brain
                                                                     && path11 == true && path12 == true &&
                                                                     path13 == false)
                                                                 {
-                                                                    Body.WalkTo(point13, 100);
+                                                                    Body.PathTo(point13, 100);
                                                                 }
                                                                 else
                                                                 {
@@ -804,7 +804,7 @@ namespace DOL.AI.Brain
                                                                         && path11 == true && path12 == true &&
                                                                         path13 == true && path14 == false)
                                                                     {
-                                                                        Body.WalkTo(point14, 100);
+                                                                        Body.PathTo(point14, 100);
                                                                     }
                                                                     else
                                                                     {
@@ -819,7 +819,7 @@ namespace DOL.AI.Brain
                                                                             path13 == true && path14 == true &&
                                                                             path15 == false)
                                                                         {
-                                                                            Body.WalkTo(point15, 100);
+                                                                            Body.PathTo(point15, 100);
                                                                         }
                                                                         else
                                                                         {
@@ -834,7 +834,7 @@ namespace DOL.AI.Brain
                                                                                 path13 == true && path14 == true &&
                                                                                 path15 == true && path16 == false)
                                                                             {
-                                                                                Body.WalkTo(point16, 100);
+                                                                                Body.PathTo(point16, 100);
                                                                             }
                                                                             else
                                                                             {
@@ -850,7 +850,7 @@ namespace DOL.AI.Brain
                                                                                  path14 == true && path15 == true &&
                                                                                  path16 == true && path17 == false)
                                                                                 {
-                                                                                    Body.WalkTo(point17, 100);
+                                                                                    Body.PathTo(point17, 100);
                                                                                 }
                                                                                 else
                                                                                 {
@@ -874,7 +874,7 @@ namespace DOL.AI.Brain
                                                                                      path17 == true &&
                                                                                      path18 == false)
                                                                                     {
-                                                                                        Body.WalkTo(point18, 100);
+                                                                                        Body.PathTo(point18, 100);
                                                                                     }
                                                                                     else
                                                                                     {
@@ -901,7 +901,7 @@ namespace DOL.AI.Brain
                                                                                          path18 == true &&
                                                                                          path19 == false)
                                                                                         {
-                                                                                            Body.WalkTo(point19, 100);
+                                                                                            Body.PathTo(point19, 100);
                                                                                         }
                                                                                         else
                                                                                         {
@@ -929,7 +929,7 @@ namespace DOL.AI.Brain
                                                                                              path19 == true &&
                                                                                              path20 == false)
                                                                                             {
-                                                                                                Body.WalkTo(point20,
+                                                                                                Body.PathTo(point20,
                                                                                                     100);
                                                                                             }
                                                                                             else
@@ -962,7 +962,7 @@ namespace DOL.AI.Brain
                                                                                                  path20 == true
                                                                                                  && path21 == false)
                                                                                                 {
-                                                                                                    Body.WalkTo(point21,
+                                                                                                    Body.PathTo(point21,
                                                                                                         100);
                                                                                                 }
                                                                                                 else
@@ -1015,7 +1015,7 @@ namespace DOL.AI.Brain
                                                                                                      path22 ==
                                                                                                      false)
                                                                                                     {
-                                                                                                        Body.WalkTo(
+                                                                                                        Body.PathTo(
                                                                                                             point22,
                                                                                                             100);
                                                                                                     }
@@ -1075,7 +1075,7 @@ namespace DOL.AI.Brain
                                                                                                          path23 ==
                                                                                                          false)
                                                                                                         {
-                                                                                                            Body.WalkTo(
+                                                                                                            Body.PathTo(
                                                                                                                 point23,
                                                                                                                 100);
                                                                                                         }
@@ -1139,7 +1139,7 @@ namespace DOL.AI.Brain
                                                                                                              false)
                                                                                                             {
                                                                                                                 Body
-                                                                                                                    .WalkTo(
+                                                                                                                    .PathTo(
                                                                                                                         point24,
                                                                                                                         100);
                                                                                                             }
@@ -1207,7 +1207,7 @@ namespace DOL.AI.Brain
                                                                                                                      false)
                                                                                                                 {
                                                                                                                     Body
-                                                                                                                        .WalkTo(
+                                                                                                                        .PathTo(
                                                                                                                             point25,
                                                                                                                             100);
                                                                                                                 }
@@ -1277,7 +1277,7 @@ namespace DOL.AI.Brain
                                                                                                                          false)
                                                                                                                     {
                                                                                                                         Body
-                                                                                                                            .WalkTo(
+                                                                                                                            .PathTo(
                                                                                                                                 point26,
                                                                                                                                 100);
                                                                                                                     }
@@ -1349,7 +1349,7 @@ namespace DOL.AI.Brain
                                                                                                                              false)
                                                                                                                         {
                                                                                                                             Body
-                                                                                                                                .WalkTo(
+                                                                                                                                .PathTo(
                                                                                                                                     point27,
                                                                                                                                     100);
                                                                                                                         }
@@ -1423,7 +1423,7 @@ namespace DOL.AI.Brain
                                                                                                                                  false)
                                                                                                                             {
                                                                                                                                 Body
-                                                                                                                                    .WalkTo(
+                                                                                                                                    .PathTo(
                                                                                                                                         point28,
                                                                                                                                         100);
                                                                                                                             }
@@ -1499,7 +1499,7 @@ namespace DOL.AI.Brain
                                                                                                                                      false)
                                                                                                                                 {
                                                                                                                                     Body
-                                                                                                                                        .WalkTo(
+                                                                                                                                        .PathTo(
                                                                                                                                             point29,
                                                                                                                                             100);
                                                                                                                                 }
@@ -1577,7 +1577,7 @@ namespace DOL.AI.Brain
                                                                                                                                          false)
                                                                                                                                     {
                                                                                                                                         Body
-                                                                                                                                            .WalkTo(
+                                                                                                                                            .PathTo(
                                                                                                                                                 point30,
                                                                                                                                                 100);
                                                                                                                                     }
@@ -1658,7 +1658,7 @@ namespace DOL.AI.Brain
                                                                                                                                              false)
                                                                                                                                         {
                                                                                                                                             Body
-                                                                                                                                                .WalkTo(
+                                                                                                                                                .PathTo(
                                                                                                                                                     point31,
                                                                                                                                                     100);
                                                                                                                                         }
@@ -1741,7 +1741,7 @@ namespace DOL.AI.Brain
                                                                                                                                                  false)
                                                                                                                                             {
                                                                                                                                                 Body
-                                                                                                                                                    .WalkTo(
+                                                                                                                                                    .PathTo(
                                                                                                                                                         point32,
                                                                                                                                                         100);
                                                                                                                                             }
@@ -1826,7 +1826,7 @@ namespace DOL.AI.Brain
                                                                                                                                                      false)
                                                                                                                                                 {
                                                                                                                                                     Body
-                                                                                                                                                        .WalkTo(
+                                                                                                                                                        .PathTo(
                                                                                                                                                             point33,
                                                                                                                                                             100);
                                                                                                                                                 }
@@ -1913,7 +1913,7 @@ namespace DOL.AI.Brain
                                                                                                                                                          false)
                                                                                                                                                     {
                                                                                                                                                         Body
-                                                                                                                                                            .WalkTo(
+                                                                                                                                                            .PathTo(
                                                                                                                                                                 point34,
                                                                                                                                                                 100);
                                                                                                                                                     }
@@ -2002,7 +2002,7 @@ namespace DOL.AI.Brain
                                                                                                                                                              false)
                                                                                                                                                         {
                                                                                                                                                             Body
-                                                                                                                                                                .WalkTo(
+                                                                                                                                                                .PathTo(
                                                                                                                                                                     point35,
                                                                                                                                                                     100);
                                                                                                                                                         }
@@ -2093,7 +2093,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                  false)
                                                                                                                                                             {
                                                                                                                                                                 Body
-                                                                                                                                                                    .WalkTo(
+                                                                                                                                                                    .PathTo(
                                                                                                                                                                         point36,
                                                                                                                                                                         100);
                                                                                                                                                             }
@@ -2186,7 +2186,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                      false)
                                                                                                                                                                 {
                                                                                                                                                                     Body
-                                                                                                                                                                        .WalkTo(
+                                                                                                                                                                        .PathTo(
                                                                                                                                                                             point37,
                                                                                                                                                                             100);
                                                                                                                                                                 }
@@ -2281,7 +2281,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                          false)
                                                                                                                                                                     {
                                                                                                                                                                         Body
-                                                                                                                                                                            .WalkTo(
+                                                                                                                                                                            .PathTo(
                                                                                                                                                                                 point38,
                                                                                                                                                                                 100);
                                                                                                                                                                     }
@@ -2378,7 +2378,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                              false)
                                                                                                                                                                         {
                                                                                                                                                                             Body
-                                                                                                                                                                                .WalkTo(
+                                                                                                                                                                                .PathTo(
                                                                                                                                                                                     point39,
                                                                                                                                                                                     100);
                                                                                                                                                                         }
@@ -2477,7 +2477,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                  false)
                                                                                                                                                                             {
                                                                                                                                                                                 Body
-                                                                                                                                                                                    .WalkTo(
+                                                                                                                                                                                    .PathTo(
                                                                                                                                                                                         point40,
                                                                                                                                                                                         100);
                                                                                                                                                                             }
@@ -2579,7 +2579,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                      false)
                                                                                                                                                                                 {
                                                                                                                                                                                     Body
-                                                                                                                                                                                        .WalkTo(
+                                                                                                                                                                                        .PathTo(
                                                                                                                                                                                             point41,
                                                                                                                                                                                             100);
                                                                                                                                                                                 }
@@ -2683,7 +2683,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                          false)
                                                                                                                                                                                     {
                                                                                                                                                                                         Body
-                                                                                                                                                                                            .WalkTo(
+                                                                                                                                                                                            .PathTo(
                                                                                                                                                                                                 point42,
                                                                                                                                                                                                 100);
                                                                                                                                                                                     }
@@ -2789,7 +2789,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                              false)
                                                                                                                                                                                         {
                                                                                                                                                                                             Body
-                                                                                                                                                                                                .WalkTo(
+                                                                                                                                                                                                .PathTo(
                                                                                                                                                                                                     point43,
                                                                                                                                                                                                     100);
                                                                                                                                                                                         }
@@ -2897,7 +2897,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                                  false)
                                                                                                                                                                                             {
                                                                                                                                                                                                 Body
-                                                                                                                                                                                                    .WalkTo(
+                                                                                                                                                                                                    .PathTo(
                                                                                                                                                                                                         point44,
                                                                                                                                                                                                         100);
                                                                                                                                                                                             }
@@ -3007,7 +3007,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                                      false)
                                                                                                                                                                                                 {
                                                                                                                                                                                                     Body
-                                                                                                                                                                                                        .WalkTo(
+                                                                                                                                                                                                        .PathTo(
                                                                                                                                                                                                             point45,
                                                                                                                                                                                                             100);
                                                                                                                                                                                                 }
@@ -3119,7 +3119,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                                          false)
                                                                                                                                                                                                     {
                                                                                                                                                                                                         Body
-                                                                                                                                                                                                            .WalkTo(
+                                                                                                                                                                                                            .PathTo(
                                                                                                                                                                                                                 point46,
                                                                                                                                                                                                                 100);
                                                                                                                                                                                                     }
@@ -3233,7 +3233,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                                              false)
                                                                                                                                                                                                         {
                                                                                                                                                                                                             Body
-                                                                                                                                                                                                                .WalkTo(
+                                                                                                                                                                                                                .PathTo(
                                                                                                                                                                                                                     point47,
                                                                                                                                                                                                                     100);
                                                                                                                                                                                                         }
@@ -3349,7 +3349,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                                                  false)
                                                                                                                                                                                                             {
                                                                                                                                                                                                                 Body
-                                                                                                                                                                                                                    .WalkTo(
+                                                                                                                                                                                                                    .PathTo(
                                                                                                                                                                                                                         point48,
                                                                                                                                                                                                                         100);
                                                                                                                                                                                                             }
@@ -3467,7 +3467,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                                                      false)
                                                                                                                                                                                                                 {
                                                                                                                                                                                                                     Body
-                                                                                                                                                                                                                        .WalkTo(
+                                                                                                                                                                                                                        .PathTo(
                                                                                                                                                                                                                             point49,
                                                                                                                                                                                                                             100);
                                                                                                                                                                                                                 }
@@ -3587,7 +3587,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                                                          false)
                                                                                                                                                                                                                     {
                                                                                                                                                                                                                         Body
-                                                                                                                                                                                                                            .WalkTo(
+                                                                                                                                                                                                                            .PathTo(
                                                                                                                                                                                                                                 point50,
                                                                                                                                                                                                                                 100);
                                                                                                                                                                                                                     }
@@ -3709,7 +3709,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                                                              false)
                                                                                                                                                                                                                         {
                                                                                                                                                                                                                             Body
-                                                                                                                                                                                                                                .WalkTo(
+                                                                                                                                                                                                                                .PathTo(
                                                                                                                                                                                                                                     point51,
                                                                                                                                                                                                                                     100);
                                                                                                                                                                                                                         }
@@ -3833,7 +3833,7 @@ namespace DOL.AI.Brain
                                                                                                                                                                                                                                  false)
                                                                                                                                                                                                                             {
                                                                                                                                                                                                                                 Body
-                                                                                                                                                                                                                                    .WalkTo(
+                                                                                                                                                                                                                                    .PathTo(
                                                                                                                                                                                                                                         spawn,
                                                                                                                                                                                                                                         100);
                                                                                                                                                                                                                             }

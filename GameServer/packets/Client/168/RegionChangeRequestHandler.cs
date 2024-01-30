@@ -103,8 +103,9 @@ namespace DOL.GS.PacketHandler.Client.v168
 
 			DbBattleground bg = GameServer.KeepManager.GetBattleground(zonePoint.TargetRegion);
 
-			if (bg != null && client.Player.Level < bg.MinLevel && client.Player.Level > bg.MaxLevel && client.Player.RealmLevel >= bg.MaxRealmLevel)
-				return;
+			//BRENT COMMENTED OUT to test Cathal
+			// if (bg != null && client.Player.Level < bg.MinLevel && client.Player.Level > bg.MaxLevel && client.Player.RealmLevel >= bg.MaxRealmLevel)
+			// 	return;
 
 			IJumpPointHandler customHandler = null;
 

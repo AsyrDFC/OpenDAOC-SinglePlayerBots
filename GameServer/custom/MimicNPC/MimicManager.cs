@@ -20,30 +20,29 @@ namespace DOL.GS.Scripts
         public static MimicBattleground ThidBattleground;
         public static MimicBattleground CathalBattleground;
 
-        //BRENT CHANGED FROM 6 min to 24 min and 60 max to 104 max
         public static void Initialize()
         {
             ThidBattleground = new MimicBattleground(252,
                                                     new Point3D(24644, 47670, 3416),
                                                     new Point3D(28688, 29415, 4032),
                                                     new Point3D(46906, 34758, 4235),
-                                                    100,
-                                                    125,
+                                                    150,
+                                                    200,
                                                     50,
                                                     50);
         }
 
-        public static void InitializeCathal()
-        {
-            CathalBattleground = new MimicBattleground(165,
-                                                    new Point3D(583286, 583362, 4896), //1739 heading
-                                                    new Point3D(535683, 583739, 5800), //1828 heading
-                                                    new Point3D(573633, 539146, 4812), //835 heading
-                                                    100,
-                                                    125,
-                                                    50,
-                                                    50);
-        }
+        // public static void Initialize()
+        // {
+        //     CathalBattleground = new MimicBattleground(165,
+        //                                             new Point3D(583286, 583362, 4896), //1739 heading
+        //                                             new Point3D(535683, 583739, 5800), //1828 heading
+        //                                             new Point3D(573633, 539146, 4812), //835 heading
+        //                                             150,
+        //                                             175,
+        //                                             50,
+        //                                             50);
+        // }
 
         public class MimicBattleground
         {
@@ -588,6 +587,24 @@ namespace DOL.GS.Scripts
         public static Faction hib = new Faction();
         public static Faction mid = new Faction();
 
+        // public static bool Initialize()
+        // {
+        //     // Factions
+        //     alb.AddEnemyFaction(hib);
+        //     alb.AddEnemyFaction(mid);
+
+        //     hib.AddEnemyFaction(alb);
+        //     hib.AddEnemyFaction(mid);
+
+        //     mid.AddEnemyFaction(alb);
+        //     mid.AddEnemyFaction(hib);
+
+        //     // Battlegrounds
+        //     MimicBattlegrounds.Initialize();
+
+        //     return true;
+        // }
+
         public static bool Initialize()
         {
             // Factions
@@ -602,24 +619,6 @@ namespace DOL.GS.Scripts
 
             // Battlegrounds
             MimicBattlegrounds.Initialize();
-
-            return true;
-        }
-
-        public static bool InitializeCathal()
-        {
-            // Factions
-            alb.AddEnemyFaction(hib);
-            alb.AddEnemyFaction(mid);
-
-            hib.AddEnemyFaction(alb);
-            hib.AddEnemyFaction(mid);
-
-            mid.AddEnemyFaction(alb);
-            mid.AddEnemyFaction(hib);
-
-            // Battlegrounds
-            MimicBattlegrounds.InitializeCathal();
 
             return true;
         }
@@ -1464,7 +1463,7 @@ namespace DOL.GS.Scripts
         [ScriptLoadedEvent]
         public static void OnScriptsCompiled(DOLEvent e, object sender, EventArgs args)
         {
-            if (MimicManager.Initialize() || MimicManager.InitializeCathal())
+            if (MimicManager.Initialize())
                 log.Info("MimicNPCs Initialized.");
             else
                 log.Error("MimicNPCs Failed to Initialize.");

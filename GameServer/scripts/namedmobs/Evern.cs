@@ -365,16 +365,16 @@ namespace DOL.AI.Brain
                 #region PickRandomLandSpot
                 switch (Util.Random(1, 10))
                 {
-                    case 1: if (!Body.IsMoving && !HasAggro) Body.WalkTo(point1, 80); break;
-                    case 2: if (!Body.IsMoving && !HasAggro) Body.WalkTo(point2, 80); break;
-                    case 3: if (!Body.IsMoving && !HasAggro) Body.WalkTo(point3, 80); break;
-                    case 4: if (!Body.IsMoving && !HasAggro) Body.WalkTo(point4, 80); break;
-                    case 5: if (!Body.IsMoving && !HasAggro) Body.WalkTo(point5, 80); break;
-                    case 6: if (!Body.IsMoving && !HasAggro) Body.WalkTo(point6, 80); break;
-                    case 7: if (!Body.IsMoving && !HasAggro) Body.WalkTo(point7, 80); break;
-                    case 8: if (!Body.IsMoving && !HasAggro) Body.WalkTo(point8, 80); break;
-                    case 9: if (!Body.IsMoving && !HasAggro) Body.WalkTo(point9, 80); break;
-                    case 10: if (!Body.IsMoving && !HasAggro) Body.WalkTo(point10, 80); break;
+                    case 1: if (!Body.IsMoving && !HasAggro) Body.PathTo(point1, 80); break;
+                    case 2: if (!Body.IsMoving && !HasAggro) Body.PathTo(point2, 80); break;
+                    case 3: if (!Body.IsMoving && !HasAggro) Body.PathTo(point3, 80); break;
+                    case 4: if (!Body.IsMoving && !HasAggro) Body.PathTo(point4, 80); break;
+                    case 5: if (!Body.IsMoving && !HasAggro) Body.PathTo(point5, 80); break;
+                    case 6: if (!Body.IsMoving && !HasAggro) Body.PathTo(point6, 80); break;
+                    case 7: if (!Body.IsMoving && !HasAggro) Body.PathTo(point7, 80); break;
+                    case 8: if (!Body.IsMoving && !HasAggro) Body.PathTo(point8, 80); break;
+                    case 9: if (!Body.IsMoving && !HasAggro) Body.PathTo(point9, 80); break;
+                    case 10: if (!Body.IsMoving && !HasAggro) Body.PathTo(point10, 80); break;
                 }
 
                 if (Body.IsWithinRadius(point1, 15)) IsAtPillar(point1);

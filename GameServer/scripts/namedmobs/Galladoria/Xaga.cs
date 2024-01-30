@@ -411,7 +411,7 @@ namespace DOL.AI.Brain
                 Point3D point4 = new Point3D(27581, 55079, 13213);
                 if (!Body.IsWithinRadius(point1, 20) && path1 == false)
                 {
-                    Body.WalkTo(point1, 250);
+                    Body.PathTo(point1, 250);
                 }
                 else
                 {
@@ -419,21 +419,21 @@ namespace DOL.AI.Brain
                     path4 = false;
                     if (!Body.IsWithinRadius(point2, 20) && path1 == true && path2 == false)
                     {
-                        Body.WalkTo(point2, 250);
+                        Body.PathTo(point2, 250);
                     }
                     else
                     {
                         path2 = true;
                         if (!Body.IsWithinRadius(point3, 20) && path1 == true && path2 == true && path3 == false)
                         {
-                            Body.WalkTo(point3, 250);
+                            Body.PathTo(point3, 250);
                         }
                         else
                         {
                             path3 = true;
                             if (!Body.IsWithinRadius(point4, 20) && path1 == true && path2 == true && path3 == true && path4 == false)
                             {
-                                Body.WalkTo(point4, 250);
+                                Body.PathTo(point4, 250);
                             }
                             else
                             {
@@ -623,7 +623,7 @@ namespace DOL.AI.Brain
                 Point3D point4 = new Point3D(27208, 55133, 13213);
                 if (!Body.IsWithinRadius(point1, 20) && path1_2 == false)
                 {
-                    Body.WalkTo(point1, 250);
+                    Body.PathTo(point1, 250);
                 }
                 else
                 {
@@ -631,21 +631,21 @@ namespace DOL.AI.Brain
                     path4_2 = false;
                     if (!Body.IsWithinRadius(point2, 20) && path1_2 == true && path2_2 == false)
                     {
-                        Body.WalkTo(point2, 250);
+                        Body.PathTo(point2, 250);
                     }
                     else
                     {
                         path2_2 = true;
                         if (!Body.IsWithinRadius(point3, 20) && path1_2 == true && path2_2 == true && path3_2 == false)
                         {
-                            Body.WalkTo(point3, 250);
+                            Body.PathTo(point3, 250);
                         }
                         else
                         {
                             path3_2 = true;
                             if (!Body.IsWithinRadius(point4, 20) && path1_2 == true && path2_2 == true && path3_2 == true && path4_2 == false)
                             {
-                                Body.WalkTo(point4, 250);
+                                Body.PathTo(point4, 250);
                             }
                             else
                             {

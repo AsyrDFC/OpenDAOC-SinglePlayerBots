@@ -603,7 +603,7 @@ namespace DOL.AI.Brain
 							if (npc.Brain is ParthananFarmController1Brain)
 							{
 								if (!Body.IsWithinRadius(npc, 50))
-									Body.WalkTo(npc, Body.MaxSpeedBase);
+									Body.PathTo(npc, Body.MaxSpeedBase);
 								else
 									Body.Die(npc);
 							}
@@ -664,7 +664,7 @@ namespace DOL.AI.Brain
 							if (npc.Brain is ParthananFarmController2Brain)
 							{
 								if (!Body.IsWithinRadius(npc, 50))
-									Body.WalkTo(npc, Body.MaxSpeedBase);
+									Body.PathTo(npc, Body.MaxSpeedBase);
 								else
 									Body.Die(npc);
 							}
@@ -726,7 +726,7 @@ namespace DOL.AI.Brain
 							if (npc.Brain is ParthananFarmController2bBrain)
 							{
 								if (!Body.IsWithinRadius(npc, 50))
-									Body.WalkTo(npc, Body.MaxSpeedBase);
+									Body.PathTo(npc, Body.MaxSpeedBase);
 								else
 									Body.Die(npc);
 							}
@@ -787,7 +787,7 @@ namespace DOL.AI.Brain
 							{
 								Point3D point = new Point3D(npc.X, npc.Y, npc.Z);
 								if (!Body.IsWithinRadius(npc, 50))
-									Body.WalkTo(point, 100);
+									Body.PathTo(point, 100);
 								else
 									Body.Die(npc);
 							}
@@ -848,7 +848,7 @@ namespace DOL.AI.Brain
 							if (npc.Brain is ParthananFarmController3bBrain)
 							{
 								if (!Body.IsWithinRadius(npc, 50))
-									Body.WalkTo(npc, Body.MaxSpeedBase);
+									Body.PathTo(npc, Body.MaxSpeedBase);
 								else
 									Body.Die(npc);
 							}

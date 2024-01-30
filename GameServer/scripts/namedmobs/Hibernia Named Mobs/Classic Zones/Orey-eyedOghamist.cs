@@ -133,73 +133,73 @@ namespace DOL.AI.Brain
 					short pathSpeed = Body.MaxSpeedBase;
 					#region Orey path
 					if (!Body.IsWithinRadius(point1, 30) && !point1check)
-						Body.WalkTo(point1, pathSpeed);
+						Body.PathTo(point1, pathSpeed);
 					else
 					{
 						point1check = true;
 						if (!Body.IsWithinRadius(point2, 30) && point1check && !point2check)
-							Body.WalkTo(point2, pathSpeed);
+							Body.PathTo(point2, pathSpeed);
 						else
 						{
 							point2check = true;
 							point13check = false;
 							if (!Body.IsWithinRadius(point3, 30) && point1check && point2check && !point3check)
-								Body.WalkTo(point3, pathSpeed);
+								Body.PathTo(point3, pathSpeed);
 							else
 							{
 								point3check = true;
 								if (!Body.IsWithinRadius(point4, 30) && point1check && point2check && point3check && !point4check)
-									Body.WalkTo(point4, pathSpeed);
+									Body.PathTo(point4, pathSpeed);
 								else
 								{
 									point4check = true;
 									if (!Body.IsWithinRadius(point5, 30) && point1check && point2check && point3check && point4check && !point5check)
-										Body.WalkTo(point5, pathSpeed);
+										Body.PathTo(point5, pathSpeed);
 									else
 									{
 										point5check = true;
 										if (!Body.IsWithinRadius(point6, 30) && point1check && point2check && point3check && point4check && point5check && !point6check)
-											Body.WalkTo(point6, pathSpeed);
+											Body.PathTo(point6, pathSpeed);
 										else
 										{
 											point6check = true;
 											if (!Body.IsWithinRadius(point7, 30) && point1check && point2check && point3check && point4check && point5check && point6check && !point7check)
-												Body.WalkTo(point7, pathSpeed);
+												Body.PathTo(point7, pathSpeed);
 											else
 											{
 												point7check = true;
 												if (!Body.IsWithinRadius(point8, 30) && point1check && point2check && point3check && point4check && point5check && point6check && point7check && !point8check)
-													Body.WalkTo(point8, pathSpeed);
+													Body.PathTo(point8, pathSpeed);
 												else
 												{
 													point8check = true;
 													if (!Body.IsWithinRadius(point9, 30) && point1check && point2check && point3check && point4check && point5check && point6check && point7check && point8check
 														&& !point9check)
-														Body.WalkTo(point9, pathSpeed);
+														Body.PathTo(point9, pathSpeed);
 													else
 													{
 														point9check = true;
 														if (!Body.IsWithinRadius(point10, 30) && point1check && point2check && point3check && point4check && point5check && point6check && point7check && point8check
 															&& point9check && !point10check)
-															Body.WalkTo(point10, pathSpeed);
+															Body.PathTo(point10, pathSpeed);
 														else
 														{
 															point10check = true;
 															if (!Body.IsWithinRadius(point11, 30) && point1check && point2check && point3check && point4check && point5check && point6check && point7check && point8check
 																&& point9check && point10check && !point11check)
-																Body.WalkTo(point11, pathSpeed);
+																Body.PathTo(point11, pathSpeed);
 															else
 															{
 																point11check = true;
 																if (!Body.IsWithinRadius(point12, 30) && point1check && point2check && point3check && point4check && point5check && point6check && point7check && point8check
 																&& point9check && point10check && point11check && !point12check)
-																	Body.WalkTo(point12, pathSpeed);
+																	Body.PathTo(point12, pathSpeed);
 																else
 																{
 																	point12check = true;
 																	if (!Body.IsWithinRadius(point13, 30) && point1check && point2check && point3check && point4check && point5check && point6check && point7check && point8check
 																		&& point9check && point10check && point11check && point12check && !point13check)
-																		Body.WalkTo(point13, pathSpeed);
+																		Body.PathTo(point13, pathSpeed);
 																	else
 																	{
 																		point13check = true;

@@ -1397,7 +1397,7 @@ namespace DOL.AI.Brain
             {
                 if (!Body.IsWithinRadius(point1, 20) && path1 == false)
                 {
-                    Body.WalkTo(point1, 250);
+                    Body.PathTo(point1, 250);
                 }
                 else
                 {
@@ -1405,28 +1405,28 @@ namespace DOL.AI.Brain
                     path11 = false;
                     if (!Body.IsWithinRadius(point2, 20) && path1 == true && path2 == false)
                     {
-                        Body.WalkTo(point2, 250);
+                        Body.PathTo(point2, 250);
                     }
                     else
                     {
                         path2 = true;
                         if (!Body.IsWithinRadius(point3, 20) && path1 == true && path2 == true && path3 == false)
                         {
-                            Body.WalkTo(point3, 250);
+                            Body.PathTo(point3, 250);
                         }
                         else
                         {
                             path3 = true;
                             if (!Body.IsWithinRadius(point4, 20) && path1 == true && path2 == true && path3 == true && path4 == false)
                             {
-                                Body.WalkTo(point4, 250);
+                                Body.PathTo(point4, 250);
                             }
                             else
                             {
                                 path4 = true;
                                 if (!Body.IsWithinRadius(point5, 20) && path1 == true && path2 == true && path3 == true && path4 == true && path5 == false)
                                 {
-                                    Body.WalkTo(point5, 250);
+                                    Body.PathTo(point5, 250);
                                 }
                                 else
                                 {
@@ -1434,7 +1434,7 @@ namespace DOL.AI.Brain
                                     if (!Body.IsWithinRadius(point6, 20) && path1 == true && path2 == true && path3 == true && path4 == true && path5 == true
                                         && path6 == false)
                                     {
-                                        Body.WalkTo(point6, 250);
+                                        Body.PathTo(point6, 250);
                                     }
                                     else
                                     {
@@ -1442,7 +1442,7 @@ namespace DOL.AI.Brain
                                         if (!Body.IsWithinRadius(point7, 20) && path1 == true && path2 == true && path3 == true && path4 == true && path5 == true
                                             && path6 == true && path7 == false)
                                         {
-                                            Body.WalkTo(point7, 250);
+                                            Body.PathTo(point7, 250);
                                         }
                                         else
                                         {
@@ -1450,7 +1450,7 @@ namespace DOL.AI.Brain
                                             if (!Body.IsWithinRadius(point8, 20) && path1 == true && path2 == true && path3 == true && path4 == true && path5 == true
                                                  && path6 == true && path7 == true && path8 == false)
                                             {
-                                                Body.WalkTo(point8, 250);
+                                                Body.PathTo(point8, 250);
                                             }
                                             else
                                             {
@@ -1458,7 +1458,7 @@ namespace DOL.AI.Brain
                                                 if (!Body.IsWithinRadius(point9, 20) && path1 == true && path2 == true && path3 == true && path4 == true && path5 == true
                                                     && path6 == true && path7 == true && path8 == true && path9 == false)
                                                 {
-                                                    Body.WalkTo(point9, 250);
+                                                    Body.PathTo(point9, 250);
                                                 }
                                                 else
                                                 {
@@ -1466,7 +1466,7 @@ namespace DOL.AI.Brain
                                                     if (!Body.IsWithinRadius(point10, 20) && path1 == true && path2 == true && path3 == true && path4 == true && path5 == true
                                                         && path6 == true && path7 == true && path8 == true && path9 == true && path10 == false)
                                                     {
-                                                        Body.WalkTo(point10, 250);
+                                                        Body.PathTo(point10, 250);
                                                     }
                                                     else
                                                     {
@@ -1474,7 +1474,7 @@ namespace DOL.AI.Brain
                                                         if (!Body.IsWithinRadius(point11, 20) && path1 == true && path2 == true && path3 == true && path4 == true && path5 == true
                                                             && path6 == true && path7 == true && path8 == true && path9 == true && path10 == true && path11 == false)
                                                         {
-                                                            Body.WalkTo(point11, 250);
+                                                            Body.PathTo(point11, 250);
                                                         }
                                                         else
                                                         {
@@ -1720,7 +1720,7 @@ namespace DOL.AI.Brain
             {
                 Point3D point1 = new Point3D();
                 point1.X = 39652; point1.Y = 60831; point1.Z = 11893;
-                Body.WalkTo(point1, 300);
+                Body.PathTo(point1, 300);
             }
             base.Notify(e, sender, args);
         }
@@ -1774,7 +1774,7 @@ namespace DOL.AI.Brain
                         ClearAggroList();
                         message = true;
                     }
-                    Body.WalkTo(point1, 300);
+                    Body.PathTo(point1, 300);
                     dontattack = true;
                 }
             }
@@ -2054,7 +2054,7 @@ namespace DOL.AI.Brain
                 }
                 if (!Body.IsWithinRadius(point1, 20) && path1 == false)
                 {
-                    Body.WalkTo(point1, 200);
+                    Body.PathTo(point1, 200);
                 }
                 else
                 {
@@ -2062,21 +2062,21 @@ namespace DOL.AI.Brain
                     path4 = false;
                     if (!Body.IsWithinRadius(point2, 20) && path1 == true && path2 == false)
                     {
-                        Body.WalkTo(point2, 200);
+                        Body.PathTo(point2, 200);
                     }
                     else
                     {
                         path2 = true;
                         if (!Body.IsWithinRadius(point3, 20) && path1 == true && path2 == true && path3 == false)
                         {
-                            Body.WalkTo(point3, 200);
+                            Body.PathTo(point3, 200);
                         }
                         else
                         {
                             path3 = true;
                             if (!Body.IsWithinRadius(point4, 20) && path1 == true && path2 == true && path3 == true && path4 == false)
                             {
-                                Body.WalkTo(point4, 200);
+                                Body.PathTo(point4, 200);
                             }
                             else
                             {

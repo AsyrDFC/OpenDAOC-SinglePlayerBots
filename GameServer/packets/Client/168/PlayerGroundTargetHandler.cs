@@ -97,7 +97,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 						if (player.Steed.OwnerID == player.InternalID)
 						{
 							player.Out.SendMessage("You usher your boat forward.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-							player.Steed.WalkTo(player.GroundTarget, player.Steed.MaxSpeed);
+							player.Steed.PathTo(player.GroundTarget, player.Steed.MaxSpeed);
 							return 0;
 						}
 					}
@@ -108,7 +108,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 						                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
 						return 0;
 					}
-					player.Steed.WalkTo(player.GroundTarget, player.Steed.MaxSpeed);
+					player.Steed.PathTo(player.GroundTarget, player.Steed.MaxSpeed);
 					return 0;
 				}
 

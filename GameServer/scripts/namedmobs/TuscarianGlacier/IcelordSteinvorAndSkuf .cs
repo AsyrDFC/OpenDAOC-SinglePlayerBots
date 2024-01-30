@@ -626,7 +626,7 @@ namespace DOL.AI.Brain
                 if (Body.CurrentRegionID == 160) //TG
                 {
                     if (!Body.IsWithinRadius(point1, 30) && walkto_point == false)
-                        Body.WalkTo(point1, 100);
+                        Body.PathTo(point1, 100);
                     else
                         walkto_point = true;
                 }

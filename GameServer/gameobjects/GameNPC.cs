@@ -918,7 +918,7 @@ namespace DOL.GS
 
 		public virtual void WalkTo(IPoint3D target, short speed)
 		{
-			movementComponent.WalkTo(target, speed);
+			movementComponent.PathTo(target, speed);
 		}
 
 		public virtual void PathTo(IPoint3D target, short speed)
@@ -945,6 +945,19 @@ namespace DOL.GS
 		{
 			movementComponent.MoveOnPath(speed);
 		}
+
+		public string LetsChooseAPath()
+        {
+            switch (Realm)
+            {
+                case eRealm.Albion: return "AlbCathPath1";
+                case eRealm.Hibernia: return "HibCathPath1";
+                case eRealm.Midgard: return "MidCathPath1";
+                default:
+                    log.Error($"Invalid realm for NPC: {GameObjectType} {Name} {Realm}");
+                    return null; // Handle invalid realm
+            }
+        }
 
 		public virtual void StopMovingOnPath()
 		{

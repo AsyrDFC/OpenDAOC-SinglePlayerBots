@@ -116,6 +116,8 @@ namespace DOL.GS.Scripts
             }));
 
             Dev = ClientService.GetPlayers()[0];
+            //Brent Added -- here we are getting the path to set the path id 
+            // PathID = LetsChooseAPath();
         }
 
         public void GetTauntStyles()
@@ -7259,6 +7261,8 @@ namespace DOL.GS.Scripts
                     {
                         // Thid
                         case 252: MimicBattlegrounds.ThidBattleground.UpdateBattleStats(this); break;
+                        // Cathal
+                        case 165: MimicBattlegrounds.CathalBattleground.UpdateBattleStats(this); break;
                     }
 
                     playerMessage = LanguageMgr.GetTranslation("EN", "GamePlayer.Die.KilledByLocation", GetName(0, true), killer.GetName(1, false), location);

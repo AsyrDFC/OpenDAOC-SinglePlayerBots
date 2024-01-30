@@ -295,7 +295,7 @@ namespace DOL.GS.Spells
                 return;
 
             if ((response & 0x100) == 0x100)
-                m_npc.WalkTo(m_loc, 100);
+                m_npc.PathTo(m_loc, 100);
         }
 
         public virtual IPoint3D GetTargetLoc()

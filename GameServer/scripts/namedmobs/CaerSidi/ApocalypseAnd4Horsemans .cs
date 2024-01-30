@@ -2366,7 +2366,7 @@ namespace DOL.AI.Brain
                     ClearAggroList();
                     if (!Body.IsWithinRadius(point1, 100))
                     {
-                        Body.WalkTo(point1, 200);
+                        Body.PathTo(point1, 200);
                         IsInFlyPhase = true;
                     }
                     else
@@ -2413,7 +2413,7 @@ namespace DOL.AI.Brain
                     ClearAggroList();
                     if (!Body.IsWithinRadius(point1, 100))
                     {
-                        Body.WalkTo(point1, 200);
+                        Body.PathTo(point1, 200);
                         IsInFlyPhase = true;                       
                     }
                     else

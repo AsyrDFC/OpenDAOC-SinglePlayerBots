@@ -121,7 +121,7 @@ namespace DOL.AI.Brain
                     Body.ReturnToSpawnPoint(NpcMovementComponent.DEFAULT_WALK_SPEED);
                 }
                 else if(!Body.IsMoving)
-                    Body.WalkTo(_roamingPathPoints[_lastRoamIndex], (short)Util.Random(195, 250));
+                    Body.PathTo(_roamingPathPoints[_lastRoamIndex], (short)Util.Random(195, 250));
             }
 
             if (Body.InCombatInLast(60 * 1000) == false && Body.InCombatInLast(65 * 1000))

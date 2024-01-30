@@ -303,12 +303,19 @@ namespace DOL.GS.Scripts
                         }
                         break;
 
-                        case "cathal":
-                        switch (args[2])
+                    case "cathal":
+                        if (MimicBattlegrounds.CathalBattleground != null)
                         {
-                            case "start": MimicBattlegrounds.CathalBattleground.Start(); break;
-                            case "stop": MimicBattlegrounds.CathalBattleground.Stop(); break;
-                            case "clear": MimicBattlegrounds.CathalBattleground.Clear(); break;
+                            switch (args[2])
+                            {
+                                case "start": MimicBattlegrounds.CathalBattleground.Start(); break;
+                                case "stop": MimicBattlegrounds.CathalBattleground.Stop(); break;
+                                case "clear": MimicBattlegrounds.CathalBattleground.Clear(); break;
+                            }
+                        }
+                        else
+                        {
+                            // Handle the null case, maybe log an error or notify the user
                         }
                         break;
                 }
@@ -632,7 +639,7 @@ namespace DOL.GS.Scripts
       "&mbstats",
       ePrivLevel.Player,
       "/mbstats [Battleground] - Get stats on a battleground.",
-      "[Battleground] - Thid")]
+      "[Battleground] - Thid - Cathal")]
     public class MimicBattleStatsCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
@@ -644,6 +651,7 @@ namespace DOL.GS.Scripts
                 switch (args[1])
                 {
                     case "thid": MimicBattlegrounds.ThidBattleground.BattlegroundStats(client.Player); break;
+                    case "cathal": MimicBattlegrounds.CathalBattleground.BattlegroundStats(client.Player); break;
                 }
             }
         }

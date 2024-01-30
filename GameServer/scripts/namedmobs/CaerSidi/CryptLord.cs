@@ -140,7 +140,7 @@ namespace DOL.AI.Brain
             {
                 if (!Body.IsWithinRadius(point1, 30) && point1check == false)
                 {
-                    Body.WalkTo(point1, 100);
+                    Body.PathTo(point1, 100);
                 }
                 else
                 {
@@ -148,7 +148,7 @@ namespace DOL.AI.Brain
                     walkback = false;
                     if (!Body.IsWithinRadius(point2, 30) && point1check == true && point2check == false)
                     {
-                        Body.WalkTo(point2, 100);
+                        Body.PathTo(point2, 100);
                     }
                     else
                     {
@@ -156,7 +156,7 @@ namespace DOL.AI.Brain
                         if (!Body.IsWithinRadius(point3, 30) && point1check == true && point2check == true &&
                             point3check == false)
                         {
-                            Body.WalkTo(point3, 100);
+                            Body.PathTo(point3, 100);
                         }
                         else
                         {
@@ -164,7 +164,7 @@ namespace DOL.AI.Brain
                             if (!Body.IsWithinRadius(point4, 30) && point1check == true && point2check == true &&
                                 point3check == true && point4check == false)
                             {
-                                Body.WalkTo(point4, 100);
+                                Body.PathTo(point4, 100);
                             }
                             else
                             {
@@ -172,7 +172,7 @@ namespace DOL.AI.Brain
                                 if (!Body.IsWithinRadius(spawn, 30) && point1check == true && point2check == true &&
                                     point3check == true && point4check == true && walkback == false)
                                 {
-                                    Body.WalkTo(spawn, 100);
+                                    Body.PathTo(spawn, 100);
                                 }
                                 else
                                 {

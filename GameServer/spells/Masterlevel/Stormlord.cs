@@ -149,7 +149,7 @@ namespace DOL.GS.Spells
                 {
                     int range = Util.Random(0, 750);
                     double angle = Util.RandomDouble() * 2 * Math.PI;
-                    targetStorm.WalkTo(new Point3D(targetStorm.X + (int) (range * Math.Cos(angle)), targetStorm.Y + (int) (range * Math.Sin(angle)), targetStorm.Z), targetStorm.MaxSpeed);
+                    targetStorm.PathTo(new Point3D(targetStorm.X + (int) (range * Math.Cos(angle)), targetStorm.Y + (int) (range * Math.Sin(angle)), targetStorm.Z), targetStorm.MaxSpeed);
                 }
             }
         }
